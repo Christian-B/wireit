@@ -219,12 +219,60 @@ YAHOO.lang.extend(LightbulbContainer, LogicContainer, {
    }
 });
 
-YAHOO.util.Event.onDOMReady( function() { 
-	try {
-	var editor = new WireIt.WiringEditor(logicGatesLang); 
-}catch(ex) {
-	console.log(ex);
-}
-});
+//YAHOO.util.Event.onDOMReady( function() { 
+//	try {
+//	var editor = new WireIt.WiringEditor(logicGatesLang); 
+//}catch(ex) {
+//	console.log(ex);
+//}
+//});
 
+YAHOO.util.Event.onDOMReady( function() {
+
+	try {
+
+
+	WireIt.WiringEditor.adapters.Ajax.config = 	{
+		deleteWiring: {
+			method: 'GET',
+			url: function(value) {
+				if(console && console.log) {
+					console.log(value);
+				}
+				// for a REST query you might want to send a DELETE /resource/wirings/moduleName
+//				return "fakeSaveDelete.json";
+				return "../../DeleteWireit?name=" + value.name + "&language=" + value.language;
+			}
+		},
+		saveWiring: {
+//			method: 'GET',
+//			url: 'fakeSaveDelete.json'
+			method: 'POST',
+			url: '../../SaveWireit'
+		},
+		listWirings: {
+			method: 'GET',
+			url: function(value) {
+				if(console && console.log) {
+					console.log(value);
+				}
+				// for a REST query you might want to send a DELETE /resource/wirings/moduleName
+				return "../../ListWireit?language=" + value.language;
+			}
+		}
+	};
+
+	logicGatesLang.adapter = WireIt.WiringEditor.adapters.Ajax;
+
+	editor = new WireIt.WiringEditor(logicGatesLang);
+
+	// Open the infos panel
+	editor.accordionView.openPanel(2);
+
+	}
+	catch(ex) {
+		console.log(ex);
+	}
+
+});
 
