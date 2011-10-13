@@ -84,7 +84,7 @@ WireIt.WiringEditor.adapters.Ajax = {
 		}
 		
 		var method = "";
-		if( YAHOO.lang.isFunction(this.config[action].url) ) {
+		if( YAHOO.lang.isFunction(this.config[action].method) ) {
 			method = this.config[action].method(value);
 		}
 		else {
