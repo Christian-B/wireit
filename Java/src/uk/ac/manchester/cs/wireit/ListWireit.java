@@ -52,14 +52,16 @@ public class ListWireit extends WireitSQLBase {
             throws ServletException, IOException {
         System.out.println();
         System.out.println((new Date()) + "in ListWireit.doGet");
-       // Set the MIME type for the response message
+        
+        String language = request.getParameter("language");
+        
+        // Set the MIME type for the response message
         response.setContentType("text/x-json;charset=UTF-8");  
         // Get a output writer to write the response message into the network socket
         PrintWriter out = response.getWriter();
  
-        boolean notFirst = false;
         try {
-            out.println(getJsonString());
+            out.println(getJsonString(language));
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new ServletException(ex);
@@ -72,8 +74,13 @@ public class ListWireit extends WireitSQLBase {
      * @return json String without spaces or line breaks.
      * @throws SQLException Thrown if the query fails
      */
-    private String getJsonString() throws SQLException{
-        String sqlStr = "select * from wirings";
+    private String getJsonString(String language) throws SQLException{
+        String sqlStr;
+        if (language == null){
+            sqlStr = "select * from wirings";
+        } else {
+            sqlStr = "select * from wirings where language = \"" + language + "\"";
+        }
         System.out.println("running: " + sqlStr);
         StringBuilder builder = new StringBuilder();
         builder.append("[");
@@ -100,7 +107,7 @@ public class ListWireit extends WireitSQLBase {
             //builder.append(workingJson.toString(4));
             builder.append(working);
             builder.append("\",\n");
-            String language = URLDecoder.decode(rset.getString("language"));
+            language = URLDecoder.decode(rset.getString("language"));
             builder.append("\"language\":\"");
             builder.append(rset.getString("language"));
             builder.append("\"}");
@@ -126,7 +133,7 @@ public class ListWireit extends WireitSQLBase {
      */
     public static void main(String[] args) throws ServletException, SQLException, JSONException {
         ListWireit tester = new ListWireit();
-        String input = tester.getJsonString();
+        String input = tester.getJsonString(null);
         System.out.println(input);
         JSONArray json = new JSONArray(input);
         System.out.println(json.toString(4));

@@ -142,7 +142,7 @@ YAHOO.util.Event.onDOMReady( function() {
 				}
 				// for a REST query you might want to send a DELETE /resource/wirings/moduleName
 //				return "fakeSaveDelete.json";
-				return "../../DeleteWireit?" + value.name;
+				return "../../DeleteWireit?name=" + value.name + "&language=" + value.language;
 			}
 		},
 		saveWiring: {
@@ -154,7 +154,13 @@ YAHOO.util.Event.onDOMReady( function() {
 		listWirings: {
 			method: 'GET',
 //			url: 'listWirings.json'
-			url: '../../ListWireit'
+			url: function(value) {
+				if(console && console.log) {
+					console.log(value);
+				}
+				// for a REST query you might want to send a DELETE /resource/wirings/moduleName
+				return "../../ListWireit?language=" + value.language;
+			}
 		}
 	};
 

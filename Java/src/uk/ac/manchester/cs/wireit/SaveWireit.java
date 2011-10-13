@@ -125,6 +125,8 @@ public class SaveWireit extends WireitSQLBase {
                 language =  token.substring(token.indexOf("=")+1,token.length());
             } else if (key.equalsIgnoreCase("working")){
                 workingEncoded =  token.substring(token.indexOf("=")+1,token.length());
+            } else {
+                throw new ServletException("Unexpected key " + key + " in body");
             }
         }
         //Check name and length exist and are not too long.
@@ -153,9 +155,9 @@ public class SaveWireit extends WireitSQLBase {
      */
     private void saveWorking(String name, String workingEncoded, String language) throws SQLException {
         String sqlQuery;
-        if (findName(name)){
-            sqlQuery = "update wirings set working = \"" + workingEncoded + "\", language = \"" + language + 
-                    "\" where name = \"" + name + "\"";            
+        if (findWorking(name, language)){
+            sqlQuery = "update wirings set working = \"" + workingEncoded + 
+                    "\" where name = \"" + name + "\" and language = \"" + language + "\"";            
         } else {
             sqlQuery = "insert into wirings set name = \"" + name + "\", working = \"" + workingEncoded + 
                 "\", language = \"" + language + "\"";
@@ -176,15 +178,16 @@ public class SaveWireit extends WireitSQLBase {
      }
     
     /**
-     * Checks to see if there is already a row with this name.
+     * Checks to see if there is already a row with this name and language.
      * 
      * @param name Name to check
-     * @return True if and only if there is already a row with this name 
+     * @param language Language to check
+     * @return True if and only if there is already a row with this name and language.
      *     Case sensitivity is as the database would handle =
      * @throws SQLException Thrown if the query fails.
      */
-    public boolean findName(String name) throws SQLException { 
-        String sqlStr = "select name from wirings where name = \"" + name +"\"";
+    public boolean findWorking(String name, String language) throws SQLException { 
+        String sqlStr = "select name from wirings where name = \"" + name +"\" and language = \"" + language + "\"";
         ResultSet rset = stmt.executeQuery(sqlStr);  // Send the query to the server
         int count = 0;
         while(rset.next()) {
