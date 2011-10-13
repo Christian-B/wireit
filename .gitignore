@@ -1,0 +1,5 @@
+WEB-INF/lib/*
+Java/build/*
+Java/nbproject/*
+Java/build.xml
+Java/manifest.mf
