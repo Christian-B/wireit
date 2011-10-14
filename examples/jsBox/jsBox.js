@@ -61,10 +61,42 @@ var jsBox = {
     * @static
     */
    init: function() {
+	WireIt.WiringEditor.adapters.Ajax.config = 	{
+		deleteWiring: {
+			method: 'GET',
+			url: function(value) {
+				if(console && console.log) {
+					console.log(value);
+				}
+				// for a REST query you might want to send a DELETE /resource/wirings/moduleName
+//				return "fakeSaveDelete.json";
+				return "../../DeleteWireit?name=" + value.name + "&language=" + value.language;
+			}
+		},
+		saveWiring: {
+//			method: 'GET',
+//			url: 'fakeSaveDelete.json'
+			method: 'POST',
+			url: '../../SaveWireit'
+		},
+		listWirings: {
+			method: 'GET',
+			url: function(value) {
+				if(console && console.log) {
+					console.log(value);
+				}
+				// for a REST query you might want to send a DELETE /resource/wirings/moduleName
+				return "../../ListWireit?language=" + value.language;
+			}
+		}
+	};
+	
+	this.language.adapter = WireIt.WiringEditor.adapters.Ajax;
+	
    	this.editor = new jsBox.WiringEditor(this.language);
 
-		// Open the infos panel
-		editor.accordionView.openPanel(2);
+	// Open the infos panel
+	editor.accordionView.openPanel(2);
    },
    
    /**

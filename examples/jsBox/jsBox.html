@@ -104,7 +104,8 @@ div.ComposedModule { background-color: #DDDDAA; }
 <script type="text/javascript" src="../../js/BaseEditor.js"></script>
 <script type="text/javascript" src="../../js/ModuleProxy.js"></script>
 <script type="text/javascript" src="../../js/WiringEditor.js"></script>
-<script type="text/javascript" src="../../js/adapters/json-rpc.js"></script>
+<!--script type="text/javascript" src="../../js/adapters/json-rpc.js"></script-->
+<script type="text/javascript" src="../../js/adapters/ajax.js"></script>
 <script type="text/javascript" src="../../js/ImageContainer.js"></script>
 
 
@@ -126,7 +127,7 @@ YAHOO.util.Event.onDOMReady( jsBox.init, jsBox, true);
 		<div class="logo">jsBox</a></div>
 		<div id="toolbar"></div>
 		<div class="topright">
-			<span>Hello there !</span> | 
+			<span>Hello there !</span> |
 			<a href="../..">back to WireIt</a>
 		</div>
 	</div>
@@ -134,7 +135,7 @@ YAHOO.util.Event.onDOMReady( jsBox.init, jsBox, true);
 
 	<div id="left">
 	</div>
-	
+
 	<div id="right">
 		<ul id="accordionView">
 			<li>
@@ -156,7 +157,7 @@ YAHOO.util.Event.onDOMReady( jsBox.init, jsBox, true);
 	        		<p style="font-weight: bold;">What this example does :</p>
 					<ul style="margin-left: 20px;">
 						<li>* Define a visual language of 5 modules: input, output, jsBox, callback, comment</li>
-						<li>* Creates the "jsBox" container</li>	
+						<li>* Creates the "jsBox" container</li>
 						<li>* Creates the "Composed" container</li>
 						<li>* Hack the WiringEditor to handle the composed modules</li>
 						<li>* Provide a small virtual machine for executing this language</li>
@@ -181,18 +182,18 @@ YAHOO.util.Event.onDOMReady( jsBox.init, jsBox, true);
 	<div id="center">
 	</div>
 
-	
+
 	<!-- This is the content of the HELP panel -->
 	<div id="helpPanel">
 	    <div class="hd">Welcome to jsBox</div>
 	    <div class="bd" style="text-align: left;">
-	
+
 					<p>This is an advanced example of the WiringEditor from the <a href="http://javascript.neyric.com/wireit">WireIt library</a>.</p>
 					<br />
 	        <p style="font-weight: bold;">What this example does :</p>
 					<ul style="margin-left: 20px;">
 						<li>* Define a visual language of 5 modules: input, output, jsBox, callback, comment</li>
-						<li>* Creates the "jsBox" container</li>	
+						<li>* Creates the "jsBox" container</li>
 						<li>* Creates the "Composed" container</li>
 						<li>* Hack the WiringEditor to handle the composed modules</li>
 						<li>* Provide a small virtual machine for executing this language</li>
@@ -208,11 +209,11 @@ YAHOO.util.Event.onDOMReady( jsBox.init, jsBox, true);
 					<p><u>Warning:</u> Composed modules are shared anonymously. <br />Someone could change/delete your modules or create evil ones !</p>
 					<br />
 					<p>Sources: <a href="jsBox.js" target="_new">jsBox.js</a> and <a href="ExecutionFrame.js" target="_new">ExecutionFrame.js</a></p>
-		
+
 	    </div>
 	</div>
 
-	
+
 
 </body>
 </html>
