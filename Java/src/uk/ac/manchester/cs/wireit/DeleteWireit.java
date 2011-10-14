@@ -28,7 +28,7 @@ public class DeleteWireit extends WireitSQLBase {
     /**
      * Deletes a Wiring from the SQL database.
      * 
-     * If a wiring exists in the database with a name that matches the part of the URL after the ?
+     * If a wiring exists in the database with a name and language that matches the part of the URL after the ?
      * It will be deleted.
      * <p>
      * No Exception is thrown if there is no wiring of that name or if there is nothing after the ?
@@ -69,6 +69,7 @@ public class DeleteWireit extends WireitSQLBase {
      * Case sensitivity depends on how the underlying database handles =.
      * 
      * @param name Value in the "name" to identify row(s) to be deleted.
+     * @param language Value in the "language" to identify row(s) to be deleted.
      * @throws SQLException Thrown if SQL update fails.
      * 
      */

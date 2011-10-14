@@ -30,7 +30,7 @@ public class ListWireit extends WireitSQLBase {
     }
         
     /**
-     * Reads the save WireIt workings from database and returns then to WireIt.
+     * Reads the save WireIt workings for this langauge from database and returns then to WireIt.
      * <p>
      *     See WireIt\examples\ajaxAdapter\listWirings.json for an example format.
      * <p>
@@ -41,7 +41,7 @@ public class ListWireit extends WireitSQLBase {
      * <li>All the objects are Strings so must be wrapped in quotes</li>
      * <li>The quotes within the working String but all be preceeded by a \</li>
      * </ul>
-     * @param request No information is extracted from request.
+     * @param request Should have a language parameter.
      * @param response Returns the wirings in the format WireIt expects.
      *     See WireIt\examples\ajaxAdapter\listWirings.json for an example format.
      * @throws ServletException
@@ -69,8 +69,9 @@ public class ListWireit extends WireitSQLBase {
     }
        
     /**
-     * Runs a select * query and returns the results as a Json String.
+     * Runs a select * query where language = language and returns the results as a Json String.
      * 
+     * @param language Language to be selected for null for all languages
      * @return json String without spaces or line breaks.
      * @throws SQLException Thrown if the query fails
      */

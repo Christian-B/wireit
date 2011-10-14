@@ -145,7 +145,7 @@ public class SaveWireit extends WireitSQLBase {
     /**
      * Saves the name, working and language to the sql database.
      * 
-     * Checks to see if the name already exist.
+     * Checks to see if the name and language pair already exist.
      * If so an update is sent.
      * If not an insert is sent
      * @param name Name of the working
