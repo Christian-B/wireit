@@ -75,11 +75,14 @@ public class RunWireit extends WireitSQLBase {
     }
 
     private JSONObject doRun(JSONObject jsonInput) throws JSONException{
-        JSONArray modules = jsonInput.getJSONArray("modules");
-        JSONObject commentBox = (JSONObject)modules.get(0);
-        JSONObject value = commentBox.getJSONObject("value");
-        value.put("comment", "Ran sucessfullly");
-        return jsonInput;
+        Wiring wiring = new Wiring(jsonInput);
+        wiring.run();
+        return wiring.getJsonObject();
+        //JSONArray jsonModules = jsonInput.getJSONArray("modules");
+        //JSONObject commentBox = (JSONObject)jsonModules.get(0);
+        //JSONObject value = commentBox.getJSONObject("value");
+        //value.put("comment", "Ran sucessfullly");
+        //return jsonInput;
     }
 
 }
