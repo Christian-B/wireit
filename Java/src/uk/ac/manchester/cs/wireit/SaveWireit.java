@@ -84,22 +84,6 @@ public class SaveWireit extends WireitSQLBase {
         
     }
         
-    /**
-     * Reads the data from the request body
-     * @see http://java.sun.com/developer/onlineTraining/Programming/BasicJava1/servlet.html
-     * @param request
-     * @return 
-     */
-     private String readRequestBody(HttpServletRequest request) throws IOException{
-        StringBuilder json = new StringBuilder();
-        String line = null;
-        BufferedReader reader = request.getReader();
-        while((line=reader.readLine()) != null ){
-            json.append(line);
-        }
-        return json.toString();
-    }
-
      /**
       * Parses the jsonString into name, language and working and then call other method to save to sql.
       * 

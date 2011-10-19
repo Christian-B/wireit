@@ -1,11 +1,14 @@
 package uk.ac.manchester.cs.wireit;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * This is a base class for the various wireit classes.
@@ -50,4 +53,21 @@ public class WireitSQLBase extends HttpServlet{
             throw new ServletException(ex);
         }
     }    
+    
+        /**
+     * Reads the data from the request body
+     * @see http://java.sun.com/developer/onlineTraining/Programming/BasicJava1/servlet.html
+     * @param request
+     * @return 
+     */
+     String readRequestBody(HttpServletRequest request) throws IOException{
+        StringBuilder json = new StringBuilder();
+        String line = null;
+        BufferedReader reader = request.getReader();
+        while((line=reader.readLine()) != null ){
+            json.append(line);
+        }
+        return json.toString();
+    }
+
 }

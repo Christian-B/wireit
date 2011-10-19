@@ -47,7 +47,7 @@ public class DeleteWireit extends WireitSQLBase {
         System.out.println((new Date()) + "in DeleteWireit.doGet");
              
         String name = request.getParameter("name");
-        String language = request.getParameter("languge");
+        String language = request.getParameter("language");
         try {
             deleteWorking(name, language);
         } catch (Exception ex) {
@@ -75,7 +75,7 @@ public class DeleteWireit extends WireitSQLBase {
      */
     private void deleteWorking(String name, String language) throws SQLException {
         String sqlQuery;
-        sqlQuery = "delete from wirings where name = \"" + name + "\" and language \"" + language + "\"";            
+        sqlQuery = "delete from wirings where name = \"" + name + "\" and language = \"" + language + "\"";            
         System.out.println("Running: " +  sqlQuery);
         int count = stmt.executeUpdate(sqlQuery);
         System.out.println(count + " wirings deleted");
