@@ -412,11 +412,11 @@ lang.extend(WireIt.WiringEditor, WireIt.BaseEditor, {
 	 },
  
 	 /**
+	  * EDIT by Christian split of function LoadWiring
 	  * @method loadPipe
 	  * @param {String} name Pipe name
 	  */
-	 loadPipe: function(name) {
-	
+	loadPipe: function(name) {
 		if(!this.isSaved()) {
 			if( !confirm("Warning: Your work is not saved yet ! Press ok to continue anyway.") ) {
 				return;
@@ -424,60 +424,25 @@ lang.extend(WireIt.WiringEditor, WireIt.BaseEditor, {
 		}
 	
 		try {
-	
 			this.preventLayerChangedEvent = true;
-	
-	     this.loadPanel.hide();
-	
-	    var wiring = this.getPipeByName(name), i;
-
-		 if(!wiring) {
-			this.alert("The wiring '"+name+"' was not found.");
-			return;
-	  	 }
-    
-	    // TODO: check if current wiring is saved...
-	    this.layer.clear();
-    
-	    this.propertiesForm.setValue(wiring.properties, false); // the false tells inputEx to NOT fire the updatedEvt
-    
-	    if(lang.isArray(wiring.modules)) {
-      
-	       // Containers
-	       for(i = 0 ; i < wiring.modules.length ; i++) {
-	          var m = wiring.modules[i];
-	          if(this.modulesByName[m.name]) {
-	             var baseContainerConfig = this.modulesByName[m.name].container;
-	             YAHOO.lang.augmentObject(m.config, baseContainerConfig); 
-	             m.config.title = m.name;
-	             var container = this.layer.addContainer(m.config);
-	             Dom.addClass(container.el, "WiringEditor-module-"+m.name);
-	             container.setValue(m.value);
-	          }
-	          else {
-	             throw new Error("WiringEditor: module '"+m.name+"' not found !");
-	          }
-	       }
-       
-	       // Wires
-	       if(lang.isArray(wiring.wires)) {
-	           for(i = 0 ; i < wiring.wires.length ; i++) {
-	              // On doit chercher dans la liste des terminaux de chacun des modules l'index des terminaux...
-	              this.layer.addWire(wiring.wires[i]);
-	           }
-	        }
-	     }
-     
-		this.markSaved();
-	
-		this.preventLayerChangedEvent = false;
-	
-	  	}
-	  	catch(ex) {
-	     	this.alert(ex);
-	  	}
-	 },
-
+			this.loadPanel.hide();
+			var wiring = this.getPipeByName(name), i;
+			if(!wiring) {
+				this.alert("The wiring '"+name+"' was not found.");
+				return;
+			}
+			if(!this.isSaved()) {
+				if( !confirm("Warning: Your work is not saved yet ! Press ok to continue anyway.") ) {
+					return;
+				}
+			}
+			this.loadWiring(wiring);
+			this.markSaved();
+		}
+		catch(ex) {
+			this.alert(ex);
+		}
+	},
 
 	onLayerChanged: function() {
 		if(!this.preventLayerChangedEvent) {
@@ -485,6 +450,49 @@ lang.extend(WireIt.WiringEditor, WireIt.BaseEditor, {
 		}
 	},
 
+
+	 /**
+	  * Edit bu Christian Split from loadPipe
+	  * @method loadWiring
+	  * @param {Object} Wiring (pipe)
+	  */
+	loadWiring: function(wiring) {
+		// TODO: check if current wiring is saved...
+		this.layer.clear();
+
+		this.propertiesForm.setValue(wiring.properties, false); // the false tells inputEx to NOT fire the updatedEvt
+
+		console.log(wiring)
+		console.log(wiring.modules)
+		
+		if(lang.isArray(wiring.modules)) {
+			// Containers
+			for(i = 0 ; i < wiring.modules.length ; i++) {
+				var m = wiring.modules[i];
+				if(this.modulesByName[m.name]) {
+					var baseContainerConfig = this.modulesByName[m.name].container;
+					YAHOO.lang.augmentObject(m.config, baseContainerConfig); 
+					m.config.title = m.name;
+					var container = this.layer.addContainer(m.config);
+					Dom.addClass(container.el, "WiringEditor-module-"+m.name);
+					container.setValue(m.value);
+				}
+				else {
+					throw new Error("WiringEditor: module '"+m.name+"' not found !");
+				}
+			}
+
+			// Wires
+			if(lang.isArray(wiring.wires)) {
+				for(i = 0 ; i < wiring.wires.length ; i++) {
+					// On doit chercher dans la liste des terminaux de chacun des modules l'index des terminaux...
+					this.layer.addWire(wiring.wires[i]);
+				}
+			}
+		}
+
+		this.preventLayerChangedEvent = false;
+	},
  
  /**
   * This method return a wiring within the given vocabulary described by the modules list
