@@ -19,10 +19,14 @@
    </servlet>
  
    <servlet>
+      <servlet-name>RunWireit</servlet-name>
+      <servlet-class>uk.ac.manchester.cs.wireit.RunWireit</servlet-class>
+   </servlet>
+
+   <servlet>
       <servlet-name>SaveWireit</servlet-name>
       <servlet-class>uk.ac.manchester.cs.wireit.SaveWireit</servlet-class>
    </servlet>
-
  <!-- Note: All <servlet> elements MUST be grouped together and
          placed IN FRONT of the <servlet-mapping> elements -->
  
@@ -34,6 +38,11 @@
    <servlet-mapping>
       <servlet-name>ListWireit</servlet-name>
       <url-pattern>/ListWireit</url-pattern>
+   </servlet-mapping>
+
+   <servlet-mapping>
+      <servlet-name>RunWireit</servlet-name>
+      <url-pattern>/RunWireit</url-pattern>
    </servlet-mapping>
 
    <servlet-mapping>
