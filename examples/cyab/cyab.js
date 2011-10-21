@@ -37,7 +37,7 @@ var cyab = {
 					],
 					"legend": "Please enter an input...",
 					"terminals": [
-						{"name": "output1", "direction": [-1,0], "offsetPosition": {"left": 90, "top": 50 }}
+						{"name": "output1", "direction": [-1,0], "alwaysSrc":true, "offsetPosition": {"left": 90, "top": 50 }}
 					]
 				}
 			},
@@ -52,7 +52,7 @@ var cyab = {
 						{"type": "string", "inputParams": {"label": "Output", "name": "input1", "required": false } },
 					],
 					"terminals": [
-						{"name": "input1", "direction": [1,0], "offsetPosition": {"left": 90,"top": -10}},
+						{"name": "input1", nMaxWires: 1, "direction": [1,0], "offsetPosition": {"left": 90,"top": -10}},
 					]
 				}
 			},
@@ -67,8 +67,8 @@ var cyab = {
 						{"type": "string", "inputParams": {"label": "PassThrough", "name": "both1", "required": false } },
 					],
 					"terminals": [
-						{"name": "output1", "direction": [-1,0], "offsetPosition": {"left": 90, "top": 70 }},
-						{"name": "input1", "direction": [1,0], "offsetPosition": {"left": 90,"top": -10}},
+						{"name": "output1", "direction": [-1,0], "alwaysSrc":true, "offsetPosition": {"left": 90, "top": 70 }},
+						{"name": "input1", nMaxWires: 1, "direction": [1,0], "offsetPosition": {"left": 90,"top": -10}},
 					]
 				}
 			},
@@ -81,7 +81,7 @@ var cyab = {
 					"legend": "Runs HelloWorld.T2Flow",
 					"fields": [],
 					"terminals": [
-						{"name": "Foo", "direction": [-1,0], "offsetPosition": {"left": 90, "top": 45 }},
+						{"name": "Foo", "direction": [-1,0], "alwaysSrc":true, "offsetPosition": {"left": 70, "top": 45 }},
 					]
 				}
 			},
