@@ -4,10 +4,12 @@
  */
 package uk.ac.manchester.cs.wireit;
 
+import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.ac.manchester.cs.wireit.module.*;
+import uk.ac.manchester.cs.wireit.taverna.TavernaException;
 
 /**
  *
@@ -19,7 +21,7 @@ public class Wiring {
     JSONObject properties;
     JSONArray wires;
     
-    public Wiring(JSONObject jsonInput) throws JSONException{
+    public Wiring(JSONObject jsonInput) throws JSONException, TavernaException, IOException{
         JSONArray jsonArray = jsonInput.getJSONArray("modules");
         modules = new Module[jsonArray.length()];
         for (int i = 0; i < jsonArray.length(); i++){
@@ -33,6 +35,8 @@ public class Wiring {
                    modules[i] = new OutputModule(jsonObject); 
                 } else if (name.equals("PassThrough")){
                    modules[i] = new PassThroughModule(jsonObject); 
+                } else if (name.equals("HelloWorld")){
+                   modules[i] = new HelloWorldModule(jsonObject); 
                 } else if (name.equals("comment")){
                    modules[i] = new CommentModule(jsonObject); 
                 } else {

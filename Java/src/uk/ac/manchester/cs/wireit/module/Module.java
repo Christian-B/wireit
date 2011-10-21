@@ -21,14 +21,13 @@ public abstract class Module {
         Object valuesObject = json.get("value");
         values = new HashMap <String, String>();
         if (valuesObject instanceof JSONObject){
-           JSONObject valuePair = (JSONObject) valuesObject;
-           Iterator keys = valuePair.keys();
-           String key = (String)keys.next();
-           String value = valuePair.getString(key);
-           values.put(key, value);
-           if (keys.hasNext()){
-               throw new JSONException("Unexpected more than one key in value");
-           }
+            JSONObject valuePair = (JSONObject) valuesObject;
+            Iterator keys = valuePair.keys();
+            while (keys.hasNext()){
+                String key = (String)keys.next();
+                String value = valuePair.getString(key);
+                values.put(key, value);
+            }
         } else {
             throw new JSONException ("Unexpected value type " + valuesObject.getClass());
         }

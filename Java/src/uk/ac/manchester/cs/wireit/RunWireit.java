@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import uk.ac.manchester.cs.wireit.taverna.TavernaException;
 
 public class RunWireit extends WireitSQLBase {
     
@@ -74,7 +75,7 @@ public class RunWireit extends WireitSQLBase {
         return parameters;
     }
 
-    private JSONObject doRun(JSONObject jsonInput) throws JSONException{
+    private JSONObject doRun(JSONObject jsonInput) throws JSONException, TavernaException, IOException{
         Wiring wiring = new Wiring(jsonInput);
         wiring.run();
         return wiring.getJsonObject();
