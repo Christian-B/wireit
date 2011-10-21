@@ -15,12 +15,13 @@ public class InputModule extends Module{
     
     public InputModule (JSONObject json) throws JSONException{
         super(json);
+        output = new OutputFirer();
     }
     
     @Override
     public void run() throws JSONException {
         Object value = values.get("output1");
-        output.fireOutputReady(output);
+        output.fireOutputReady(value);
     }
 
     @Override
