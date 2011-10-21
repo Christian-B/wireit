@@ -73,6 +73,19 @@ var cyab = {
 				}
 			},
 			{
+				"name": "HelloWorld",
+				"container": {
+					"xtype": "WireIt.FormContainer",
+					// inputEx options :
+					"collapsible": true,
+					"legend": "Runs HelloWorld.T2Flow",
+					"fields": [],
+					"terminals": [
+						{"name": "Foo", "direction": [-1,0], "offsetPosition": {"left": 90, "top": 45 }},
+					]
+				}
+			},
+			{
 				"name": "comment",
 				"container": {
 					"xtype": "WireIt.FormContainer",
