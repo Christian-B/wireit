@@ -6,11 +6,10 @@ package uk.ac.manchester.cs.wireit.module;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
-import uk.ac.manchester.cs.wireit.taverna.ProcessException;
+import uk.ac.manchester.cs.wireit.event.OutputFirer;
+import uk.ac.manchester.cs.wireit.event.OutputListener;
 import uk.ac.manchester.cs.wireit.taverna.TavernaException;
 import uk.ac.manchester.cs.wireit.taverna.baclava.DataThingBasedBaclava;
 
@@ -20,11 +19,12 @@ import uk.ac.manchester.cs.wireit.taverna.baclava.DataThingBasedBaclava;
  */
 public class HelloWorldModule extends TavernaModule {
     
-    InputPort output;
+    OutputFirer output;
     
     public HelloWorldModule(JSONObject json) throws JSONException, TavernaException, IOException{
         super(json);
         setWorkflowFile(new File("webapps/WireIt/Java/HelloWorld.t2flow"));
+        output = new OutputFirer();
     }
         
     @Override
@@ -32,21 +32,21 @@ public class HelloWorldModule extends TavernaModule {
         try {
             DataThingBasedBaclava baclava = runWorkflow();
             Object value = baclava.getValue("Foo");
-            output.push(value.toString());
+            output.fireOutputReady(value);
         } catch (Exception ex) {
             throw new JSONException(ex);
         }
     }
 
     @Override
-    public InputPort getInputPort(String terminal) throws JSONException {
-        throw new JSONException("HelloWorld has no InputPorts");
+    public OutputListener getOutputListener(String terminal) throws JSONException {
+        throw new JSONException("HelloWorld has no Inputs");
     }
 
     @Override
-    public void setOutputPort(String terminal, InputPort inputPort) throws JSONException {
+    public void addOutputListener(String terminal, OutputListener listener) throws JSONException {
         if (terminal.equals("Foo")){
-            output = inputPort;
+            output.addOutputListener(listener);
         } else {
             throw new JSONException("Unsupported port name");
         }

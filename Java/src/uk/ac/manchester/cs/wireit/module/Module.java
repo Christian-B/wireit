@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
+import uk.ac.manchester.cs.wireit.event.OutputListener;
 
 /**
  *
@@ -13,13 +14,13 @@ public abstract class Module {
     
     String name;
     JSONObject config;
-    HashMap <String, String> values;
+    HashMap <String, Object> values;
     
     Module (JSONObject json) throws JSONException{
         name = json.getString("name");
         config = json.getJSONObject("config");
         Object valuesObject = json.get("value");
-        values = new HashMap <String, String>();
+        values = new HashMap <String, Object>();
         if (valuesObject instanceof JSONObject){
             JSONObject valuePair = (JSONObject) valuesObject;
             Iterator keys = valuePair.keys();
@@ -33,9 +34,9 @@ public abstract class Module {
         }
     }
     
-    public abstract InputPort getInputPort(String terminal) throws JSONException;
+    public abstract OutputListener getOutputListener(String terminal) throws JSONException;
 
-    public abstract void setOutputPort(String terminal, InputPort inputPort) throws JSONException;
+    public abstract void addOutputListener(String terminal, OutputListener listener) throws JSONException;
     
     public abstract void run() throws JSONException;
  

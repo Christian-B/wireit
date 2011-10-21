@@ -2,6 +2,8 @@ package uk.ac.manchester.cs.wireit.module;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import uk.ac.manchester.cs.wireit.event.OutputFirer;
+import uk.ac.manchester.cs.wireit.event.OutputListener;
 
 /**
  *
@@ -9,41 +11,42 @@ import org.json.JSONObject;
  */
 public class PassThroughModule extends Module{
         
-    InputPort output;
+    OutputFirer outputFirer;
     
     public PassThroughModule (JSONObject json) throws JSONException{
         super(json);
+        outputFirer = new OutputFirer();
     }
     
-    @Override
-    public InputPort getInputPort(String terminal) throws JSONException{
-        if (terminal.equals("input1")){
-            return new InnerInputPort();
-        } else {
-            throw new JSONException("Unsupported port name");
-        }
-    }
-
-    @Override
-    public void setOutputPort(String terminal, InputPort inputPort) throws JSONException {
-        if (terminal.equals("output1")){
-            output = inputPort;
-        } else {
-            throw new JSONException("Unsupported port name");
-        }
-    }
-
     @Override
     public void run() throws JSONException {
         //Do nothing reacts to push not run()
     }
 
-    private class InnerInputPort implements InputPort{
+    @Override
+    public OutputListener getOutputListener(String terminal) throws JSONException {
+        if (terminal.equals("input1")){
+            return new InnerLisener();
+        } else {
+            throw new JSONException("Unsupported port name: " + terminal);
+        }
+    }
+
+    @Override
+    public void addOutputListener(String terminal, OutputListener listener) throws JSONException {
+        if (terminal.equals("output1")){
+            outputFirer.addOutputListener(listener);
+        } else {
+            throw new JSONException("Unsupported port name: " + terminal);
+        }
+    }
+
+    private class InnerLisener implements OutputListener{
 
         @Override
-        public void push(String value) {
-            values.put("both1", value);
-            output.push(value);
-        }    
+        public void outputReady(Object output) {
+            values.put("both1", output);
+            outputFirer.fireOutputReady(output);
+        }
     }
 }

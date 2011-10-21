@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import uk.ac.manchester.cs.wireit.event.OutputListener;
 import uk.ac.manchester.cs.wireit.module.*;
 import uk.ac.manchester.cs.wireit.taverna.TavernaException;
 
@@ -55,12 +56,12 @@ public class Wiring {
             Module target = modules[tgtNum];
             String terminal = tgt.getString("terminal");
             System.out.println(tgtNum + " " + terminal + " " + target);
-            InputPort inputPort = target.getInputPort(terminal);
+            OutputListener outputListener = target.getOutputListener(terminal);
             JSONObject src = wire.getJSONObject("src");
             int srcNum = src.getInt("moduleId");
             Module source = modules[srcNum];
             terminal = src.getString("terminal");
-            source.setOutputPort(terminal, inputPort);           
+            source.addOutputListener(terminal, outputListener);           
         }
     }
     

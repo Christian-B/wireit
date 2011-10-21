@@ -2,6 +2,8 @@ package uk.ac.manchester.cs.wireit.module;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import uk.ac.manchester.cs.wireit.event.OutputFirer;
+import uk.ac.manchester.cs.wireit.event.OutputListener;
 
 /**
  *
@@ -9,30 +11,30 @@ import org.json.JSONObject;
  */
 public class InputModule extends Module{
         
-    InputPort output;
+    OutputFirer output;
     
     public InputModule (JSONObject json) throws JSONException{
         super(json);
     }
     
     @Override
-    public InputPort getInputPort(String terminal) throws JSONException{
-        throw new JSONException("InputModule has no InputPorts");
+    public void run() throws JSONException {
+        Object value = values.get("output1");
+        output.fireOutputReady(output);
     }
 
     @Override
-    public void setOutputPort(String terminal, InputPort inputPort) throws JSONException {
+    public OutputListener getOutputListener(String terminal) throws JSONException {
+        throw new JSONException("InputModule has no Inputs");
+    }
+
+    @Override
+    public void addOutputListener(String terminal, OutputListener listener) throws JSONException {
         if (terminal.equals("output1")){
-            output = inputPort;
+            output.addOutputListener(listener);
         } else {
             throw new JSONException("Unsupported port name");
         }
-    }
-
-    @Override
-    public void run() throws JSONException {
-        String value = values.get("output1");
-        output.push(value);
     }
 
 }
