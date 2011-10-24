@@ -8,51 +8,102 @@ var cyab = {
 		languageName: "cyabTest1",
 	
 		modules: [
-//			{
-//				"name": "DemoModule",
-//				"container": {
-//					"xtype": "WireIt.FormContainer",
-//					// inputEx options :
-//					"title": "WireIt.FormContainer demo",
-//					"collapsible": true,
-//					"fields": [
-//						{"type": "select", "inputParams": {"label": "Title", "name": "title", "selectValues": ["Mr","Mrs","Mme"] } },
-//						{"inputParams": {"label": "Firstname", "name": "firstname", "required": true //} },
-//						{"inputParams": {"label": "Lastname", "name": "lastname", "value":"Dupont"} },
-//						{"type":"email", "inputParams": {"label": "Email", "name": "email", "required": true, "wirable": true}},
-//						{"type":"boolean", "inputParams": {"label": "Happy to be there ?", "name": "happy"}},
-//						{"type":"url", "inputParams": {"label": "Website", "name":"website", "size": 25}}
-//					],
-//					"legend": "Tell us about yourself..."
-//		 		}
-//			},
 			{
-				"name": "Input",
+				"name": "Echo",
+				"category": "Taverna Workflow",
+				"description": "Echoes input to output",
+				"container" : {
+					"xtype":"WireIt.TavernaWFContainer",
+					"inputs": ["foo"],
+					"outputs": ["bar"],
+					"wfURI":"file://blah1"
+				}
+			},
+			{
+				"name": "HelloWorld",
+				"category": "Taverna Workflow",
+				"wfURI":"file://blah1",
+				"container": {
+					"xtype":"WireIt.TavernaWFContainer",
+					"inputs": [],
+					"outputs": ["Foo"],
+				}
+			},
+			{
+				"name": "Simple Input",
+				"category": "input",
 				"container": {
 					"xtype": "WireIt.FormContainer",
-					// inputEx options :
-					"collapsible": true,
+					"title": "input",
 					"fields": [
-						{"type": "string", "inputParams": {"label": "Input", "name": "output1", "required": true } },
+						{
+							"ddConfig": {
+								"type": "output",
+								"allowedTypes": ["input"]
+							},
+							"inputParams": {
+								"label": "Value", 
+								"name": "output",
+								"required": true
+							}
+						},
 					],
-					"legend": "Please enter an input...",
 					"terminals": [
-						{"name": "output1", "direction": [-1,0], "alwaysSrc":true, "offsetPosition": {"left": 90, "top": 50 }}
+						{
+							"name": "output",
+							"direction": [0,1],
+							"offsetPosition": {"left": 86, "bottom": -15},
+							"alwaysSrc":true,
+							"ddConfig": {
+								"type": "output",
+								"allowedTypes": ["input"]
+							}
+						}
 					]
 				}
 			},
 			{
-				"name": "Output",
+				"name": "List Input",
+				"category": "input",
 				"container": {
 					"xtype": "WireIt.FormContainer",
-					// inputEx options :
-					"collapsible": true,
-					"legend": "here comes the output...",
-					"fields": [
-						{"type": "string", "inputParams": {"label": "Output", "name": "input1", "required": false } },
+					"title": "Input test",
+					"fields": [{"type": "text", "inputParams": {"label": "List values", "name": "output", "wirable": false }} ],
+					"terminals": [
+						{
+							"name": "output",
+							"direction": [0,1],
+							"offsetPosition": {"left": 86, "bottom": -15},
+							"alwaysSrc":true,
+							"ddConfig":{
+								"type": "output",
+								"allowedTypes": ["input"]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Simple Output",
+				"category": "output",
+				"description": "Workflow output",
+				"container": {
+					"xtype": "WireIt.FormContainer",
+					"title": "output",
+					"fields": [ 
+						{"type": "string", "inputParams": {"label": "Value", "name": "input", "wirable": false}}
 					],
 					"terminals": [
-						{"name": "input1", nMaxWires: 1, "direction": [1,0], "offsetPosition": {"left": 90,"top": -10}},
+						{
+							"name": "input",
+							"direction": [0,-1],
+							"offsetPosition": {"left": 82, "top": -15 },
+							"ddConfig": {
+								"type": "input",
+								"allowedTypes": ["output"]
+							},
+							"nMaxWires": 1
+						}
 					]
 				}
 			},
@@ -64,24 +115,29 @@ var cyab = {
 					"collapsible": true,
 					"legend": "here comes the passthrough...",
 					"fields": [
-						{"type": "string", "inputParams": {"label": "PassThrough", "name": "both1", "required": false } },
+						{"type": "string", "inputParams": {"label": "PassThrough", "name": "both", "required": false } },
 					],
 					"terminals": [
-						{"name": "output1", "direction": [-1,0], "alwaysSrc":true, "offsetPosition": {"left": 90, "top": 70 }},
-						{"name": "input1", nMaxWires: 1, "direction": [1,0], "offsetPosition": {"left": 90,"top": -10}},
-					]
-				}
-			},
-			{
-				"name": "HelloWorld",
-				"container": {
-					"xtype": "WireIt.FormContainer",
-					// inputEx options :
-					"collapsible": true,
-					"legend": "Runs HelloWorld.T2Flow",
-					"fields": [],
-					"terminals": [
-						{"name": "Foo", "direction": [-1,0], "alwaysSrc":true, "offsetPosition": {"left": 70, "top": 45 }},
+						{
+							"name": "input",
+							"direction": [0,-1],
+							"offsetPosition": {"left": 90, "top": -10 },
+							"ddConfig": {
+								"type": "input",
+								"allowedTypes": ["output"]
+							},
+							"nMaxWires": 1
+						},
+						{
+							"name": "out",
+							"direction": [0,1],
+							"offsetPosition": {"left": 86, "bottom": -10},
+							"alwaysSrc":true,
+							"ddConfig": {
+								"type": "output",
+								"allowedTypes": ["input"]
+							}
+						}
 					]
 				}
 			},
