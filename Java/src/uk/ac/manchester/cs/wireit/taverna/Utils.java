@@ -91,7 +91,7 @@ public class Utils {
     public static File createCalendarBasedDirectory(File parent) throws IOException{
         checkDirectory(parent);
         GregorianCalendar calendar = new GregorianCalendar();
-        String name = calendar.get(Calendar.YEAR) + "_" + twoCharacter(calendar.get(Calendar.MONTH)) + "_" + 
+        String name = calendar.get(Calendar.YEAR) + "_" + twoCharacter(calendar.get(Calendar.MONTH) + 1) + "_" + 
                 twoCharacter(calendar.get(Calendar.DAY_OF_MONTH)) + "_" + 
                 twoCharacter(calendar.get(Calendar.HOUR_OF_DAY)) + "_" + 
                 twoCharacter(calendar.get(Calendar.MINUTE)) + "_" + twoCharacter(calendar.get(Calendar.SECOND));
