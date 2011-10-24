@@ -1,6 +1,7 @@
 package uk.ac.manchester.cs.wireit.taverna.workflow;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ import uk.ac.manchester.cs.wireit.taverna.XMLReader;
 public class XMLBasedT2Flow implements TavernaWorkflow{
 
     /**
-     * Name of the workflowas given in the T"Flow
+     * Name of the workflowas given in the T2Flow
      */
     private String workflowName;
     
@@ -28,6 +29,11 @@ public class XMLBasedT2Flow implements TavernaWorkflow{
      * Map of expected inputs by name and the corrospondoing depth for each input.
      */
     private HashMap<String,Integer>inputs;
+    
+    /**
+     * List of the expected outputs of the workflow
+     */
+    private ArrayList<String> outputs;
     
     /**
      * Extracts the required information by parsing the file as XML and looking for the required information.
@@ -78,20 +84,28 @@ public class XMLBasedT2Flow implements TavernaWorkflow{
      */
     private void updateWorkflow(Document workflow) throws TavernaException{
         inputs = new HashMap<String,Integer>();
+        outputs = new ArrayList<String>();
         try { 
             HashMap<String,Integer> newInputs = new HashMap<String,Integer>();
             Element root = workflow.getDocumentElement();
             Element dataflow = XMLReader.getDirectOnlyChildrenByName(root, "dataflow");
             Element name = XMLReader.getDirectOnlyChildrenByName(dataflow, "name");
             workflowName = XMLReader.getText(name);
-            Element inputPort = XMLReader.getDirectOnlyChildrenByName(dataflow, "inputPorts");
-            List<Node> ports = XMLReader.getDirectChildrenByName(inputPort,"port");
+            Element inputPorts = XMLReader.getDirectOnlyChildrenByName(dataflow, "inputPorts");
+            List<Node> ports = XMLReader.getDirectChildrenByName(inputPorts,"port");
             for (Node port: ports){
                 name = XMLReader.getDirectOnlyChildrenByName(port, "name");
                 String theName = XMLReader.getText(name);
                 Element depth = XMLReader.getDirectOnlyChildrenByName(port, "depth");
                 Integer theDepth = new Integer(XMLReader.getText(depth));
                 inputs.put(theName, theDepth);
+            }
+            Element outputPorts = XMLReader.getDirectOnlyChildrenByName(dataflow, "outputPorts");
+            ports = XMLReader.getDirectChildrenByName(outputPorts,"port");
+            for (Node port: ports){
+                name = XMLReader.getDirectOnlyChildrenByName(port, "name");
+                String theName = XMLReader.getText(name);
+                outputs.add(theName);
             }
         } catch (Exception ex) {
             throw new TavernaException ("Unable to parse XML as a workflow.", ex);
@@ -108,10 +122,18 @@ public class XMLBasedT2Flow implements TavernaWorkflow{
         return inputs;
     }
     
+    @Override
+    public List<String> getOutputs() {
+        return outputs;
+    }
+
     public static void main(String[] args) throws TavernaException {
-        XMLBasedT2Flow me = new XMLBasedT2Flow("HelloWorld.t2flow");
+        XMLBasedT2Flow me = new XMLBasedT2Flow("Echo.t2flow");
         Map<String, Integer> inputs = me.getInputs();
         System.out.println(inputs);
+        List<String> outputs = me.getOutputs();
+        System.out.println(outputs);
     }
+
 }
 

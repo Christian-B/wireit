@@ -1,5 +1,6 @@
 package uk.ac.manchester.cs.wireit.taverna.workflow;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,4 +28,13 @@ public interface TavernaWorkflow {
      * @return Map of input names to their port depth.
      */
     public Map<String,Integer> getInputs();
+
+    /**
+     * Obtains the expected outputs by name.
+     * 
+     * Regrettably at the time of writing there was no way to identify the expected outout types from a Taverna workflow.
+     * @return List of output names.
+     */
+    public List<String> getOutputs();
+
 }
