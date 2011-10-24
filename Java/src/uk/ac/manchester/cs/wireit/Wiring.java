@@ -30,9 +30,9 @@ public class Wiring {
             if (json instanceof JSONObject){
                 JSONObject jsonObject = (JSONObject)json;
                 String name = jsonObject.getString("name");
-                if (name.equals("Input")){
+                if (name.equals("Simple Input")){
                    modules[i] = new InputModule(jsonObject); 
-                } else if (name.equals("Output")){
+                } else if (name.equals("Simple Output")){
                    modules[i] = new OutputModule(jsonObject); 
                 } else if (name.equals("PassThrough")){
                    modules[i] = new PassThroughModule(jsonObject); 

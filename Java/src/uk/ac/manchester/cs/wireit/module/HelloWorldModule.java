@@ -19,8 +19,10 @@ import uk.ac.manchester.cs.wireit.taverna.baclava.DataThingBasedBaclava;
  */
 public class HelloWorldModule extends TavernaModule {
     
-    OutputFirer output;
+    private OutputFirer output;
     
+    private final String PORT_NAME = "Foo";
+
     public HelloWorldModule(JSONObject json) throws JSONException, TavernaException, IOException{
         super(json);
         setWorkflowFile(new File("webapps/WireIt/Java/HelloWorld.t2flow"));
@@ -31,7 +33,7 @@ public class HelloWorldModule extends TavernaModule {
     public void run() throws JSONException {
         try {
             DataThingBasedBaclava baclava = runWorkflow();
-            Object value = baclava.getValue("Foo");
+            Object value = baclava.getValue(PORT_NAME);
             output.fireOutputReady(value);
         } catch (Exception ex) {
             throw new JSONException(ex);
@@ -45,10 +47,10 @@ public class HelloWorldModule extends TavernaModule {
 
     @Override
     public void addOutputListener(String terminal, OutputListener listener) throws JSONException {
-        if (terminal.equals("Foo")){
+        if (terminal.equals(PORT_NAME)){
             output.addOutputListener(listener);
         } else {
-            throw new JSONException("Unsupported port name");
+            throw new JSONException("Unsupported port name " + terminal + " Expected Foo");
         }
     }
 

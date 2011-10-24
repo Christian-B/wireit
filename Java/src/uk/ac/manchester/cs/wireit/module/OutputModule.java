@@ -9,7 +9,9 @@ import uk.ac.manchester.cs.wireit.event.OutputListener;
  * @author Christian
  */
 public class OutputModule extends Module{
-           
+       
+    private final String PORT_NAME = "input";
+    
     public OutputModule (JSONObject json) throws JSONException{
         super(json);
     }
@@ -21,10 +23,10 @@ public class OutputModule extends Module{
 
     @Override
     public OutputListener getOutputListener(String terminal) throws JSONException {
-        if (terminal.equals("input1")){
+        if (terminal.equals(PORT_NAME)){
             return new InnerLisener();
         } else {
-            throw new JSONException("Unsupported port name");
+            throw new JSONException("Unsupported port name " + terminal + " expected input");
         }
     }
 
@@ -37,7 +39,7 @@ public class OutputModule extends Module{
 
         @Override
         public void outputReady(Object output) {
-            values.put("input1", output);
+            values.put(PORT_NAME, output);
         }
         
     }

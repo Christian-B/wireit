@@ -25,7 +25,7 @@ public class PassThroughModule extends Module{
 
     @Override
     public OutputListener getOutputListener(String terminal) throws JSONException {
-        if (terminal.equals("input1")){
+        if (terminal.equals("input")){
             return new InnerLisener();
         } else {
             throw new JSONException("Unsupported port name: " + terminal);
@@ -34,7 +34,7 @@ public class PassThroughModule extends Module{
 
     @Override
     public void addOutputListener(String terminal, OutputListener listener) throws JSONException {
-        if (terminal.equals("output1")){
+        if (terminal.equals("output")){
             outputFirer.addOutputListener(listener);
         } else {
             throw new JSONException("Unsupported port name: " + terminal);
@@ -45,7 +45,7 @@ public class PassThroughModule extends Module{
 
         @Override
         public void outputReady(Object output) {
-            values.put("both1", output);
+            values.put("both", output);
             outputFirer.fireOutputReady(output);
         }
     }
