@@ -62,7 +62,7 @@ var cyab = {
 						{
 							"name": "output",
 							"direction": [0,1],
-							"offsetPosition": {"left": 86, "bottom": -15},
+							"offsetPosition": {"right": -14, "top": 25},
 							"alwaysSrc":true,
 							"ddConfig": {
 								"type": "output",
@@ -83,7 +83,7 @@ var cyab = {
 						{
 							"name": "output",
 							"direction": [0,1],
-							"offsetPosition": {"left": 86, "bottom": -15},
+							"offsetPosition": {"right": -14, "top": 75},
 							"alwaysSrc":true,
 							"ddConfig":{
 								"type": "output",
@@ -107,7 +107,7 @@ var cyab = {
 						{
 							"name": "input",
 							"direction": [0,-1],
-							"offsetPosition": {"left": 82, "top": -15 },
+							"offsetPosition": {"left": -14, "top": 25 },
 							"ddConfig": {
 								"type": "input",
 								"allowedTypes": ["output"]
@@ -131,7 +131,7 @@ var cyab = {
 						{
 							"name": "input",
 							"direction": [0,-1],
-							"offsetPosition": {"left": 90, "top": -10 },
+							"offsetPosition": {"left": -14, "top": 33 },
 							"ddConfig": {
 								"type": "input",
 								"allowedTypes": ["output"]
@@ -141,7 +141,7 @@ var cyab = {
 						{
 							"name": "output",
 							"direction": [0,1],
-							"offsetPosition": {"left": 86, "bottom": -10},
+							"offsetPosition": {"right": -14, "top": 33},
 							"alwaysSrc":true,
 							"ddConfig": {
 								"type": "output",
