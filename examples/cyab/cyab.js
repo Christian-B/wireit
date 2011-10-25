@@ -34,8 +34,8 @@ var cyab = {
 				"category": "Taverna Workflow",
 				"container": {
 					"xtype":"WireIt.TavernaWFContainer",
-					"inputs": ["Left","Middle","Right"],
-					"outputs": ["Left","Middle","Right"],
+					"inputs": ["in_Left","in_Middle","in_Right"],
+					"outputs": ["out_Left","out_Middle","out_Right"],
 					"wfURI":"ThreeStrings.t2flow",
 				}
 			},

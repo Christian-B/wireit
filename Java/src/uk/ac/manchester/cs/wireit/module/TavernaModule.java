@@ -122,6 +122,8 @@ public class TavernaModule extends Module{
     public OutputListener getOutputListener(String terminal) throws JSONException {
         if (inputPorts.containsKey(terminal)){
             return inputPorts.get(terminal);
+        } else if (terminal.startsWith("in_") && inputPorts.containsKey(terminal.substring(3))) {
+            return inputPorts.get(terminal.substring(3));            
         } else {
             String portNames = "";
             for (String key:inputPorts.keySet()){
@@ -135,6 +137,8 @@ public class TavernaModule extends Module{
     public void addOutputListener(String terminal, OutputListener listener) throws JSONException {
         if (outputPorts.containsKey(terminal)){
             outputPorts.get(terminal).addOutputListener(listener);
+        } else if (terminal.startsWith("out_") && outputPorts.containsKey(terminal.substring(4))) {
+            outputPorts.get(terminal.substring(4)).addOutputListener(listener);           
         } else {
             String portNames = "";
             for (String key:outputPorts.keySet()){
