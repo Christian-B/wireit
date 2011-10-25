@@ -14,19 +14,29 @@ var cyab = {
 				"description": "Echoes input to output",
 				"container" : {
 					"xtype":"WireIt.TavernaWFContainer",
-					"inputs": ["foo"],
-					"outputs": ["bar"],
-					"wfURI":"file://blah1"
+					"inputs": ["Bar"],
+					"outputs": ["Foo"],
+					"wfURI":"Echo.t2flow"
 				}
 			},
 			{
 				"name": "HelloWorld",
 				"category": "Taverna Workflow",
-				"wfURI":"file://blah1",
 				"container": {
 					"xtype":"WireIt.TavernaWFContainer",
 					"inputs": [],
 					"outputs": ["Foo"],
+					"wfURI":"HelloWorld.t2flow",
+				}
+			},
+			{
+				"name": "Triple Echo",
+				"category": "Taverna Workflow",
+				"container": {
+					"xtype":"WireIt.TavernaWFContainer",
+					"inputs": ["Left","Middle","Right"],
+					"outputs": ["Left","Middle","Right"],
+					"wfURI":"ThreeStrings.t2flow",
 				}
 			},
 			{
@@ -129,7 +139,7 @@ var cyab = {
 							"nMaxWires": 1
 						},
 						{
-							"name": "out",
+							"name": "output",
 							"direction": [0,1],
 							"offsetPosition": {"left": 86, "bottom": -10},
 							"alwaysSrc":true,
