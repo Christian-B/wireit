@@ -36,12 +36,18 @@ public class Wiring {
                    modules[i] = new OutputModule(jsonObject); 
                 } else if (name.equals("PassThrough")){
                    modules[i] = new PassThroughModule(jsonObject); 
-                } else if (name.equals("HelloWorld")){
-                   modules[i] = new HelloWorldModule(jsonObject); 
                 } else if (name.equals("comment")){
                    modules[i] = new CommentModule(jsonObject); 
+                } else if (jsonObject.has("config")){
+                    JSONObject config = jsonObject.getJSONObject("config");
+                    String xtype = config.optString("xtype");
+                    if ("WireIt.TavernaWFContainer".equalsIgnoreCase(xtype)){
+                       modules[i] = new TavernaModule(jsonObject); 
+                    } else {
+                        throw new JSONException("Unexpected name " + name + "and xtype " + xtype + " in modules");
+                    }
                 } else {
-                    throw new JSONException("Unexpected name " + name + " in modules");
+                    throw new JSONException("Unexpected name " + name + "and no config in modules");
                 }
             } else {
                 throw new JSONException("Unexpected type " + json.getClass() + " in modules");
@@ -65,7 +71,7 @@ public class Wiring {
         }
     }
     
-    public void run() throws JSONException{
+    public void run() throws WireItRunException{
         for (int i = 0; i < modules.length; i++){
             modules[i].run();
         }

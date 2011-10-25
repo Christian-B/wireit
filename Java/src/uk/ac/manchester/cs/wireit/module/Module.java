@@ -38,7 +38,7 @@ public abstract class Module {
 
     public abstract void addOutputListener(String terminal, OutputListener listener) throws JSONException;
     
-    public abstract void run() throws JSONException;
+    public abstract void run() throws WireItRunException;
  
     public JSONObject getJsonObject() throws JSONException{
         JSONObject me = new JSONObject();

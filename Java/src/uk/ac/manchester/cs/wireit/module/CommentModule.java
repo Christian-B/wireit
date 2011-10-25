@@ -20,7 +20,7 @@ public class CommentModule extends Module{
     }
 
     @Override
-    public void run() throws JSONException {
+    public void run() throws WireItRunException {
         Date now = new Date();
         values.put("comment", "Ran successfully at " + now);
     }

@@ -17,7 +17,7 @@ public class OutputModule extends Module{
     }
     
     @Override
-    public void run() throws JSONException {
+    public void run() throws WireItRunException {
         //Do nothing reacts to push not run()
     }
 

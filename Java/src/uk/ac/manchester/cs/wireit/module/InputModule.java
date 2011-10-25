@@ -21,7 +21,7 @@ public class InputModule extends Module{
     }
     
     @Override
-    public void run() throws JSONException {
+    public void run() throws WireItRunException {
         Object value = values.get(PORT_NAME);
         output.fireOutputReady(value);
     }

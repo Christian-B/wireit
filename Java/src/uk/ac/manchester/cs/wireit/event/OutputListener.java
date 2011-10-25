@@ -4,11 +4,13 @@
  */
 package uk.ac.manchester.cs.wireit.event;
 
+import uk.ac.manchester.cs.wireit.module.WireItRunException;
+
 /**
  *
  * @author Christian
  */
 public interface OutputListener {
     
-    public void outputReady(Object output);
+    public void outputReady(Object output) throws WireItRunException;
 }

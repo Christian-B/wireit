@@ -1,6 +1,7 @@
 package uk.ac.manchester.cs.wireit.event;
 
 import java.util.ArrayList;
+import uk.ac.manchester.cs.wireit.module.WireItRunException;
 
 public class OutputFirer {
     
@@ -31,7 +32,7 @@ public class OutputFirer {
         listeners.remove(l);
     }
     
-    public void fireOutputReady(Object output) {
+    public void fireOutputReady(Object output) throws WireItRunException {
         for (OutputListener listener: listeners){
             listener.outputReady(output);
         }
