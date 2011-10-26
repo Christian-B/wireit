@@ -1,9 +1,9 @@
 /**
  * Ajax Adapter. Expect JSON response for all queries.
- * @class WireIt.WiringEditor.adapters.Ajax
+ * @class WireIt.WiringEditor.adapters.AjaxAdapter
  * @static 
  */
-WireIt.WiringEditor.adapters.AjaxPlus = {
+WireIt.WiringEditor.adapters.AjaxAdapter = {
 	
 	/**
 	 * init the adapter 
@@ -20,7 +20,7 @@ WireIt.WiringEditor.adapters.AjaxPlus = {
 	 * @static
 	 */
 	saveWiring: function(value, callbacks) {
-		this._sendRequest('../../SaveWireit', 'POST', value, callbacks);
+		this._sendRequest('../SaveWireit', 'POST', value, callbacks);
 	},
 	
 	/**
@@ -29,7 +29,7 @@ WireIt.WiringEditor.adapters.AjaxPlus = {
 	 * @static
 	 */
 	runWiring: function(value, callbacks) {
-		this._sendRequest('../../RunWireit', 'POST', value, callbacks);
+		this._sendRequest('../RunWireit', 'POST', value, callbacks);
 	},
 	
 	/**
@@ -38,7 +38,7 @@ WireIt.WiringEditor.adapters.AjaxPlus = {
 	 * @static
 	 */
 	deleteWiring: function(value, callbacks) {
-		this.url = "../../DeleteWireit?name=" + value.name + "&language=" + value.language;
+		this.url = "../DeleteWireit?name=" + value.name + "&language=" + value.language;
 		this._sendRequest(this.url, 'GET', value, callbacks);
 	},
 	
@@ -48,7 +48,7 @@ WireIt.WiringEditor.adapters.AjaxPlus = {
 	 * @static
 	 */
 	listWirings: function(value, callbacks) {
-		this.url = "../../ListWireit?language=" + value.language;
+		this.url = "../ListWireit?language=" + value.language;
 		this._sendRequest(this.url, 'GET', value, callbacks);
 	},
 	
