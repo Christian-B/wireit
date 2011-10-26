@@ -37,7 +37,14 @@ public class TavernaModule extends Module{
         super(json);
         commandLine = new CommandLineWrapper();
         setTavernaHome(System.getenv("TAVERNA_HOME"));
+        commandLine.setOutputRootDirectory(new File("webapps/WireIt/Output"));
         setWorkflow(json);    
+    }
+    
+    public final void setTavernaHome(String tavernaHome) throws TavernaException, IOException {
+        if (tavernaHome != null && !tavernaHome.isEmpty()){
+            commandLine.setTavernaHome(new File(tavernaHome));        
+        } 
     }
     
     private void setWorkflow(JSONObject json) throws JSONException, TavernaException, IOException{
@@ -55,23 +62,7 @@ public class TavernaModule extends Module{
         setInputs(workflow);
         setOutputs(workflow);
     }
-    
-    /*private void removeNullandEmptyValues(){
-        //remove any null or empty values as we check that all values are set to run
-        for (String key:values.keySet()){
-            Object value = values.get(key);
-            if (value == null){
-                values.remove(key);
-            }
-            if (value instanceof String){
-                String valueSt = (String)value;
-                if (valueSt.isEmpty()){
-                    values.remove(key);
-                }
-            }
-        }
-    }*/
-    
+        
     private void setInputs(TavernaWorkflow workflow) throws TavernaException{
         //removeNullandEmptyValues();
         Map<String,Integer> inputs = workflow.getInputs();  
@@ -93,12 +84,6 @@ public class TavernaModule extends Module{
         }
     }
     
-    public final void setTavernaHome(String tavernaHome) throws TavernaException, IOException {
-        if (tavernaHome != null && !tavernaHome.isEmpty()){
-            commandLine.setTavernaHome(new File(tavernaHome));        
-        } 
-    }
-
     @Override
     public void run() throws WireItRunException {
         //Just in case their are no inputs are all set as values.

@@ -3,3 +3,5 @@ Java/build/*
 Java/nbproject/*
 Java/build.xml
 Java/manifest.mf
+Output/*
+!Output/ReadMe.txt
