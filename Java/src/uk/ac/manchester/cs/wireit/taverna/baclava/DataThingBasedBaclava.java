@@ -10,10 +10,10 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Iterator;
-import org.embl.ebi.escience.baclava.factory.DataThingXMLFactory;
 import org.jdom.input.SAXBuilder;
 import java.util.Map;
-import org.embl.ebi.escience.baclava.DataThing;
+import net.sf.taverna.t2.lang.baclava.DataThing;
+import net.sf.taverna.t2.lang.baclava.factory.DataThingXMLFactory;
 import org.jdom.Document;
 import uk.ac.manchester.cs.wireit.taverna.TavernaException;
 
