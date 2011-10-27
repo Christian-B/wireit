@@ -41,16 +41,12 @@ var tavernaLanguage = {
 			},
 			{
 				"name": "Simple Input",
-				"category": "input",
+				"category": "Input",
 				"container": {
 					"xtype": "WireIt.FormContainer",
 					"title": "input",
 					"fields": [
 						{
-							"ddConfig": {
-								"type": "output",
-								"allowedTypes": ["input"]
-							},
 							"inputParams": {
 								"label": "Value", 
 								"name": "output",
@@ -65,8 +61,39 @@ var tavernaLanguage = {
 							"offsetPosition": {"right": -14, "top": 25},
 							"alwaysSrc":true,
 							"ddConfig": {
-								"type": "output",
-								"allowedTypes": ["input"]
+								"type": "outputString",
+								"allowedTypes": ["inputString","inputDepthZero"]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "URL Input",
+				"category": "Input",
+				"container": {
+					"xtype": "WireIt.FormContainer",
+					"width": 350,
+					"title": "input",
+					"fields": [
+						{
+							"type": 'url',
+							"inputParams": {
+								"label": "URL", 
+								"name": "output",
+								"required": true
+							}
+						},
+					],
+					"terminals": [
+						{
+							"name": "output",
+							"direction": [0,1],
+							"offsetPosition": {"right": -14, "top": 25},
+							"alwaysSrc":true,
+							"ddConfig": {
+								"type": "outputURL",
+								"allowedTypes": ["inputURL","inputDepthZero"]
 							}
 						}
 					]
@@ -74,7 +101,7 @@ var tavernaLanguage = {
 			},
 			{
 				"name": "List Input",
-				"category": "input",
+				"category": "Input",
 				"container": {
 					"xtype": "WireIt.FormContainer",
 					"title": "Input test",
@@ -86,8 +113,8 @@ var tavernaLanguage = {
 							"offsetPosition": {"right": -14, "top": 75},
 							"alwaysSrc":true,
 							"ddConfig":{
-								"type": "output",
-								"allowedTypes": ["input"]
+								"type": "outputList",
+								"allowedTypes": ["inputDepthOne"]
 							}
 						}
 					]
@@ -95,7 +122,7 @@ var tavernaLanguage = {
 			},
 			{
 				"name": "Simple Output",
-				"category": "output",
+				"category": "Output",
 				"description": "Workflow output",
 				"container": {
 					"xtype": "WireIt.FormContainer",
@@ -109,8 +136,39 @@ var tavernaLanguage = {
 							"direction": [0,-1],
 							"offsetPosition": {"left": -14, "top": 25 },
 							"ddConfig": {
-								"type": "input",
-								"allowedTypes": ["output"]
+								"type": "inputString",
+								"allowedTypes": ["outputString"]
+							},
+							"nMaxWires": 1
+						}
+					]
+				}
+			},
+			{
+				"name": "URL Output",
+				"category": "Output",
+				"description": "Workflow output",
+				"container": {
+					"width": 350,
+					"xtype": "WireIt.FormContainer",
+					"title": "output",
+					"fields": [ 
+						{
+							"type": 'url',
+							"inputParams": {
+								"label": "URL",
+								"name": "input",
+								"wirable": false
+						}	}
+					],
+					"terminals": [
+						{
+							"name": "input",
+							"direction": [0,-1],
+							"offsetPosition": {"left": -14, "top": 25 },
+							"ddConfig": {
+								"type": "inputURL",
+								"allowedTypes": ["outputURL"]
 							},
 							"nMaxWires": 1
 						}
@@ -133,8 +191,8 @@ var tavernaLanguage = {
 							"direction": [0,-1],
 							"offsetPosition": {"left": -14, "top": 33 },
 							"ddConfig": {
-								"type": "input",
-								"allowedTypes": ["output"]
+								"type": "inputString",
+								"allowedTypes": ["outputString"]
 							},
 							"nMaxWires": 1
 						},
@@ -144,8 +202,8 @@ var tavernaLanguage = {
 							"offsetPosition": {"right": -14, "top": 33},
 							"alwaysSrc":true,
 							"ddConfig": {
-								"type": "output",
-								"allowedTypes": ["input"]
+								"type": "outputString",
+								"allowedTypes": ["inputString","inputDepthZero"]
 							}
 						}
 					]

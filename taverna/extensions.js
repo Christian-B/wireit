@@ -5,6 +5,8 @@ tavernaLanguage.WiringEditor = function(options) {
 	tavernaLanguage.WiringEditor.superclass.constructor.call(this, options);
 };
 
+inputEx.spacerUrl = "../lib/inputex/images/space.gif";
+
 YAHOO.lang.extend(tavernaLanguage.WiringEditor, WireIt.WiringEditor, {
 	/**
 	 * Add the "run" button

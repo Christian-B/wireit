@@ -39,30 +39,63 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 	render: function() {
 		WireIt.TavernaWFContainer.superclass.render.call(this);
 
+		var baclavaName;
+		//Baclava Input if needed
+		if (this.options.inputs.length > 0) {
+			this.options.terminals.push({
+				"name": "Baclava Input", 
+				"direction": [-1,0], 
+				"offsetPosition": {"left": -14, "top": 33 }, 
+				"nMaxWires": 1,
+				"ddConfig": {
+					"type": "inputURL",
+					"allowedTypes": ["outputURL"]
+					}
+			});	
+			baclavaName = "Baclava format Input/Output"
+		} else {
+			baclavaName = "Baclava format Output"
+		}
+		
+		//Baclava Output
+		this.options.terminals.push({
+			"name": "Baclava Output", 
+			"direction": [1,0], 
+			"offsetPosition": {"right": -14, "top": 33 }, 
+			"ddConfig": {
+				"type": "outputURL",
+				"allowedTypes": ["inputURL"]
+			},
+			"alwaysSrc": true
+		});
+		this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "center"}, baclavaName));
+		
+		//Normal input
 		for(var i = 0 ; i < this.options.inputs.length ; i++) {
 			var input = this.options.inputs[i];
 			this.options.terminals.push({
 				"name": input, 
 				"direction": [-1,0], 
-				"offsetPosition": {"left": -14, "top": 3+30*(i+1) }, 
+				"offsetPosition": {"left": -14, "top": 3+30*(i+2) }, 
 				"nMaxWires": 1,
 				"ddConfig": {
-					"type": "input",
-					"allowedTypes": ["output"]
+					"type": "inputDepthZero",
+					"allowedTypes": ["outputString","outputURL"]
 					}
 			});
 			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px"}, input));
 		}
 		
+		//Normal Output
 		for(i = 0 ; i < this.options.outputs.length ; i++) {
 			var output = this.options.outputs[i];
 			this.options.terminals.push({
 				"name": output, 
 				"direction": [1,0], 
-				"offsetPosition": {"right": -14, "top": 3+30*(i+1+this.options.inputs.length) }, 
+				"offsetPosition": {"right": -14, "top": 3+30*(i+2+this.options.inputs.length) }, 
 				"ddConfig": {
-					"type": "output",
-					"allowedTypes": ["input"]
+					"type": "outputString",
+					"allowedTypes": ["inputString","inputDepthZero"]
 				},
 				"alwaysSrc": true
 			});
