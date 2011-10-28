@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import uk.ac.manchester.cs.wireit.taverna.baclava.Baclava;
-import uk.ac.manchester.cs.wireit.taverna.baclava.XMLBasedBaclava;
+import uk.ac.manchester.cs.wireit.taverna.baclava.DataThingBasedBaclava;
 import uk.ac.manchester.cs.wireit.taverna.workflow.TavernaWorkflow;
 import uk.ac.manchester.cs.wireit.taverna.workflow.XMLBasedT2Flow;
 
@@ -301,7 +300,7 @@ public class CommandLineWrapper extends ChangeFirer{
         if (workflowName == null){
             throw new TavernaException ("Illegal attempt to load inputs before workflow");
         }
-        Baclava baclava = new XMLBasedBaclava(uri);
+        DataThingBasedBaclava baclava = new DataThingBasedBaclava(uri);
         for (String inputName:inputs.keySet().toArray(new String[0])){
             if (!baclava.hasValue(inputName)) {
                 throw new TavernaException("Unable to find input " + inputName + " in " + uri);

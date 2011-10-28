@@ -22,7 +22,7 @@ import uk.ac.manchester.cs.wireit.taverna.TavernaException;
  * http://code.google.com/p/taverna/source/browse/portal/neiss-liferay/trunk/src/java/net/sf/taverna/t2/portal/WorkflowResultsPortlet.java
  * @author Christian
  */
-public class DataThingBasedBaclava implements Baclava{
+public class DataThingBasedBaclava {
 
     private Map<java.lang.String,DataThing> dataThingMap;
     
