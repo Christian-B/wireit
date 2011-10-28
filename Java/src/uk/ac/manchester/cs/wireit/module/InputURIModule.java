@@ -23,14 +23,14 @@ public class InputURIModule extends Module{
     }
     
     @Override
-    public void run() throws WireItRunException {
+    public void run(StringBuilder outputBuilder) throws WireItRunException {
         Object value = values.get(PORT_NAME);
         try {
             URI uri = new URI(value.toString());
         } catch (URISyntaxException ex) {
             throw new WireItRunException("Ilegal URI: " + value, ex);
         }
-        output.fireOutputReady(value);
+        output.fireOutputReady(value, outputBuilder);
     }
 
     @Override

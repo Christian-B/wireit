@@ -12,5 +12,5 @@ import uk.ac.manchester.cs.wireit.module.WireItRunException;
  */
 public interface OutputListener {
     
-    public void outputReady(Object output) throws WireItRunException;
+    public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException;
 }

@@ -73,9 +73,9 @@ public class Wiring {
         }
     }
     
-    public void run() throws WireItRunException{
+    public void run(StringBuilder outputBuilder) throws WireItRunException{
         for (int i = 0; i < modules.length; i++){
-            modules[i].run();
+            modules[i].run(outputBuilder);
         }
     }
     

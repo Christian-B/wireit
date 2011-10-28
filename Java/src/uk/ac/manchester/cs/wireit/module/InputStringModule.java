@@ -21,9 +21,9 @@ public class InputStringModule extends Module{
     }
     
     @Override
-    public void run() throws WireItRunException {
+    public void run(StringBuilder outputBuilder) throws WireItRunException {
         Object value = values.get(PORT_NAME);
-        output.fireOutputReady(value);
+        output.fireOutputReady(value, outputBuilder);
     }
 
     @Override

@@ -98,9 +98,9 @@ public class TavernaModule extends Module{
     }
     
     @Override
-    public void run() throws WireItRunException {
+    public void run(StringBuilder outputBuilder) throws WireItRunException {
         //Just in case their are no inputs are all set as values.
-        runIfReady();
+        runIfReady(outputBuilder);
     }
     
     @Override
@@ -169,37 +169,45 @@ public class TavernaModule extends Module{
         return output;
     }
 
-    private void runIfReady() throws WireItRunException {
+    private void runIfReady(StringBuilder outputBuilder) throws WireItRunException {
         File output;
         if (allValuesSet()){
             try {
                 output = runWorkflowWithInputs();             
             } catch (Exception ex) {
-                 throw new WireItRunException("Error running workflow ", ex);
+                 throw new WireItRunException("Error running workflow: " + name + "  " + ex.getMessage(), ex);
             } 
-            processRun(output);
+            processRun(output, outputBuilder);
         } else if (baclavaInput != null) {
             try {
                 output = runWorkflowWithBaclava();             
             } catch (Exception ex) {
-                 throw new WireItRunException("Error running workflow ", ex);
+                 throw new WireItRunException("Error running workflow: " + name + "  " + ex.getMessage(), ex);
             } 
-            processRun(output);
+            processRun(output, outputBuilder);
         }
     }
     
-    private void processRun(File output) throws WireItRunException {
-            DataThingBasedBaclava baclava;
+    private void processRun(File output, StringBuilder outputBuilder) throws WireItRunException {
+        DataThingBasedBaclava baclava;
+        outputBuilder.append("Workflow ");
+        outputBuilder.append(name);
+        outputBuilder.append(" succesfully.\n");
         try {
             baclava = new DataThingBasedBaclava(output);
-            for (String key:outputPorts.keySet()){
-                System.out.print (key + ": ");
-                Object value = baclava.getValue(key);
-                System.out.println(value);
-                outputPorts.get(key).fireOutputReady(value);
-            }
         } catch (TavernaException ex) {
-            throw new WireItRunException ("Unable to read baclava", ex);
+            throw new WireItRunException ("Unable to read baclava from " + name, ex);
+        }
+        for (String key:outputPorts.keySet()){
+            System.out.print (key + ": ");
+            Object value;
+            try {
+                value = baclava.getValue(key);
+            } catch (TavernaException ex) {
+                throw new WireItRunException ("Unable to read value " + key + " from baclava form " + name, ex);
+            }
+            System.out.println(value);
+            outputPorts.get(key).fireOutputReady(value, outputBuilder);
         }
         String bavalaPath = output.getPath().replace("\\","/");
         System.out.println(bavalaPath);
@@ -208,9 +216,9 @@ public class TavernaModule extends Module{
         try {
             uri = new URI(baclavaURI);
         } catch (URISyntaxException ex) {
-            throw new WireItRunException ("Unable to set baclava uri", ex);
+            throw new WireItRunException ("Unable to set baclava uri for " + name, ex);
         }
-        baclavaOutput.fireOutputReady(uri);
+        baclavaOutput.fireOutputReady(uri, outputBuilder);
     }
     
     private class PortListener implements OutputListener{
@@ -222,19 +230,19 @@ public class TavernaModule extends Module{
         }
         
         @Override
-        public void outputReady(Object output) throws WireItRunException{
+        public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException{
             try {
                 if (output instanceof String){
                     myInput.setStringInput(output.toString());
                 } else if (output instanceof URI){
                     myInput.setSingleURIInput(output.toString());                    
                 } else {
-                     throw new WireItRunException ("Unknown inpiut type " + output.getClass());
+                     throw new WireItRunException ("Unknown inpiut type " + output.getClass() + " in " + name);
                 }
             } catch (TavernaException ex) {
-                throw new WireItRunException ("Error setting Taverna input ",ex);
+                throw new WireItRunException ("Error setting Taverna input for " + name, ex);
             }
-            runIfReady();
+            runIfReady(outputBuilder);
         }
     }
 
@@ -244,14 +252,14 @@ public class TavernaModule extends Module{
         }
         
         @Override
-        public void outputReady(Object output) throws WireItRunException{
+        public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException{
             if (output instanceof URI){
                 baclavaInput = (URI)output;
-                runIfReady();
+                runIfReady(outputBuilder);
             } else {
-                 throw new WireItRunException ("Unknown inpiut type " + output.getClass());
+                 throw new WireItRunException ("Unknown inpiut type " + output.getClass() + " in " + name);
             }
-            runIfReady();
+            runIfReady(outputBuilder);
         }
     }
 

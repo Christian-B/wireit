@@ -6,6 +6,8 @@ import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,28 +25,73 @@ public class RunWireit extends WireitSQLBase {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         System.out.println();
-         System.out.println((new Date()) + "in runWireit.doPost");
+        System.out.println((new Date()) + "in runWireit.doPost");
+        StringBuilder outputBuilder = new StringBuilder();
+        outputBuilder.append("Run posted at ");
+        outputBuilder.append(new Date());
+        outputBuilder.append("\n");
+        String input = readRequestBody(request);
+        HashMap<String, String> parameters = convertBody(input);
+        JSONObject jsonInput = getInputJson(parameters);
+
+        // Set the MIME type for the response message
+        response.setContentType("text/x-json;charset=UTF-8");  
+        // Get a output writer to write the response message into the network socket
+        PrintWriter out = response.getWriter();
+        JSONObject jsonReply;
         try {
-            String input = readRequestBody(request);
-            System.out.println(input);
-            HashMap<String, String> parameters = convertBody(input);
-            String workingString = parameters.get("working");
-            JSONObject jsonInput = new JSONObject(workingString);
-            System.out.println(jsonInput.toString(4));
-            JSONObject jsonReply = doRun(jsonInput, request.getRequestURL());
-            System.out.println(jsonReply.toString(4));
-            // Set the MIME type for the response message
-            response.setContentType("text/x-json;charset=UTF-8");  
-            // Get a output writer to write the response message into the network socket
-            PrintWriter out = response.getWriter();
+            jsonReply = doRun(jsonInput, request.getRequestURL(), outputBuilder);
+            addRunResult(jsonReply, outputBuilder);
             String output = getOutput(parameters.get("name"), jsonReply, parameters.get("language"));
             out.println(output);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new ServletException(ex);
+            addRunFailed(jsonInput, ex, outputBuilder);
+            String output = getOutput(parameters.get("name"), jsonInput, parameters.get("language"));
+            out.println(output);
         }        
     }
   
+    private JSONObject getInputJson(HashMap<String, String> parameters) throws IOException, ServletException{
+        String workingString = parameters.get("working");
+        JSONObject jsonInput;
+        try {
+            jsonInput = new JSONObject(workingString);
+            System.out.println(jsonInput.toString(4));     
+        } catch (Exception ex) {
+            System.err.println("Error reading input json");
+            ex.printStackTrace();
+            throw new ServletException(ex);
+        }        
+        return jsonInput;
+    }
+    
+    private void addRunResult(JSONObject jsonReply, StringBuilder outputBuilder) throws JSONException {
+        JSONObject properties = jsonReply.getJSONObject("properties"); 
+        System.out.println(jsonReply.toString(4));
+        properties.put("status", "Pipe run");
+        outputBuilder.append("Run finished at ");
+        outputBuilder.append(new Date());
+        outputBuilder.append("\n");
+        properties.put("details",outputBuilder.toString());
+        properties.remove("error");
+    }
+    
+    private void addRunFailed(JSONObject main, Exception ex, StringBuilder outputBuilder) throws ServletException{
+        System.err.println("Error running pipe");
+        ex.printStackTrace();        
+        outputBuilder.append(ex.getMessage());
+        try {
+            JSONObject properties = main.getJSONObject("properties"); 
+            properties.put("status", "Pipe Failed");
+            properties.put("details",outputBuilder.toString());
+            properties.put("error", ex.getMessage());
+        } catch (JSONException newEx) {
+            System.err.println("Error writing error to json");
+            newEx.printStackTrace();
+            throw new ServletException(newEx);
+        }
+    }
+
     private String getOutput(String name, JSONObject working, String language){
         StringBuilder builder = new StringBuilder();
         builder.append("{\"id\":\"0\",\n");
@@ -75,10 +122,13 @@ public class RunWireit extends WireitSQLBase {
         return parameters;
     }
 
-    private JSONObject doRun(JSONObject jsonInput, StringBuffer URL) 
+    private JSONObject doRun(JSONObject jsonInput, StringBuffer URL, StringBuilder outputBuilder) 
             throws WireItRunException, JSONException, TavernaException, IOException{
         Wiring wiring = new Wiring(jsonInput, URL);
-        wiring.run();
+        outputBuilder.append("Pipe loaded at ");
+        outputBuilder.append(new Date());
+        outputBuilder.append("\n");
+        wiring.run(outputBuilder);
         return wiring.getJsonObject();
         //JSONArray jsonModules = jsonInput.getJSONArray("modules");
         //JSONObject commentBox = (JSONObject)jsonModules.get(0);

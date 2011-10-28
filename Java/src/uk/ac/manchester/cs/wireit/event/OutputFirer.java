@@ -32,9 +32,9 @@ public class OutputFirer {
         listeners.remove(l);
     }
     
-    public void fireOutputReady(Object output) throws WireItRunException {
+    public void fireOutputReady(Object output, StringBuilder outputBuilder) throws WireItRunException {
         for (OutputListener listener: listeners){
-            listener.outputReady(output);
+            listener.outputReady(output, outputBuilder);
         }
     }   
     

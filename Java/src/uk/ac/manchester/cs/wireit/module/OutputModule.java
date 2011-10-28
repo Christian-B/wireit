@@ -17,7 +17,7 @@ public class OutputModule extends Module{
     }
     
     @Override
-    public void run() throws WireItRunException {
+    public void run(StringBuilder outputBuilder) throws WireItRunException {
         //Do nothing reacts to push not run()
     }
 
@@ -38,7 +38,7 @@ public class OutputModule extends Module{
     private class InnerLisener implements OutputListener{
 
         @Override
-        public void outputReady(Object output) {
+        public void outputReady(Object output, StringBuilder outputBuilder) {
             values.put(PORT_NAME, output);
         }
         

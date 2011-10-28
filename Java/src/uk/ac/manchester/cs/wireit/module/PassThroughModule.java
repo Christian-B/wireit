@@ -19,7 +19,7 @@ public class PassThroughModule extends Module{
     }
     
     @Override
-    public void run() throws WireItRunException {
+    public void run(StringBuilder outputBuilder) throws WireItRunException {
         //Do nothing reacts to push not run()
     }
 
@@ -44,9 +44,9 @@ public class PassThroughModule extends Module{
     private class InnerLisener implements OutputListener{
 
         @Override
-        public void outputReady(Object output) throws WireItRunException{
+        public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException{
             values.put("both", output);
-            outputFirer.fireOutputReady(output);
+            outputFirer.fireOutputReady(output, outputBuilder);
         }
     }
 }
