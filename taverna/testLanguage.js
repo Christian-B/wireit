@@ -238,11 +238,31 @@ var tavernaLanguage = {
 
 			this.editor = new tavernaLanguage.WiringEditor(this.language);
 
+			//Open the minimap
+			this.editor.accordionView.openPanel(2);
+
 			// Open the infos panel
-			//this.editor.accordionView.openPanel(2);
+			//this.editor.accordionView.openPanel(3);
 			
+
+			var runStatusFields = [
+				{"type": "string", inputParams: {"name": "status", label: "Status", typeInvite: "Enter a title" } },
+				{"type": "text", inputParams: {"name": "details", label: "Description", cols: 50, rows: 4} }
+			];
+
+			this.editor.runStatusForm = new inputEx.Group({
+				parentEl: YAHOO.util.Dom.get('runStatus'),
+				fields: runStatusFields
+			});
+			
+			var testProp = {};
+			testProp.status = "Not yet run."
+			testProp.details = "Please setup the pipe and press run."
+			this.editor.runStatusForm.setValue(testProp , false); // the false tells inputEx to NOT fire the updatedEvt
 			//Open the minimap
 			this.editor.accordionView.openPanel(1);
+
+
 		} catch(ex) {
 			console.log("Error while initialising: ", ex);
 		}
