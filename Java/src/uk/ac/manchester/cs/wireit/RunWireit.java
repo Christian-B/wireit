@@ -9,7 +9,6 @@ import java.util.StringTokenizer;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.ac.manchester.cs.wireit.module.WireItRunException;
@@ -24,7 +23,7 @@ public class RunWireit extends WireitSQLBase {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         System.out.println();
-        System.out.println((new Date()) + "in runWireit.doPost");
+         System.out.println((new Date()) + "in runWireit.doPost");
         try {
             String input = readRequestBody(request);
             System.out.println(input);
@@ -32,7 +31,7 @@ public class RunWireit extends WireitSQLBase {
             String workingString = parameters.get("working");
             JSONObject jsonInput = new JSONObject(workingString);
             System.out.println(jsonInput.toString(4));
-            JSONObject jsonReply = doRun(jsonInput);
+            JSONObject jsonReply = doRun(jsonInput, request.getRequestURL());
             System.out.println(jsonReply.toString(4));
             // Set the MIME type for the response message
             response.setContentType("text/x-json;charset=UTF-8");  
@@ -76,9 +75,9 @@ public class RunWireit extends WireitSQLBase {
         return parameters;
     }
 
-    private JSONObject doRun(JSONObject jsonInput) 
+    private JSONObject doRun(JSONObject jsonInput, StringBuffer URL) 
             throws WireItRunException, JSONException, TavernaException, IOException{
-        Wiring wiring = new Wiring(jsonInput);
+        Wiring wiring = new Wiring(jsonInput, URL);
         wiring.run();
         return wiring.getJsonObject();
         //JSONArray jsonModules = jsonInput.getJSONArray("modules");

@@ -9,13 +9,13 @@ import uk.ac.manchester.cs.wireit.event.OutputListener;
  *
  * @author Christian
  */
-public class InputModule extends Module{
+public class InputStringModule extends Module{
         
     private OutputFirer output;
     
     private final String PORT_NAME = "output";
 
-    public InputModule (JSONObject json) throws JSONException{
+    public InputStringModule (JSONObject json) throws JSONException{
         super(json);
         output = new OutputFirer();
     }

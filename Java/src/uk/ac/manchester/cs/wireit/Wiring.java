@@ -22,7 +22,7 @@ public class Wiring {
     JSONObject properties;
     JSONArray wires;
     
-    public Wiring(JSONObject jsonInput) throws JSONException, TavernaException, IOException{
+    public Wiring(JSONObject jsonInput, StringBuffer URL) throws JSONException, TavernaException, IOException{
         JSONArray jsonArray = jsonInput.getJSONArray("modules");
         modules = new Module[jsonArray.length()];
         for (int i = 0; i < jsonArray.length(); i++){
@@ -31,8 +31,10 @@ public class Wiring {
                 JSONObject jsonObject = (JSONObject)json;
                 String name = jsonObject.getString("name");
                 if (name.equals("Simple Input")){
-                   modules[i] = new InputModule(jsonObject); 
-                } else if (name.equals("Simple Output")){
+                   modules[i] = new InputStringModule(jsonObject); 
+                } else if (name.equals("URL Input")){
+                   modules[i] = new InputStringModule(jsonObject); 
+                } else if (name.equals("Simple Output") || name.equals("URL Output")){
                    modules[i] = new OutputModule(jsonObject); 
                 } else if (name.equals("PassThrough")){
                    modules[i] = new PassThroughModule(jsonObject); 
@@ -42,7 +44,7 @@ public class Wiring {
                     JSONObject config = jsonObject.getJSONObject("config");
                     String xtype = config.optString("xtype");
                     if ("WireIt.TavernaWFContainer".equalsIgnoreCase(xtype)){
-                       modules[i] = new TavernaModule(jsonObject); 
+                       modules[i] = new TavernaModule(jsonObject, URL); 
                     } else {
                         throw new JSONException("Unexpected name " + name + "and xtype " + xtype + " in modules");
                     }

@@ -116,6 +116,10 @@ public class CommandLineWrapper extends ChangeFirer{
         this.outputRoot = rootDir;
         fireStateChanged();
     }
+    
+    public File getOutputRootDirectory(){
+        return this.outputRoot;
+    }
  
     /**
      * Loads a file as a workflow and extracts a small subset of its information.
