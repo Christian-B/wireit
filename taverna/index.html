@@ -31,8 +31,27 @@ What it does do includes:
 </ul>
 <h2>Current state/ Limitations</h2>
 <ul>
-	<li>Only workflows where all inputs are depth zero and can take a String input.
-	<li>Only workflows which have Depth zero single type output.
+	<li>Setting individual inputs is limited to workflows where all inputs are depth.
+	<ul>
+		<li>Input can be as a String
+		<li>Input can be from a URI
+		<li>File input is not yet supported
+	</ul>
+	<li>Baclava Inputs are supported
+	<ul>
+		<li>From URI
+		<li>File Baclava not yet supported
+	</ul>
+	<li>Individual Outputs only work with workflows which have Depth zero String type output.
+	<li>Baclava output is supported
+	<ul>
+		<li>As a URI
+		<li>Fancy guis based on Baclava left to future work
+		<li>Baclava output from one workflow can be used as Baclava input for another workflow
+		<ul>
+			<li>If and only if the input port names are a subset (or equal to) the ouput port names.
+		</ul>
+	</ul>
 	<li>Only predefined workflows
 	<ul>
 		<li>This is mainly for security
@@ -43,8 +62,6 @@ What it does do includes:
 <ul>
 	<li>Allow different input types
 	<ul>
-		<li>Baclava File
-		<li>Value from uri
 		<li>Lists
 		<ul>
 			<li>From uri
@@ -54,8 +71,6 @@ What it does do includes:
 	</ul>
 	<li>Allow different output types
 	<ul>
-		<li>uri to Baclava File
-		<li>Baclava file to next workflow
 		<li>Any format that can easily be convert to a string
 		<li>Lists
 	</ul>
@@ -71,10 +86,16 @@ What it does do includes:
 		<li>Settup issue this includes
 		<li>Passing of security stuff from client to server
 	</ul>
+	<li>Fancy guis based on Baclava format
+	<ul>
+		<li>Creating a Baclava input file
+		<li>Viewing a Baclava file
+	</ul>
 	<li>Security
 	<li>User accounts
 	<li>Scuffl 2 workflows
 	<li>Taverna 1 workflows
+	<li>Renaming and marketing
 	<li>User documentation
 </ul>
 </body>
