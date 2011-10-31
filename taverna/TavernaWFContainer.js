@@ -43,12 +43,11 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 			//This adds the terminal dot.
 			this.options.terminals.push({
 				"name": "Baclava Input", 
-				"direction": [-1,0], 
 				"offsetPosition": {"left": -14, "top": 33 }, 
 				"nMaxWires": 1,
 				"ddConfig": {
 					"type": "inputURL",
-					"allowedTypes": ["outputURL"]
+					"allowedTypes": ["outputURL"],
 					}
 			});	
 			baclavaName = "Baclava format Input/Output"
@@ -60,13 +59,13 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		//This adds the terminal dot.
 		this.options.terminals.push({
 			"name": "Baclava Output", 
-			"direction": [1,0], 
 			"offsetPosition": {"right": -14, "top": 33 }, 
 			"ddConfig": {
 				"type": "outputURL",
-				"allowedTypes": ["inputURL"]
+				"allowedTypes": ["inputURL"],
 			},
-			"alwaysSrc": true
+			"alwaysSrc": true,
+			"wireConfig": { drawingMethod: "arrows"}
 		});
 		//This adds the text name to the form
 		this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "center"}, baclavaName));
@@ -79,7 +78,6 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 			newTerminal.ddConfig = {};
 			
 			newTerminal.name = input.name;
-			newTerminal.direction = [-1,0];
 			newTerminal.offsetPosition = {"left": -14, "top": 3+30*(i+2) }; 
 			newTerminal.nMaxWires = 1;
 			
@@ -104,22 +102,23 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 			var showName = {};
 			var newTerminal = {};
 			newTerminal.ddConfig = {};
+			newTerminal.wireConfig = {};
 			
 			newTerminal.name = output.name;
-			newTerminal.direction = [1,0];
 			newTerminal.offsetPosition = {"right": -14, "top": 3+30*(i+2+this.options.inputs.length) };
 			newTerminal.alwaysSrc = true;
+			newTerminal.wireConfig.drawingMethod = "arrows"
 			
 			if (output.depth == 1) {
 				newTerminal.ddConfig.type = "outputList";
 				newTerminal.ddConfig.allowedTypes = ["inputList","inputDepthOne"];
 				showName = output.name + " (list)";
-				newTerminal.wireConfig = {width: 5, borderwidth:3, drawingMethod: "bezierArrows"}				
+				newTerminal.wireConfig.width = 5;
+				newTerminal.wireConfig.borderwidth = 3;
 			} else {
 				newTerminal.ddConfig.type = "outputString";
 				newTerminal.ddConfig.allowedTypes = ["inputString","inputDepthOne","inputDepthZero"];	
 				showName = output.name;
-				newTerminal.wireConfig = {drawingMethod: "bezierArrows"}				
 			}		
 			//This adds the terminal dot.
 			this.options.terminals.push(newTerminal);

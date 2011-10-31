@@ -77,12 +77,12 @@ var tavernaLanguage = {
 					"terminals": [
 						{
 							"name": "output",
-							"direction": [0,1],
 							"offsetPosition": {"right": -14, "top": 25},
 							"alwaysSrc":true,
+							 wireConfig: { drawingMethod: "arrows"},
 							"ddConfig": {
 								"type": "outputString",
-								"allowedTypes": ["inputString","inputDepthZero","inputDepthOne"]
+								"allowedTypes": ["inputString","inputDepthZero","inputDepthOne"],
 							}
 						}
 					]
@@ -108,12 +108,12 @@ var tavernaLanguage = {
 					"terminals": [
 						{
 							"name": "output",
-							"direction": [0,1],
 							"offsetPosition": {"right": -14, "top": 25},
 							"alwaysSrc":true,
+							 wireConfig: { drawingMethod: "arrows"},
 							"ddConfig": {
 								"type": "outputURL",
-								"allowedTypes": ["inputURL","inputDepthZero","inputDepthOne"]
+								"allowedTypes": ["inputURL","inputDepthZero","inputDepthOne"],
 							}
 						}
 					]
@@ -129,14 +129,13 @@ var tavernaLanguage = {
 					"terminals": [
 						{
 							"name": "output",
-							"direction": [0,1],
 							"offsetPosition": {"right": -14, "top": 75},
 							"alwaysSrc":true,
 							"ddConfig":{
 								"type": "outputList",
 								"allowedTypes": ["inputList", "inputDepthOne"]
 							},
-							wireConfig:{width: 5, borderwidth:3}
+							wireConfig:{width: 5, borderwidth:3, drawingMethod: "arrows"}
 						}
 					],
 				}
@@ -154,7 +153,6 @@ var tavernaLanguage = {
 					"terminals": [
 						{
 							"name": "input",
-							"direction": [0,-1],
 							"offsetPosition": {"left": -14, "top": 25 },
 							"ddConfig": {
 								"type": "inputString",
@@ -185,7 +183,6 @@ var tavernaLanguage = {
 					"terminals": [
 						{
 							"name": "input",
-							"direction": [0,-1],
 							"offsetPosition": {"left": -14, "top": 25 },
 							"ddConfig": {
 								"type": "inputURL",
@@ -212,7 +209,6 @@ var tavernaLanguage = {
 					"terminals": [
 						{
 							"name": "input",
-							"direction": [0,1],
 							"offsetPosition": {"left": -14, "top": 75},
 							"alwaysSrc":false,
 							"ddConfig":{
@@ -236,7 +232,6 @@ var tavernaLanguage = {
 					"terminals": [
 						{
 							"name": "input",
-							"direction": [0,-1],
 							"offsetPosition": {"left": -14, "top": 33 },
 							"ddConfig": {
 								"type": "inputString",
@@ -246,12 +241,12 @@ var tavernaLanguage = {
 						},
 						{
 							"name": "output",
-							"direction": [0,1],
 							"offsetPosition": {"right": -14, "top": 33},
 							"alwaysSrc":true,
+							 wireConfig: { drawingMethod: "arrows"},
 							"ddConfig": {
 								"type": "outputString",
-								"allowedTypes": ["inputString", "inputDepthZero"]
+								"allowedTypes": ["inputString", "inputDepthZero"],
 							}
 						}
 					]
