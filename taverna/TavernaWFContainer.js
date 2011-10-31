@@ -40,6 +40,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		var baclavaName;
 		//Baclava Input if needed
 		if (this.options.inputs.length > 0) {
+			//This adds the terminal dot.
 			this.options.terminals.push({
 				"name": "Baclava Input", 
 				"direction": [-1,0], 
@@ -56,6 +57,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		}
 		
 		//Baclava Output
+		//This adds the terminal dot.
 		this.options.terminals.push({
 			"name": "Baclava Output", 
 			"direction": [1,0], 
@@ -66,6 +68,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 			},
 			"alwaysSrc": true
 		});
+		//This adds the text name to the form
 		this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "center"}, baclavaName));
 		
 		//Normal input
@@ -82,6 +85,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 				ddConfig.allowedTypes = ["outputString","outputURL"];
 				showName = input.name;
 			}		
+			//This adds the terminal dot.
 			this.options.terminals.push({
 				"name": input.name, 
 				"direction": [-1,0], 
@@ -89,6 +93,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 				"nMaxWires": 1,
 				"ddConfig": ddConfig,
 			});
+			//This adds the text name to the form
 			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px"}, showName));
 		}
 		
@@ -106,6 +111,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 				ddConfig.allowedTypes = ["inputString","inputDepthOne","inputDepthZero"];	
 				showName = output.name;
 			}		
+			//This adds the terminal dot.
 			this.options.terminals.push({
 				"name": output.name, 
 				"direction": [1,0], 
@@ -113,6 +119,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 				"ddConfig": ddConfig,
 				"alwaysSrc": true
 			});
+			//This adds the text name to the form
 			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "right"}, showName));
 		}
 		

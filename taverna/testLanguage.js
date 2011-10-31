@@ -55,7 +55,7 @@ var tavernaLanguage = {
 						{"name":"LeftNoList", "depth":0},
 						{"name":"RightList", "depth":1},
 						{"name":"RightNoList", "depth":0}],
-					"outputs": [{"name":"Result", "depth":0}],
+					"outputs": [{"name":"Result", "depth":1}],
 					"wfURI":"MixedWorkflow.t2flow",
 				}
 			},
@@ -134,7 +134,7 @@ var tavernaLanguage = {
 							"alwaysSrc":true,
 							"ddConfig":{
 								"type": "outputList",
-								"allowedTypes": ["inputDepthOne"]
+								"allowedTypes": ["inputList", "inputDepthOne"]
 							}
 						}
 					]
@@ -196,6 +196,27 @@ var tavernaLanguage = {
 				}
 			},
 			{
+				"name": "List Output",
+				"category": "Output",
+				"container": {
+					"xtype": "WireIt.FormContainer",
+					"title": "Output test",
+					"fields": [{"type": "text", "inputParams": {"label": "List values", "name": "input", "wirable": true }} ],
+					"terminals": [
+						{
+							"name": "input",
+							"direction": [0,1],
+							"offsetPosition": {"left": -14, "top": 75},
+							"alwaysSrc":true,
+							"ddConfig":{
+								"type": "inputList",
+								"allowedTypes": ["outputDepthOne", "outputList"]
+							}
+						}
+					]
+				}
+			},
+			{
 				"name": "PassThrough",
 				"container": {
 					"xtype": "WireIt.FormContainer",
@@ -223,7 +244,7 @@ var tavernaLanguage = {
 							"alwaysSrc":true,
 							"ddConfig": {
 								"type": "outputString",
-								"allowedTypes": ["inputString","inputDepthZero"]
+								"allowedTypes": ["inputString", "inputDepthZero"]
 							}
 						}
 					]
