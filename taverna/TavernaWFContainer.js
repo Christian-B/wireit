@@ -74,25 +74,26 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		//Normal input
 		for(var i = 0 ; i < this.options.inputs.length ; i++) {
 			var input = this.options.inputs[i];
-			var ddConfig = {};
-			var showName = {};
+			var showName = {};			
+			var newTerminal = {};
+			newTerminal.ddConfig = {};
+			
+			newTerminal.name = input.name;
+			newTerminal.direction = [-1,0];
+			newTerminal.offsetPosition = {"left": -14, "top": 3+30*(i+2) }; 
+			newTerminal.nMaxWires = 1;
+			
 			if (input.depth == 1) {
-				ddConfig.type = "inputDepthOne";
-				ddConfig.allowedTypes = ["outputString","outputURL","outputList","outputDelimitedURL"];			
+				newTerminal.ddConfig.type = "inputDepthOne";
+				newTerminal.ddConfig.allowedTypes = ["outputString","outputURL","outputList","outputDelimitedURL"];			
 				showName = input.name + " (list)";
 			} else {
-				ddConfig.type = "inputDepthZero";
-				ddConfig.allowedTypes = ["outputString","outputURL"];
+				newTerminal.ddConfig.type = "inputDepthZero";
+				newTerminal.ddConfig.allowedTypes = ["outputString","outputURL"];
 				showName = input.name;
 			}		
 			//This adds the terminal dot.
-			this.options.terminals.push({
-				"name": input.name, 
-				"direction": [-1,0], 
-				"offsetPosition": {"left": -14, "top": 3+30*(i+2) }, 
-				"nMaxWires": 1,
-				"ddConfig": ddConfig,
-			});
+			this.options.terminals.push(newTerminal);
 			//This adds the text name to the form
 			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px"}, showName));
 		}
@@ -100,25 +101,28 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		//Normal Output
 		for(i = 0 ; i < this.options.outputs.length ; i++) {
 			var output = this.options.outputs[i];
-			var ddConfig = {};
 			var showName = {};
+			var newTerminal = {};
+			newTerminal.ddConfig = {};
+			
+			newTerminal.name = output.name;
+			newTerminal.direction = [1,0];
+			newTerminal.offsetPosition = {"right": -14, "top": 3+30*(i+2+this.options.inputs.length) };
+			newTerminal.alwaysSrc = true;
+			
 			if (output.depth == 1) {
-				ddConfig.type = "outputList";
-				ddConfig.allowedTypes = ["inputList","inputDepthOne"];
+				newTerminal.ddConfig.type = "outputList";
+				newTerminal.ddConfig.allowedTypes = ["inputList","inputDepthOne"];
 				showName = output.name + " (list)";
+				newTerminal.wireConfig = {width: 5, borderwidth:3, drawingMethod: "bezierArrows"}				
 			} else {
-				ddConfig.type = "outputString";
-				ddConfig.allowedTypes = ["inputString","inputDepthOne","inputDepthZero"];	
+				newTerminal.ddConfig.type = "outputString";
+				newTerminal.ddConfig.allowedTypes = ["inputString","inputDepthOne","inputDepthZero"];	
 				showName = output.name;
+				newTerminal.wireConfig = {drawingMethod: "bezierArrows"}				
 			}		
 			//This adds the terminal dot.
-			this.options.terminals.push({
-				"name": output.name, 
-				"direction": [1,0], 
-				"offsetPosition": {"right": -14, "top": 3+30*(i+2+this.options.inputs.length) }, 
-				"ddConfig": ddConfig,
-				"alwaysSrc": true
-			});
+			this.options.terminals.push(newTerminal);
 			//This adds the text name to the form
 			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "right"}, showName));
 		}

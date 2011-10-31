@@ -135,9 +135,10 @@ var tavernaLanguage = {
 							"ddConfig":{
 								"type": "outputList",
 								"allowedTypes": ["inputList", "inputDepthOne"]
-							}
+							},
+							wireConfig:{width: 5, borderwidth:3}
 						}
-					]
+					],
 				}
 			},
 			{
@@ -201,13 +202,19 @@ var tavernaLanguage = {
 				"container": {
 					"xtype": "WireIt.FormContainer",
 					"title": "Output test",
-					"fields": [{"type": "text", "inputParams": {"label": "List values", "name": "input", "wirable": true }} ],
+					"fields": [
+						{"type": "text", "inputParams": {"label": "List values", "name": "input", "wirable": true,
+								"ddConfig":{
+									"type": "inputList",
+									"allowedTypes": ["outputDepthOne", "outputList"]
+						}	}	}
+					],
 					"terminals": [
 						{
 							"name": "input",
 							"direction": [0,1],
 							"offsetPosition": {"left": -14, "top": 75},
-							"alwaysSrc":true,
+							"alwaysSrc":false,
 							"ddConfig":{
 								"type": "inputList",
 								"allowedTypes": ["outputDepthOne", "outputList"]
