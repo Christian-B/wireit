@@ -14,8 +14,8 @@ var tavernaLanguage = {
 				"description": "Echoes input to output",
 				"container" : {
 					"xtype":"WireIt.TavernaWFContainer",
-					"inputs": ["Bar"],
-					"outputs": ["Foo"],
+					"inputs": [{"name":"Bar", "depth":0}],
+					"outputs": [{"name":"Foo", "depth":0}],
 					"wfURI":"Echo.t2flow"
 				}
 			},
@@ -25,7 +25,7 @@ var tavernaLanguage = {
 				"container": {
 					"xtype":"WireIt.TavernaWFContainer",
 					"inputs": [],
-					"outputs": ["Foo"],
+					"outputs": [{"name":"Foo", "depth":0}],
 					"wfURI":"HelloWorld.t2flow",
 				}
 			},
@@ -34,9 +34,29 @@ var tavernaLanguage = {
 				"category": "Taverna Workflow",
 				"container": {
 					"xtype":"WireIt.TavernaWFContainer",
-					"inputs": ["in_Left","in_Middle","in_Right"],
-					"outputs": ["out_Left","out_Middle","out_Right"],
+					"inputs": [
+						{"name":"in_Left", "depth":0},
+						{"name":"in_Middle", "depth":0},
+						{"name":"in_Right", "depth":0}],
+					"outputs": [
+						{"name":"out_Left", "depth":0},
+						{"name":"out_Middle", "depth":0},
+						{"name":"out_Right", "depth":0}],
 					"wfURI":"ThreeStrings.t2flow",
+				}
+			},
+			{
+				"name": "Mixed Concatenation",
+				"category": "Taverna Workflow",
+				"container": {
+					"xtype":"WireIt.TavernaWFContainer",
+					"inputs": [
+						{"name":"LeftList", "depth":1},
+						{"name":"LeftNoList", "depth":0},
+						{"name":"RightList", "depth":1},
+						{"name":"RightNoList", "depth":0}],
+					"outputs": [{"name":"Result", "depth":0}],
+					"wfURI":"MixedWorkflow.t2flow",
 				}
 			},
 			{
@@ -62,7 +82,7 @@ var tavernaLanguage = {
 							"alwaysSrc":true,
 							"ddConfig": {
 								"type": "outputString",
-								"allowedTypes": ["inputString","inputDepthZero"]
+								"allowedTypes": ["inputString","inputDepthZero","inputDepthOne"]
 							}
 						}
 					]
@@ -93,7 +113,7 @@ var tavernaLanguage = {
 							"alwaysSrc":true,
 							"ddConfig": {
 								"type": "outputURL",
-								"allowedTypes": ["inputURL","inputDepthZero"]
+								"allowedTypes": ["inputURL","inputDepthZero","inputDepthOne"]
 							}
 						}
 					]

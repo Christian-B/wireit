@@ -32,8 +32,6 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		
 		this,options.wfURI = options.wfURI;
 
-		this.options.wfURI = options.wfURI;
-
 	},
 
 	render: function() {
@@ -73,33 +71,49 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		//Normal input
 		for(var i = 0 ; i < this.options.inputs.length ; i++) {
 			var input = this.options.inputs[i];
+			var ddConfig = {};
+			var showName = {};
+			if (input.depth == 1) {
+				ddConfig.type = "inputDepthOne";
+				ddConfig.allowedTypes = ["outputString","outputURL","outputList","outputDelimitedURL"];			
+				showName = input.name + " (list)";
+			} else {
+				ddConfig.type = "inputDepthZero";
+				ddConfig.allowedTypes = ["outputString","outputURL"];
+				showName = input.name;
+			}		
 			this.options.terminals.push({
-				"name": input, 
+				"name": input.name, 
 				"direction": [-1,0], 
 				"offsetPosition": {"left": -14, "top": 3+30*(i+2) }, 
 				"nMaxWires": 1,
-				"ddConfig": {
-					"type": "inputDepthZero",
-					"allowedTypes": ["outputString","outputURL"]
-					}
+				"ddConfig": ddConfig,
 			});
-			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px"}, input));
+			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px"}, showName));
 		}
 		
 		//Normal Output
 		for(i = 0 ; i < this.options.outputs.length ; i++) {
 			var output = this.options.outputs[i];
+			var ddConfig = {};
+			var showName = {};
+			if (output.depth == 1) {
+				ddConfig.type = "outputList";
+				ddConfig.allowedTypes = ["inputList","inputDepthOne"];
+				showName = output.name + " (list)";
+			} else {
+				ddConfig.type = "outputString";
+				ddConfig.allowedTypes = ["inputString","inputDepthOne","inputDepthZero"];	
+				showName = output.name;
+			}		
 			this.options.terminals.push({
-				"name": output, 
+				"name": output.name, 
 				"direction": [1,0], 
 				"offsetPosition": {"right": -14, "top": 3+30*(i+2+this.options.inputs.length) }, 
-				"ddConfig": {
-					"type": "outputString",
-					"allowedTypes": ["inputString","inputDepthZero"]
-				},
+				"ddConfig": ddConfig,
 				"alwaysSrc": true
 			});
-			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "right"}, output));
+			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "right"}, showName));
 		}
 		
 	},
