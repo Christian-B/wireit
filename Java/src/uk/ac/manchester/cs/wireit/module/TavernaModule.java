@@ -11,8 +11,6 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.ac.manchester.cs.wireit.event.OutputFirer;
@@ -33,7 +31,7 @@ import uk.ac.manchester.cs.wireit.taverna.workflow.XMLBasedT2Flow;
 public class TavernaModule extends Module{
 
     private CommandLineWrapper commandLine;
-    private Map<String,PortListener> inputPorts;
+    private Map<String,StringListener> inputPorts;
     private Map<String,OutputFirer> outputPorts;
     private Map<String,TavernaInput> tavernaInputs;
     private OutputFirer baclavaOutput;
@@ -77,12 +75,12 @@ public class TavernaModule extends Module{
     private void setInputs(TavernaWorkflow workflow) throws TavernaException{
         //removeNullandEmptyValues();
         Map<String,Integer> inputs = workflow.getInputs();  
-        inputPorts = new HashMap<String,PortListener>();
+        inputPorts = new HashMap<String,StringListener>();
         tavernaInputs = new HashMap<String,TavernaInput>();
         for (String key:inputs.keySet()){
             TavernaInput tavernaInput = new TavernaInput(key, inputs.get(key));
             tavernaInputs.put(key, tavernaInput);
-            PortListener port = new PortListener(tavernaInput);
+            StringListener port = new StringListener(tavernaInput);
             inputPorts.put(key, port);
         }
         baclavaInput = null;
@@ -221,11 +219,38 @@ public class TavernaModule extends Module{
         baclavaOutput.fireOutputReady(uri, outputBuilder);
     }
     
-    private class PortListener implements OutputListener{
+    private class StringListener implements OutputListener{
 
         private TavernaInput myInput;
         
-        private PortListener(TavernaInput input){
+        private StringListener(TavernaInput input){
+            myInput = input;
+        }
+        
+        @Override
+        public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException{
+            try {
+                if (output instanceof String){
+                    myInput.setStringInput(output.toString());
+                } else if (output instanceof URI){
+                    myInput.setSingleURIInput(output.toString());                    
+                } else if (output instanceof String[]){
+                    myInput.setStringsInput((String[])output);                   
+                } else {
+                     throw new WireItRunException ("Unknown inpiut type " + output.getClass() + " in " + name);
+                }
+            } catch (TavernaException ex) {
+                throw new WireItRunException ("Error setting Taverna input for " + name, ex);
+            }
+            runIfReady(outputBuilder);
+        }
+    }
+
+    private class ListListener implements OutputListener{
+
+        private TavernaInput myInput;
+        
+        private ListListener(TavernaInput input){
             myInput = input;
         }
         
