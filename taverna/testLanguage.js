@@ -200,7 +200,7 @@ var tavernaLanguage = {
 					"xtype": "WireIt.FormContainer",
 					"title": "Output test",
 					"fields": [
-						{"type": "text", "inputParams": {"label": "List values", "name": "input", "wirable": true,
+						{"type": "text", "inputParams": {"label": "List values", "name": "input", "wirable": false,
 								"ddConfig":{
 									"type": "inputList",
 									"allowedTypes": ["outputDepthOne", "outputList"]
