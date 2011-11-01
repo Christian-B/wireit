@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,10 +150,10 @@ public class TavernaModule extends Module{
         System.out.println("Workflow ready based on inputs!");
         TavernaInput[] inputArray = new TavernaInput[0];
         inputArray = tavernaInputs.values().toArray(inputArray);
-        System.out.println(inputArray);
-        System.out.println(inputArray.length);
         commandLine.setInputs(inputArray);
+        System.out.println("ready to run");
         CommandLineRun run = commandLine.runWorkFlow();
+        System.out.println("ready started");
         File output = run.getOutputFile();
         System.out.println("Workflow ran");
         return output;
@@ -236,8 +237,11 @@ public class TavernaModule extends Module{
                     myInput.setSingleURIInput(output.toString());                    
                 } else if (output instanceof String[]){
                     myInput.setStringsInput((String[])output);                   
+                } else if (output instanceof ArrayList){
+                    String[] array = ListUtils.toStringArray(output);
+                    myInput.setStringsInput(array);                   
                 } else {
-                     throw new WireItRunException ("Unknown inpiut type " + output.getClass() + " in " + name);
+                     throw new WireItRunException ("Unknown input type " + output.getClass() + " in " + name);
                 }
             } catch (TavernaException ex) {
                 throw new WireItRunException ("Error setting Taverna input for " + name, ex);

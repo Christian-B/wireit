@@ -1,5 +1,6 @@
 package uk.ac.manchester.cs.wireit.module;
 
+import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.ac.manchester.cs.wireit.event.OutputListener;
@@ -27,9 +28,14 @@ public class OutputListModule extends OutputModule{
 
         @Override
         public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException {
-             String[] array;
+            System.out.println("InnerListLisener.outputReady");
+            System.out.println(output);
+            System.out.println(output.getClass());
+            String[] array;
             if (output instanceof String[]){
                 array = (String[]) output;
+            } else if (output instanceof ArrayList){
+                array = ListUtils.toStringArray(output);
             } else {
                 throw new WireItRunException("Unexpected output type " + output.getClass());
             }
