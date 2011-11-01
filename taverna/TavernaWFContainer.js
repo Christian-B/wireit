@@ -30,7 +30,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		this.options.inputs = options.inputs || [];
 		this.options.outputs = options.outputs || [];
 		
-		this,options.wfURI = options.wfURI;
+		this.options.wfURI = options.wfURI;
 
 	},
 
@@ -65,7 +65,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 				"allowedTypes": ["inputURL"],
 			},
 			"alwaysSrc": true,
-			"wireConfig": { drawingMethod: "arrows"}
+			"wireConfig": { drawingMethod: "arrows", color: "#EE11EE", bordercolor:"#FF00FF"} 
 		});
 		//This adds the text name to the form
 		this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "center"}, baclavaName));

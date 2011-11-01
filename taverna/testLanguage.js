@@ -110,7 +110,7 @@ var tavernaLanguage = {
 							"name": "output",
 							"offsetPosition": {"right": -14, "top": 25},
 							"alwaysSrc":true,
-							 wireConfig: { drawingMethod: "arrows"},
+							 wireConfig: { drawingMethod: "arrows", color: "#EE11EE", bordercolor:"#FF00FF"},
 							"ddConfig": {
 								"type": "outputURL",
 								"allowedTypes": ["inputURL","inputDepthZero","inputDepthOne"],
