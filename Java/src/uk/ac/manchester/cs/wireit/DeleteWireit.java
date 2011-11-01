@@ -47,9 +47,10 @@ public class DeleteWireit extends WireitSQLBase {
         System.out.println((new Date()) + "in DeleteWireit.doGet");
              
         String name = request.getParameter("name");
+        String encodeName = URLEncoder.encode(name);
         String language = request.getParameter("language");
         try {
-            deleteWorking(name, language);
+            deleteWorking(encodeName, language);
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new ServletException(ex);
