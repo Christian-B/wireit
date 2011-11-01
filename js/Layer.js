@@ -165,7 +165,7 @@ WireIt.Layer.prototype = {
    
       var terminal1 = this.containers[src.moduleId].getTerminal(src.terminal);
       var terminal2 = this.containers[tgt.moduleId].getTerminal(tgt.terminal);
-      var wire = new type( terminal1, terminal2, this.el, wireConfig);
+      var wire = new type( terminal1, terminal2, this.el, terminal1.options.wireConfig);
       wire.redraw();
    
       return wire;
