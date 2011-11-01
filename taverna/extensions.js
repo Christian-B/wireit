@@ -31,8 +31,8 @@ YAHOO.lang.extend(tavernaLanguage.WiringEditor, WireIt.WiringEditor, {
 
 		this.propertiesForm.setValue(wiring.properties, false); // the false tells inputEx to NOT fire the updatedEvt
 
-		console.log(wiring)
-		console.log(wiring.modules)
+		//console.log(wiring)
+		//console.log(wiring.modules)
 		
 		if(YAHOO.lang.isArray(wiring.modules)) {
 			// Containers

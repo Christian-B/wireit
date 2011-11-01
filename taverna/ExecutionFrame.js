@@ -30,6 +30,7 @@ ExecutionFrame.prototype = {
  
 		try {
 			value = this.editor.getValue()
+			console.log(this.editor.layer.wires[0].xtype);
 			console.log("running frame "+ value.name, " with params ", params);
 			console.log(value);
 			this.tempRunWiring = {name: value.name, working: JSON.stringify(value.working), language: this.editor.options.languageName };
@@ -55,13 +56,13 @@ ExecutionFrame.prototype = {
  */
 runModuleSuccess: function(encoded) {
 	try {
-		console.log(encoded);
+		//console.log(encoded);
 		for (property in encoded) {
 			console.log(property + ': ' + encoded[property]+'; ');
 		}
 		decoded = window.decodeURIComponent(encoded.working);
 
-		console.log(decoded);
+		//console.log(decoded);
 		var wiring = eval("(" +decoded +")");
 		console.log(wiring);
 		this.editor.loadWiring(wiring);
