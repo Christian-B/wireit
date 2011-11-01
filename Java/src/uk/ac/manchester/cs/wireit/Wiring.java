@@ -32,10 +32,14 @@ public class Wiring {
                 String name = jsonObject.getString("name");
                 if (name.equals("Simple Input")){
                    modules[i] = new InputStringModule(jsonObject); 
+                } else if (name.equals("List Input")){
+                   modules[i] = new InputListModule(jsonObject); 
                 } else if (name.equals("URL Input")){
                    modules[i] = new InputStringModule(jsonObject); 
                 } else if (name.equals("Simple Output") || name.equals("URL Output")){
                    modules[i] = new OutputModule(jsonObject); 
+                } else if (name.equals("List Output")){
+                   modules[i] = new OutputListModule(jsonObject); 
                 } else if (name.equals("PassThrough")){
                    modules[i] = new PassThroughModule(jsonObject); 
                 } else if (name.equals("comment")){
@@ -46,7 +50,7 @@ public class Wiring {
                     if ("WireIt.TavernaWFContainer".equalsIgnoreCase(xtype)){
                        modules[i] = new TavernaModule(jsonObject, URL); 
                     } else {
-                        throw new JSONException("Unexpected name " + name + "and xtype " + xtype + " in modules");
+                        throw new JSONException("Unexpected name " + name + " and xtype " + xtype + " in modules");
                     }
                 } else {
                     throw new JSONException("Unexpected name " + name + "and no config in modules");

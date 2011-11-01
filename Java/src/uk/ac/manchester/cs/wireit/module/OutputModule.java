@@ -10,7 +10,7 @@ import uk.ac.manchester.cs.wireit.event.OutputListener;
  */
 public class OutputModule extends Module{
        
-    private final String PORT_NAME = "input";
+    final String PORT_NAME = "input";
     
     public OutputModule (JSONObject json) throws JSONException{
         super(json);
