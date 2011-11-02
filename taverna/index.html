@@ -31,10 +31,11 @@ What it does do includes:
 </ul>
 <h2>Current state/ Limitations</h2>
 <ul>
-	<li>Setting individual inputs is limited to workflows where all inputs are depth.
+	<li>Setting individual inputs is limited to workflows where all inputs are depth.0 or 1
 	<ul>
 		<li>Input can be as a String
 		<li>Input can be from a URI
+		<li>Lists of Strings can be entered.
 		<li>File input is not yet supported
 	</ul>
 	<li>Baclava Inputs are supported
@@ -42,7 +43,6 @@ What it does do includes:
 		<li>From URI
 		<li>File Baclava not yet supported
 	</ul>
-	<li>Individual Outputs only work with workflows which have Depth zero String type output.
 	<li>Baclava output is supported
 	<ul>
 		<li>As a URI
@@ -52,6 +52,8 @@ What it does do includes:
 			<li>If and only if the input port names are a subset (or equal to) the ouput port names.
 		</ul>
 	</ul>
+	<li>Individual output support by casting to String
+	<li>List output supported by flattening lists of lists and casting to string
 	<li>Only predefined workflows
 	<ul>
 		<li>This is mainly for security
@@ -66,13 +68,7 @@ What it does do includes:
 		<ul>
 			<li>From uri
 			<li>From file
-			<li>Typed in
 		</ul>
-	</ul>
-	<li>Allow different output types
-	<ul>
-		<li>Any format that can easily be convert to a string
-		<li>Lists
 	</ul>
 	<li>Baclava key (input/ output) name - renamer
 	<li>Automatic generation of WireIt module based on Workflow
@@ -91,6 +87,7 @@ What it does do includes:
 		<li>Creating a Baclava input file
 		<li>Viewing a Baclava file
 	</ul>
+	<li>Fancier handling of list of lists output (if required)
 	<li>Security
 	<li>User accounts
 	<li>Scuffl 2 workflows
