@@ -102,7 +102,10 @@ public class ListWireit extends WireitSQLBase {
             builder.append(name);
             builder.append("\",\n");
             String working = URLDecoder.decode(rset.getString("working"));
+            //Json needs quotes " to be escpaped
             working = working.replace("\"","\\\"");
+            //Json needs carriage returns to be escpaed.
+            working = working.replace("\\n","\\\\n");
             builder.append("\"working\":\"");
             //JSONObject workingJson = new JSONObject(working);
             //builder.append(workingJson.toString(4));
