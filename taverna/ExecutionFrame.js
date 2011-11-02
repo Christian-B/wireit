@@ -30,7 +30,6 @@ ExecutionFrame.prototype = {
  
 		try {
 			value = this.editor.getValue()
-			console.log(this.editor.layer.wires[0].xtype);
 			console.log("running frame "+ value.name, " with params ", params);
 			console.log(value);
 			this.tempRunWiring = {name: value.name, working: JSON.stringify(value.working), language: this.editor.options.languageName };
