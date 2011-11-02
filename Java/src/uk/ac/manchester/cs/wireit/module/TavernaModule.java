@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,15 +31,15 @@ import uk.ac.manchester.cs.wireit.taverna.workflow.XMLBasedT2Flow;
 public class TavernaModule extends Module{
 
     private CommandLineWrapper commandLine;
-    private Map<String,StringListener> inputPorts;
+    private Map<String,ValueListener> inputPorts;
     private Map<String,OutputFirer> outputPorts;
     private Map<String,TavernaInput> tavernaInputs;
     private OutputFirer baclavaOutput;
     private String URLRoot;
     private URI baclavaInput;
     private final String WORKING_PATH = "webapps/WireIt";
-    
-    
+    private boolean alreadyRun = false;
+
     public TavernaModule(JSONObject json, StringBuffer URL) throws JSONException, TavernaException, IOException{
         super(json);
         commandLine = new CommandLineWrapper();
@@ -76,12 +75,12 @@ public class TavernaModule extends Module{
     private void setInputs(TavernaWorkflow workflow) throws TavernaException{
         //removeNullandEmptyValues();
         Map<String,Integer> inputs = workflow.getInputs();  
-        inputPorts = new HashMap<String,StringListener>();
+        inputPorts = new HashMap<String,ValueListener>();
         tavernaInputs = new HashMap<String,TavernaInput>();
         for (String key:inputs.keySet()){
             TavernaInput tavernaInput = new TavernaInput(key, inputs.get(key));
             tavernaInputs.put(key, tavernaInput);
-            StringListener port = new StringListener(tavernaInput);
+            ValueListener port = new ValueListener(tavernaInput);
             inputPorts.put(key, port);
         }
         baclavaInput = null;
@@ -99,7 +98,9 @@ public class TavernaModule extends Module{
     @Override
     public void run(StringBuilder outputBuilder) throws WireItRunException {
         //Just in case their are no inputs are all set as values.
-        runIfReady(outputBuilder);
+        if (!alreadyRun) { 
+            runIfReady(outputBuilder);
+        }
     }
     
     @Override
@@ -138,7 +139,6 @@ public class TavernaModule extends Module{
     
     private boolean allValuesSet(){        //ystem.out.println("in allValuesSet" + values.size());
         for (String key:tavernaInputs.keySet()){
-            //The assumption here is that all values that are null or empty have been removed.
             if (!tavernaInputs.get(key).hasValue()){
                 return false;
             }
@@ -188,6 +188,7 @@ public class TavernaModule extends Module{
     }
     
     private void processRun(File output, StringBuilder outputBuilder) throws WireItRunException {
+        alreadyRun = true;
         DataThingBasedBaclava baclava;
         outputBuilder.append("Workflow ");
         outputBuilder.append(name);
@@ -198,18 +199,18 @@ public class TavernaModule extends Module{
             throw new WireItRunException ("Unable to read baclava from " + name, ex);
         }
         for (String key:outputPorts.keySet()){
-            System.out.print (key + ": ");
+            //ystem.out.print (key + ": ");
             Object value;
             try {
                 value = baclava.getValue(key);
             } catch (TavernaException ex) {
                 throw new WireItRunException ("Unable to read value " + key + " from baclava form " + name, ex);
             }
-            System.out.println(value);
+            //ystem.out.println(value);
             outputPorts.get(key).fireOutputReady(value, outputBuilder);
         }
         String bavalaPath = output.getPath().replace("\\","/");
-        System.out.println(bavalaPath);
+        //ystem.out.println(bavalaPath);
         String baclavaURI = URLRoot + bavalaPath.substring(WORKING_PATH.length());   
         URI uri;
         try {
@@ -220,50 +221,24 @@ public class TavernaModule extends Module{
         baclavaOutput.fireOutputReady(uri, outputBuilder);
     }
     
-    private class StringListener implements OutputListener{
+    private class ValueListener implements OutputListener{
 
         private TavernaInput myInput;
         
-        private StringListener(TavernaInput input){
+        private ValueListener(TavernaInput input){
             myInput = input;
         }
         
         @Override
         public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException{
+            System.out.println(output);
+            System.out.println(output.getClass());
             try {
                 if (output instanceof String){
+                    System.out.println("Setting string");
                     myInput.setStringInput(output.toString());
                 } else if (output instanceof URI){
-                    myInput.setSingleURIInput(output.toString());                    
-                } else if (output instanceof String[]){
-                    myInput.setStringsInput((String[])output);                   
-                } else if (output instanceof ArrayList){
-                    String[] array = ListUtils.toStringArray(output);
-                    myInput.setStringsInput(array);                   
-                } else {
-                     throw new WireItRunException ("Unknown input type " + output.getClass() + " in " + name);
-                }
-            } catch (TavernaException ex) {
-                throw new WireItRunException ("Error setting Taverna input for " + name, ex);
-            }
-            runIfReady(outputBuilder);
-        }
-    }
-
-    private class ListListener implements OutputListener{
-
-        private TavernaInput myInput;
-        
-        private ListListener(TavernaInput input){
-            myInput = input;
-        }
-        
-        @Override
-        public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException{
-            try {
-                if (output instanceof String){
-                    myInput.setStringInput(output.toString());
-                } else if (output instanceof URI){
+                    System.out.println("setting URI");
                     myInput.setSingleURIInput(output.toString());                    
                 } else {
                      throw new WireItRunException ("Unknown inpiut type " + output.getClass() + " in " + name);

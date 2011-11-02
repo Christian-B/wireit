@@ -27,10 +27,10 @@ public class InputURIModule extends Module{
         Object value = values.get(PORT_NAME);
         try {
             URI uri = new URI(value.toString());
+            output.fireOutputReady(uri, outputBuilder);
         } catch (URISyntaxException ex) {
             throw new WireItRunException("Ilegal URI: " + value, ex);
         }
-        output.fireOutputReady(value, outputBuilder);
     }
 
     @Override
