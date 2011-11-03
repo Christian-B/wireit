@@ -31,19 +31,34 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		this.options.outputs = options.outputs || [];
 		
 		this.options.wfURI = options.wfURI;
+		
+		console.log(options);
+		
+		this.options.links = options.links || [];
 
 	},
 
 	render: function() {
 		WireIt.TavernaWFContainer.superclass.render.call(this);
 
+		console.log(this.options)
+		//Add links if any
+		var offset = 33; //I assume this is the header
+		for(var i = 0 ; i < this.options.links.length ; i++) {
+			var link = this.options.links[i];
+			var text = link.text || link.uri;
+			var docLink = '<a href="' + link.uri + '" target="_blank">' + text + '</a>';
+			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "center"}, docLink));
+			offset = offset + 30;
+		}
+		
 		var baclavaName;
 		//Baclava Input if needed
 		if (this.options.inputs.length > 0) {
 			//This adds the terminal dot.
 			this.options.terminals.push({
 				"name": "Baclava Input", 
-				"offsetPosition": {"left": -14, "top": 33 }, 
+				"offsetPosition": {"left": -14, "top": offset }, 
 				"nMaxWires": 1,
 				"ddConfig": {
 					"type": "inputURL",
@@ -59,7 +74,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		//This adds the terminal dot.
 		this.options.terminals.push({
 			"name": "Baclava Output", 
-			"offsetPosition": {"right": -14, "top": 33 }, 
+			"offsetPosition": {"right": -14, "top": offset }, 
 			"ddConfig": {
 				"type": "outputURL",
 				"allowedTypes": ["inputURL"],
@@ -78,7 +93,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 			newTerminal.ddConfig = {};
 			
 			newTerminal.name = input.name;
-			newTerminal.offsetPosition = {"left": -14, "top": 3+30*(i+2) }; 
+			newTerminal.offsetPosition = {"left": -14, "top": offset + 30*(i+1) }; 
 			newTerminal.nMaxWires = 1;
 			
 			if (input.depth == 1) {
@@ -105,7 +120,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 			newTerminal.wireConfig = {};
 			
 			newTerminal.name = output.name;
-			newTerminal.offsetPosition = {"right": -14, "top": 3+30*(i+2+this.options.inputs.length) };
+			newTerminal.offsetPosition = {"right": -14, "top": offset + 30*(i+1+this.options.inputs.length) };
 			newTerminal.alwaysSrc = true;
 			newTerminal.wireConfig.drawingMethod = "arrows"
 			

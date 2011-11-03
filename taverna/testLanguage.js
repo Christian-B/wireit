@@ -16,8 +16,12 @@ var tavernaLanguage = {
 					"xtype":"WireIt.TavernaWFContainer",
 					"inputs": [{"name":"Bar", "depth":0}],
 					"outputs": [{"name":"Foo", "depth":0}],
-					"wfURI":"Echo.t2flow"
-				}
+					"wfURI":"Echo.t2flow",
+					"links" : [
+						{"uri": "../Workflows/Echo.html","text": "Workflow Description"},
+						{"uri": "../Workflows/Echo.t2flow","text": "Workflow Definition"},
+					]
+				},
 			},
 			{
 				"name": "HelloWorld",
@@ -27,6 +31,10 @@ var tavernaLanguage = {
 					"inputs": [],
 					"outputs": [{"name":"Foo", "depth":0}],
 					"wfURI":"HelloWorld.t2flow",
+					"links" : [
+						{"uri": "../Workflows/HelloWorld.html","text": "Workflow Description"},
+						{"uri": "../Workflows/HelloWorld.t2flow","text": "Workflow Definition"},
+					]
 				}
 			},
 			{
@@ -43,6 +51,10 @@ var tavernaLanguage = {
 						{"name":"out_Middle", "depth":0},
 						{"name":"out_Right", "depth":0}],
 					"wfURI":"ThreeStrings.t2flow",
+					"links" : [
+						{"uri": "../Workflows/ThreeStrings.html","text": "Workflow Description"},
+						{"uri": "../Workflows/ThreeStrings.t2flow","text": "Workflow Definition"},
+					]
 				}
 			},
 			{
@@ -57,6 +69,10 @@ var tavernaLanguage = {
 						{"name":"RightNoList", "depth":0}],
 					"outputs": [{"name":"Result", "depth":1}],
 					"wfURI":"MixedWorkflow.t2flow",
+					"links" : [
+						{"uri": "../Workflows/MixedWorkflow.html","text": "Workflow Description"},
+						{"uri": "../Workflows/MixedWorkflow.t2flow","text": "Workflow Definition"},
+					]
 				}
 			},
 			{
