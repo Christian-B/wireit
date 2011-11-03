@@ -32,6 +32,7 @@ public class ShowWireit extends WireitSQLBase {
             JSONObject json = new JSONObject(working);
             System.out.print("working: " + json.toString(5));
         }
+        closeResultSet(rset);
     }
 
     public static void main(String[] args) throws ServletException, SQLException, JSONException {

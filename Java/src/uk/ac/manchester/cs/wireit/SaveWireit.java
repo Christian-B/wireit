@@ -177,6 +177,7 @@ public class SaveWireit extends WireitSQLBase {
         while(rset.next()) {
             count++;
         }
+        closeResultSet(rset);
         return (count >= 1);
    }
 

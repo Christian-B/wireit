@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +33,7 @@ public class WireitSQLBase extends HttpServlet{
         } catch (ClassNotFoundException ex) {
             throw new ServletException(ex);
         }
-    }    
+    }
     
     ResultSet executeQuery(String sqlStr) throws SQLException{
         Connection conn = null;
@@ -42,13 +44,24 @@ public class WireitSQLBase extends HttpServlet{
             return stmt.executeQuery(sqlStr);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw ex;
-        } finally {
             if (stmt != null) stmt.close();
             if (conn != null) conn.close();
-        }      
+            throw ex;
+        }
     }
             
+    void closeResultSet(ResultSet rset){
+        try {
+            Statement stmt = rset.getStatement();
+            Connection conn = stmt.getConnection();
+            stmt.close();
+            conn.close();
+        } catch (Exception ex) {
+            //Ok closed failed no need to kill operatation.
+            ex.printStackTrace();
+        }    
+    }
+    
     int executeUpdate(String sqlStr) throws SQLException{
         Connection conn = null;
         Statement stmt = null;

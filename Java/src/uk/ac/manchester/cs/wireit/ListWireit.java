@@ -93,33 +93,39 @@ public class ListWireit extends WireitSQLBase {
             } else {
                 notFirst = true;
             }
-            // Print a paragraph <p>...</p> for each record
-            builder.append("{\"id\":\"");
-            builder.append(rset.getInt("id"));
-            builder.append("\",\n");
-            String name = URLDecoder.decode(rset.getString("name"));
-            builder.append("\"name\":\"");
-            builder.append(name);
-            builder.append("\",\n");
-            String working = URLDecoder.decode(rset.getString("working"));
-            //Json needs quotes " to be escpaped
-            working = working.replace("\"","\\\"");
-            //Json needs carriage returns to be escpaed.
-            working = working.replace("\\n","\\\\n");
-            builder.append("\"working\":\"");
-            //JSONObject workingJson = new JSONObject(working);
-            //builder.append(workingJson.toString(4));
-            builder.append(working);
-            builder.append("\",\n");
-            language = URLDecoder.decode(rset.getString("language"));
-            builder.append("\"language\":\"");
-            builder.append(rset.getString("language"));
-            builder.append("\"}");
-            }
+            appendResult(rset, builder, language);
+        }
         builder.append("]");
+        closeResultSet(rset);
         return builder.toString();
     }
 
+    
+    private void appendResult(ResultSet rset, StringBuilder builder, String language) throws SQLException{
+                   // Print a paragraph <p>...</p> for each record
+        builder.append("{\"id\":\"");
+        builder.append(rset.getInt("id"));
+        builder.append("\",\n");
+        String name = URLDecoder.decode(rset.getString("name"));
+        builder.append("\"name\":\"");
+        builder.append(name);
+        builder.append("\",\n");
+        String working = URLDecoder.decode(rset.getString("working"));
+        //Json needs quotes " to be escpaped
+        working = working.replace("\"","\\\"");
+        //Json needs carriage returns to be escpaed.
+        working = working.replace("\\n","\\\\n");
+        builder.append("\"working\":\"");
+        //JSONObject workingJson = new JSONObject(working);
+        //builder.append(workingJson.toString(4));
+        builder.append(working);
+        builder.append("\",\n");
+        language = URLDecoder.decode(rset.getString("language"));
+        builder.append("\"language\":\"");
+        builder.append(rset.getString("language"));
+        builder.append("\"}");
+    }
+    
     /**
      * Testing and showing method.
      * 
