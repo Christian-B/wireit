@@ -64,6 +64,9 @@ public class TavernaInput {
         if (value == null){
             throw new NullPointerException ("null value is not allowed");
         }
+        if (value.contains("\n")){
+            throw new TavernaException("Command line tool can not handle String values with a carriage return in them");
+        }
         this.value = value;
     }
     
