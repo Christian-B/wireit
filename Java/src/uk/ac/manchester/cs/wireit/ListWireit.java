@@ -86,7 +86,7 @@ public class ListWireit extends WireitSQLBase {
         StringBuilder builder = new StringBuilder();
         builder.append("[");
         boolean notFirst = false;
-        ResultSet rset = stmt.executeQuery(sqlStr);  // Send the query to the server
+        ResultSet rset = executeQuery(sqlStr);  // Send the query to the server
         while(rset.next()) {
             if (notFirst){
                 builder.append(",\n");

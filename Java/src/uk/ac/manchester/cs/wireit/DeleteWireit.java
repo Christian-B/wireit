@@ -78,7 +78,7 @@ public class DeleteWireit extends WireitSQLBase {
         String sqlQuery;
         sqlQuery = "delete from wirings where name = \"" + name + "\" and language = \"" + language + "\"";            
         System.out.println("Running: " +  sqlQuery);
-        int count = stmt.executeUpdate(sqlQuery);
+        int count = executeUpdate(sqlQuery);
         System.out.println(count + " wirings deleted");
     }
     

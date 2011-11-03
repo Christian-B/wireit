@@ -157,7 +157,7 @@ public class SaveWireit extends WireitSQLBase {
      */
     private void doSQLUpdate(String sqlStr) throws SQLException {
         System.out.println("Running: " +  sqlStr);
-        int count = stmt.executeUpdate(sqlStr);
+        int count = executeUpdate(sqlStr);
         System.out.println(count + " wirings saved");
      }
     
@@ -172,7 +172,7 @@ public class SaveWireit extends WireitSQLBase {
      */
     public boolean findWorking(String name, String language) throws SQLException { 
         String sqlStr = "select name from wirings where name = \"" + name +"\" and language = \"" + language + "\"";
-        ResultSet rset = stmt.executeQuery(sqlStr);  // Send the query to the server
+        ResultSet rset = executeQuery(sqlStr);  // Send the query to the server
         int count = 0;
         while(rset.next()) {
             count++;

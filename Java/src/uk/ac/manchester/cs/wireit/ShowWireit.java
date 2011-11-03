@@ -23,7 +23,7 @@ public class ShowWireit extends WireitSQLBase {
     private void printJson(int id) throws SQLException, JSONException{
         String sqlStr = "select * from wirings where id = " + id;
         System.out.println("running: " + sqlStr);
-        ResultSet rset = stmt.executeQuery(sqlStr);  // Send the query to the server
+        ResultSet rset = executeQuery(sqlStr);  // Send the query to the server
         while(rset.next()) {
             System.out.print("id: " + rset.getInt("id"));
             System.out.print("name: " + rset.getString("name"));

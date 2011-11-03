@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.servlet.ServletException;
@@ -19,11 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 public class WireitSQLBase extends HttpServlet{
     
     /**
-     * Statement against which sql queries and updates can be run.
-     */
-    Statement stmt = null;
-
-    /**
      * Sets up the servlet and creates an SQL statement against which queries can be run.
      * 
      * @throws ServletException Thrown if the SQL connection and statement can not be created.
@@ -35,26 +31,41 @@ public class WireitSQLBase extends HttpServlet{
         } catch (ClassNotFoundException ex) {
             throw new ServletException(ex);
         }
-
+    }    
+    
+    ResultSet executeQuery(String sqlStr) throws SQLException{
         Connection conn = null;
-        SQLException sqlError = null;
+        Statement stmt = null;
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/wireit", "wireit", "taverna");
             stmt = conn.createStatement();
+            return stmt.executeQuery(sqlStr);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            try {
-                if (stmt != null) stmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException ex2) {
-                ex2.printStackTrace();
-                throw new ServletException(ex2);
-            }        
-            throw new ServletException(ex);
-        }
-    }    
-    
-        /**
+            throw ex;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }      
+    }
+            
+    int executeUpdate(String sqlStr) throws SQLException{
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/wireit", "wireit", "taverna");
+            stmt = conn.createStatement();
+            return stmt.executeUpdate(sqlStr);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw ex;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }      
+    }
+
+    /**
      * Reads the data from the request body
      * @see http://java.sun.com/developer/onlineTraining/Programming/BasicJava1/servlet.html
      * @param request
