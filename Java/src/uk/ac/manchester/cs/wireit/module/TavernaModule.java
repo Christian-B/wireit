@@ -235,6 +235,12 @@ public class TavernaModule extends Module{
                 if (output instanceof String){
                     System.out.println("Setting string");
                     myInput.setStringInput(output.toString());
+                } else if (output instanceof byte[]){
+                    //This is a hack. 
+                    //A nicer way would be to save to file and then pass as file.
+                    byte[] array = (byte[])output;
+                    String asString = new String(array);
+                    myInput.setStringInput(asString);
                 } else if (output instanceof String[]){
                     //TavernaInputs will throw an exception is depth is not 1
                     System.out.println("Setting string array");
@@ -247,6 +253,7 @@ public class TavernaModule extends Module{
                     DelimiterURI delimiterURI = (DelimiterURI)output;
                     myInput.setListURIInput(delimiterURI.getURI().toString(), delimiterURI.getDelimiter());
                } else {
+                    //I could have done output.toString() but for now want to check every type is handled correctly.
                      throw new WireItRunException ("Unknown input type " + output.getClass() + " in " + name);
                 }
             } catch (TavernaException ex) {

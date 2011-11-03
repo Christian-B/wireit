@@ -42,10 +42,13 @@ public class OutputModule extends Module{
             if (output instanceof DelimiterURI){
                 DelimiterURI delimiterURI = (DelimiterURI)output;
                 values.put(PORT_NAME, delimiterURI.getURI());                
+            } else if (output instanceof byte[]){
+                byte[] array = (byte[])output;
+                String asString = new String(array);
+                values.put(PORT_NAME, asString);
             } else {
                 values.put(PORT_NAME, output);
             }
         }
-        
     }
 }
