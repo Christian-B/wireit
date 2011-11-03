@@ -145,7 +145,7 @@ public class CommandLineRun  implements Destoryable{
      */
     public File getOutputFile() throws TavernaException, ProcessException{
         if (!wasSuccessful()){
-            throw new TavernaException("Workflow was no run successfully.");
+            throw new TavernaException("Workflow was not run successfully.");
         }
         if (baclavaFile.exists()){
             return baclavaFile;
