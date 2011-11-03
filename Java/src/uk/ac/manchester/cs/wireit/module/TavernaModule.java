@@ -231,17 +231,23 @@ public class TavernaModule extends Module{
         
         @Override
         public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException{
-            System.out.println(output);
-            System.out.println(output.getClass());
-            try {
+             try {
                 if (output instanceof String){
                     System.out.println("Setting string");
                     myInput.setStringInput(output.toString());
+                } else if (output instanceof String[]){
+                    //TavernaInputs will throw an exception is depth is not 1
+                    System.out.println("Setting string array");
+                    myInput.setStringsInput((String[])output);
                 } else if (output instanceof URI){
                     System.out.println("setting URI");
                     myInput.setSingleURIInput(output.toString());                    
-                } else {
-                     throw new WireItRunException ("Unknown inpiut type " + output.getClass() + " in " + name);
+                } else if (output instanceof DelimiterURI){
+                    //TavernaInputs will throw an exception is depth is not 1
+                    DelimiterURI delimiterURI = (DelimiterURI)output;
+                    myInput.setListURIInput(delimiterURI.getURI().toString(), delimiterURI.getDelimiter());
+               } else {
+                     throw new WireItRunException ("Unknown input type " + output.getClass() + " in " + name);
                 }
             } catch (TavernaException ex) {
                 throw new WireItRunException ("Error setting Taverna input for " + name, ex);

@@ -120,6 +120,45 @@ var tavernaLanguage = {
 				}
 			},
 			{
+				"name": "URL To List Input",
+				"category": "Input",
+				"container": {
+					"xtype": "WireIt.FormContainer",
+					"width": 350,
+					"title": "input",
+					"fields": [
+						{
+							"type": 'url',
+							"inputParams": {
+								"label": "URL", 
+								"name": "url",
+								"required": true
+							}
+						},
+						{
+							"inputParams": {
+								"label": "Delimiter", 
+								"name": "delimiter",
+								"required": true,
+								"maxLength": 2
+							}
+						},
+					],
+					"terminals": [
+						{
+							"name": "output",
+							"offsetPosition": {"right": -14, "top": 25},
+							"alwaysSrc":true,
+							 wireConfig: {width: 5, borderwidth:3, drawingMethod: "arrows", color: "#EE11EE", bordercolor:"#FF00FF"},
+							"ddConfig": {
+								"type": "outputDelimitedURL",
+								"allowedTypes": ["inputURL","inputDepthOne"],
+							}
+						}
+					]
+				}
+			},
+			{
 				"name": "List Input",
 				"category": "Input",
 				"container": {
@@ -186,7 +225,7 @@ var tavernaLanguage = {
 							"offsetPosition": {"left": -14, "top": 25 },
 							"ddConfig": {
 								"type": "inputURL",
-								"allowedTypes": ["outputURL"]
+								"allowedTypes": ["outputURL", "outputDelimitedURL"]
 							},
 							"nMaxWires": 1
 						}

@@ -36,6 +36,8 @@ public class Wiring {
                    modules[i] = new InputListModule(jsonObject); 
                 } else if (name.equals("URL Input")){
                    modules[i] = new InputURIModule(jsonObject); 
+                } else if (name.equals("URL To List Input")){
+                   modules[i] = new InputDelimiterURIModule(jsonObject); 
                 } else if (name.equals("Simple Output") || name.equals("URL Output")){
                    modules[i] = new OutputModule(jsonObject); 
                 } else if (name.equals("List Output")){

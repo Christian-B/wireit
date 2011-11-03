@@ -39,7 +39,12 @@ public class OutputModule extends Module{
 
         @Override
         public void outputReady(Object output, StringBuilder outputBuilder) {
-            values.put(PORT_NAME, output);
+            if (output instanceof DelimiterURI){
+                DelimiterURI delimiterURI = (DelimiterURI)output;
+                values.put(PORT_NAME, delimiterURI.getURI());                
+            } else {
+                values.put(PORT_NAME, output);
+            }
         }
         
     }
