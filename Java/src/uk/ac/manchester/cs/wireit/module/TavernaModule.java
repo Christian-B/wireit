@@ -300,7 +300,6 @@ public class TavernaModule extends Module{
             } else {
                  throw new WireItRunException ("Unknown inpiut type " + output.getClass() + " in " + name);
             }
-            runIfReady(outputBuilder);
         }
     }
 
