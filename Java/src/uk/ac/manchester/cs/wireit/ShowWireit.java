@@ -37,7 +37,7 @@ public class ShowWireit extends WireitSQLBase {
 
     public static void main(String[] args) throws ServletException, SQLException, JSONException {
         ShowWireit tester = new ShowWireit();
-        tester.printJson(28);
+        tester.printJson(6);
     }
 
 }
