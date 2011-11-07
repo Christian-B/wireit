@@ -203,7 +203,7 @@ var tavernaLanguage = {
 					"width": 350,
 					"xtype": "WireIt.URILinkContainer",
 					"title": "input",
-					"uri" : "../Inputs/BaclavaTripleEchoInput.xml",
+					"uri" : "Inputs/BaclavaTripleEchoInput.xml",
 					"terminals": [
 						{
 							"name": "output",
@@ -307,6 +307,7 @@ var tavernaLanguage = {
 			},
 			{
 				"name": "PassThrough",
+				"category": "Pass Through",
 				"container": {
 					"xtype": "WireIt.FormContainer",
 					// inputEx options :
@@ -338,6 +339,36 @@ var tavernaLanguage = {
 					]
 				}
 			},
+			{
+				"name": "URL Pass Through",
+				"category": "Pass Through",
+				"description": "Workflow output",
+				"container": {
+					"width": 350,
+					"xtype": "WireIt.URILinkContainer",
+					"terminals": [
+						{
+							"name": "input",
+							"offsetPosition": {"left": -14, "top": 25 },
+							"ddConfig": {
+								"type": "inputURL",
+								"allowedTypes": ["outputURL", "outputDelimitedURL"]
+							},
+							"nMaxWires": 1
+						},
+						{
+							"name": "output",
+							"offsetPosition": {"right": -14, "top": 25},
+							"alwaysSrc":true,
+							 wireConfig: { drawingMethod: "arrows", color: "#EE11EE", bordercolor:"#FF00FF"},
+							"ddConfig": {
+								"type": "outputURL",
+								"allowedTypes": ["inputURL","inputDepthZero","inputDepthOne"],
+							}
+						}
+					]
+				}
+			},			
 			{
 				"name": "comment",
 				"container": {
