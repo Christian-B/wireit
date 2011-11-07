@@ -44,7 +44,8 @@ public class DataThingBasedBaclava {
             Document doc = builder.build(inputStream);
             dataThingMap = DataThingXMLFactory.parseDataDocument(doc);
         } catch (Exception ex) {
-            throw new TavernaException ("Exception while reading Baclava uri");
+            ex.printStackTrace();
+            throw new TavernaException ("Exception while reading Baclava uri ", ex);
         }
     }
 
@@ -101,7 +102,7 @@ public class DataThingBasedBaclava {
     }
     
     public static void main(String[] args) throws TavernaException {
-         DataThingBasedBaclava me = new DataThingBasedBaclava("file:d:/taverna/output2.xml");
+         DataThingBasedBaclava me = new DataThingBasedBaclava("file:D:/Programs/Tomcat7/webapps/WireIt/Inputs/BaclavaTripleEchoInput.xml");
          me.checkData();
     }
 
