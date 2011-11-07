@@ -78,13 +78,19 @@ public class RunWireit extends WireitSQLBase {
     
     private void addRunFailed(JSONObject main, Exception ex, StringBuilder outputBuilder) throws ServletException{
         System.err.println("Error running pipe");
-        ex.printStackTrace();        
-        outputBuilder.append(ex.getMessage());
+        ex.printStackTrace();  
+        String message;
+        if (ex.getMessage() != null  && !ex.getMessage().isEmpty()){
+            message = ex.getMessage();
+        } else {
+            message = ex.getClass().getName();
+        }
+        outputBuilder.append(message);
         try {
             JSONObject properties = main.getJSONObject("properties"); 
             properties.put("status", "Pipe Failed");
             properties.put("details",outputBuilder.toString());
-            properties.put("error", ex.getMessage());
+            properties.put("error", message);
         } catch (JSONException newEx) {
             System.err.println("Error writing error to json");
             newEx.printStackTrace();
