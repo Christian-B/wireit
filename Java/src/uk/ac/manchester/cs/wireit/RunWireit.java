@@ -6,8 +6,6 @@ import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +38,7 @@ public class RunWireit extends WireitSQLBase {
         PrintWriter out = response.getWriter();
         JSONObject jsonReply;
         try {
-            jsonReply = doRun(jsonInput, request.getRequestURL(), outputBuilder);
+            jsonReply = doRun(jsonInput, outputBuilder, request);
             addRunResult(jsonReply, outputBuilder);
             String output = getOutput(parameters.get("name"), jsonReply, parameters.get("language"));
             out.println(output);
@@ -128,9 +126,10 @@ public class RunWireit extends WireitSQLBase {
         return parameters;
     }
 
-    private JSONObject doRun(JSONObject jsonInput, StringBuffer URL, StringBuilder outputBuilder) 
+    private JSONObject doRun(JSONObject jsonInput, StringBuilder outputBuilder, 
+            HttpServletRequest request) 
             throws WireItRunException, JSONException, TavernaException, IOException{
-        Wiring wiring = new Wiring(jsonInput, URL);
+        Wiring wiring = new Wiring(jsonInput, request);
         outputBuilder.append("Pipe loaded at ");
         outputBuilder.append(new Date());
         outputBuilder.append("\n");

@@ -5,6 +5,7 @@
 package uk.ac.manchester.cs.wireit;
 
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +23,7 @@ public class Wiring {
     JSONObject properties;
     JSONArray wires;
     
-    public Wiring(JSONObject jsonInput, StringBuffer URL) throws JSONException, TavernaException, IOException{
+    public Wiring(JSONObject jsonInput, HttpServletRequest request) throws JSONException, TavernaException, IOException{
         JSONArray jsonArray = jsonInput.getJSONArray("modules");
         modules = new Module[jsonArray.length()];
         for (int i = 0; i < jsonArray.length(); i++){
@@ -50,7 +51,7 @@ public class Wiring {
                     JSONObject config = jsonObject.getJSONObject("config");
                     String xtype = config.optString("xtype");
                     if ("WireIt.TavernaWFContainer".equalsIgnoreCase(xtype)){
-                       modules[i] = new TavernaModule(jsonObject, URL); 
+                       modules[i] = new TavernaModule(jsonObject, request); 
                     } else if ("WireIt.URILinkContainer".equalsIgnoreCase(xtype)){
                        modules[i] = new URILinkModule(jsonObject); 
                     } else {

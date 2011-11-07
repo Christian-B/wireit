@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.ac.manchester.cs.wireit.event.OutputFirer;
@@ -35,19 +36,25 @@ public class TavernaModule extends Module{
     private Map<String,OutputFirer> outputPorts;
     private Map<String,TavernaInput> tavernaInputs;
     private OutputFirer baclavaOutput;
-    private String URLRoot;
-    private URI baclavaInput;
-    private final String WORKING_PATH = "webapps/WireIt";
+    private String baclavaInput;
     private boolean alreadyRun = false;
-
-    public TavernaModule(JSONObject json, StringBuffer URL) throws JSONException, TavernaException, IOException{
+    private HttpServletRequest servletRequest;
+    
+    private static final String OUTPUT_DIR = "Output";
+    private static final String WORFKLOW_DIR = "Workflows";
+            
+    public TavernaModule(JSONObject json, HttpServletRequest request) 
+            throws JSONException, TavernaException, IOException{
         super(json);
+        servletRequest = request;
         commandLine = new CommandLineWrapper();
         setTavernaHome(System.getenv("TAVERNA_HOME"));
-        commandLine.setOutputRootDirectory(new File(WORKING_PATH + "/Output"));
+        // root = output.getParentFile();
+        //System.out.println("root = "+ root.getAbsolutePath());
+        commandLine.setOutputRootDirectory(getRelativeFile(OUTPUT_DIR));
         
         setWorkflow(json);  
-        URLRoot = URL.substring(0, URL.lastIndexOf("/"));
+       // URLRoot = URL.substring(0, URL.lastIndexOf("/"));
     }
     
     public final void setTavernaHome(String tavernaHome) throws TavernaException, IOException {
@@ -64,7 +71,7 @@ public class TavernaModule extends Module{
         if (fileSt.contains("..")){
             throw new TavernaException ("Security exception uris can not contain \"..\"");
         }
-        File workflowFile = new File("webapps/WireIt/Workflows/" + fileSt);
+        File workflowFile = getRelativeFile(WORFKLOW_DIR + File.separator + fileSt);
         commandLine.setWorkflowFile(workflowFile);
         
         TavernaWorkflow workflow = new XMLBasedT2Flow(workflowFile);
@@ -160,8 +167,8 @@ public class TavernaModule extends Module{
     }
 
     File runWorkflowWithBaclava() throws TavernaException, ProcessException{
-        System.out.println("Workflow ready based on Baclava!");
-        commandLine.setInputsURI(baclavaInput.toString());        
+        System.out.println("Workflow ready based on Baclava!" + baclavaInput);
+        commandLine.setInputsURI(baclavaInput);        
         CommandLineRun run = commandLine.runWorkFlow();
         File output = run.getOutputFile();
         System.out.println("Workflow ran");
@@ -209,18 +216,40 @@ public class TavernaModule extends Module{
             //ystem.out.println(value);
             outputPorts.get(key).fireOutputReady(value, outputBuilder);
         }
-        String bavalaPath = output.getPath().replace("\\","/");
-        //ystem.out.println(bavalaPath);
-        String baclavaURI = URLRoot + bavalaPath.substring(WORKING_PATH.length());   
-        URI uri;
-        try {
-            uri = new URI(baclavaURI);
-        } catch (URISyntaxException ex) {
-            throw new WireItRunException ("Unable to set baclava uri for " + name, ex);
+       String uriSt = servletRequest.getScheme() + "://" + servletRequest.getServerName() + ":" + 
+               servletRequest.getServerPort() + servletRequest.getContextPath() +  
+               "/" + OUTPUT_DIR + "/" + output.getParentFile().getName() + "/" + output.getName();
+       System.out.println(servletRequest.getServletContext().getContextPath());
+       try {
+          URI uri = new URI(uriSt);
+          baclavaOutput.fireOutputReady(uri, outputBuilder);
+       } catch (URISyntaxException ex) {
+            ex.printStackTrace();
+            throw new WireItRunException ("Error converting " + uriSt + " to uri.", ex);
+       }
+   }
+    
+    private String getRelativeURI(Object object){
+        URI uri = (URI)object;
+        if (uri.isAbsolute()) {
+            System.out.println("absolute");
+            return uri.toString();
+        } else {
+            String relative = uri.getPath();
+            String absolute = servletRequest.getServletContext().getRealPath(relative);
+            //Fix windows placing the wrong slashes
+            absolute = absolute.replace("\\", "/");
+            System.out.println(absolute);
+            return "file:" + absolute;
         }
-        baclavaOutput.fireOutputReady(uri, outputBuilder);
     }
     
+    private File getRelativeFile(String relative) {
+        String absolute = servletRequest.getServletContext().getRealPath(relative);
+        System.out.println(absolute);
+        return new File(absolute);
+    }
+
     private class ValueListener implements OutputListener{
 
         private TavernaInput myInput;
@@ -247,7 +276,7 @@ public class TavernaModule extends Module{
                     myInput.setStringsInput((String[])output);
                 } else if (output instanceof URI){
                     System.out.println("setting URI");
-                    myInput.setSingleURIInput(output.toString());                    
+                    myInput.setSingleURIInput(getRelativeURI(output));                    
                 } else if (output instanceof DelimiterURI){
                     //TavernaInputs will throw an exception is depth is not 1
                     DelimiterURI delimiterURI = (DelimiterURI)output;
@@ -271,7 +300,7 @@ public class TavernaModule extends Module{
         @Override
         public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException{
             if (output instanceof URI){
-                baclavaInput = (URI)output;
+                baclavaInput = getRelativeURI(output);
                 runIfReady(outputBuilder);
             } else {
                  throw new WireItRunException ("Unknown inpiut type " + output.getClass() + " in " + name);
