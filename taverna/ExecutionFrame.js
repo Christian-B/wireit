@@ -56,9 +56,9 @@ ExecutionFrame.prototype = {
 runModuleSuccess: function(encoded) {
 	try {
 		//console.log(encoded);
-		for (property in encoded) {
-			console.log(property + ': ' + encoded[property]+'; ');
-		}
+		//for (property in encoded) {
+		//	console.log(property + ': ' + encoded[property]+'; ');
+		//}
 		decoded = window.decodeURIComponent(encoded.working);
 
 		//console.log(decoded);
