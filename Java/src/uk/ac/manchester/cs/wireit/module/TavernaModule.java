@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
+import uk.ac.manchester.cs.wireit.RunWireit;
 import uk.ac.manchester.cs.wireit.event.OutputFirer;
 import uk.ac.manchester.cs.wireit.event.OutputListener;
 import uk.ac.manchester.cs.wireit.taverna.CommandLineRun;
@@ -38,19 +39,15 @@ public class TavernaModule extends Module{
     private OutputFirer baclavaOutput;
     private String baclavaInput;
     private boolean alreadyRun = false;
-    private HttpServletRequest servletRequest;
     
     private static final String OUTPUT_DIR = "Output";
     private static final String WORFKLOW_DIR = "Workflows";
             
-    public TavernaModule(JSONObject json, HttpServletRequest request) 
-            throws JSONException, TavernaException, IOException{
+    public TavernaModule(JSONObject json) throws JSONException, TavernaException, IOException, WireItRunException{
         super(json);
-        servletRequest = request;
         commandLine = new CommandLineWrapper();
         setTavernaHome(System.getenv("TAVERNA_HOME"));
-        // root = output.getParentFile();
-        //System.out.println("root = "+ root.getAbsolutePath());
+        setTavernaHome(RunWireit.getTavernaHome());
         commandLine.setOutputRootDirectory(getRelativeFile(OUTPUT_DIR));
         
         setWorkflow(json);  
@@ -63,7 +60,7 @@ public class TavernaModule extends Module{
         } 
     }
     
-    private void setWorkflow(JSONObject json) throws JSONException, TavernaException, IOException{
+    private void setWorkflow(JSONObject json) throws JSONException, TavernaException, IOException, WireItRunException{
         JSONObject config = json.getJSONObject("config");
         String fileSt = config.optString("wfURI");
         
@@ -216,10 +213,8 @@ public class TavernaModule extends Module{
             //ystem.out.println(value);
             outputPorts.get(key).fireOutputReady(value, outputBuilder);
         }
-       String uriSt = servletRequest.getScheme() + "://" + servletRequest.getServerName() + ":" + 
-               servletRequest.getServerPort() + servletRequest.getContextPath() +  
-               "/" + OUTPUT_DIR + "/" + output.getParentFile().getName() + "/" + output.getName();
-       System.out.println(servletRequest.getServletContext().getContextPath());
+       String uriSt = RunWireit.getAbsoluteRootUrl() +  
+               OUTPUT_DIR + "/" + output.getParentFile().getName() + "/" + output.getName();
        try {
           URI uri = new URI(uriSt);
           baclavaOutput.fireOutputReady(uri, outputBuilder);
@@ -229,14 +224,14 @@ public class TavernaModule extends Module{
        }
    }
     
-    private String getRelativeURI(Object object){
+    private String getRelativeURI(Object object) throws WireItRunException{
         URI uri = (URI)object;
         if (uri.isAbsolute()) {
             System.out.println("absolute");
             return uri.toString();
         } else {
             String relative = uri.getPath();
-            String absolute = servletRequest.getServletContext().getRealPath(relative);
+            String absolute = RunWireit.getAbsoluteRootFilePath() + relative;
             //Fix windows placing the wrong slashes
             absolute = absolute.replace("\\", "/");
             System.out.println(absolute);
@@ -244,8 +239,8 @@ public class TavernaModule extends Module{
         }
     }
     
-    private File getRelativeFile(String relative) {
-        String absolute = servletRequest.getServletContext().getRealPath(relative);
+    private File getRelativeFile(String relative) throws WireItRunException {
+        String absolute = RunWireit.getAbsoluteRootFilePath() + relative;
         System.out.println(absolute);
         return new File(absolute);
     }
