@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -234,6 +235,7 @@ public class TavernaModule extends Module{
             String absolute = RunWireit.getAbsoluteRootFilePath() + relative;
             //Fix windows placing the wrong slashes
             absolute = absolute.replace("\\", "/");
+            absolute = URLEncoder.encode(absolute);
             System.out.println(absolute);
             return "file:" + absolute;
         }

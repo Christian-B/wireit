@@ -27,7 +27,8 @@ public class RunWireit extends WireitSQLBase {
  
     public void init(){
         tavernaHome = getServletContext().getInitParameter(TAVERNA_CMD_HOME_PARAMETER);
-        absoluteRootFilePath= getServletContext().getRealPath("/");
+        absoluteRootFilePath = getServletContext().getRealPath("/");
+        absoluteRootFilePath = absoluteRootFilePath.replace("\\", "/");
     }
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
