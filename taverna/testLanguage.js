@@ -196,6 +196,29 @@ var tavernaLanguage = {
 				}
 			},
 			{
+				"name": "Triple Echo Baclava Input",
+				"category": "Input",
+				"description": "Workflow input",
+				"container": {
+					"width": 350,
+					"xtype": "WireIt.URILinkContainer",
+					"title": "input",
+					"uri" : "../Inputs/BaclavaTripleEchoInput.xml",
+					"terminals": [
+						{
+							"name": "output",
+							"offsetPosition": {"right": -14, "top": 25},
+							"alwaysSrc":true,
+							 wireConfig: { drawingMethod: "arrows", color: "#EE11EE", bordercolor:"#FF00FF"},
+							"ddConfig": {
+								"type": "outputURL",
+								"allowedTypes": ["inputURL","inputDepthZero","inputDepthOne"],
+							}
+						}
+					]
+				}
+			},			
+			{
 				"name": "Simple Output",
 				"category": "Output",
 				"description": "Workflow output",
@@ -224,17 +247,8 @@ var tavernaLanguage = {
 				"description": "Workflow output",
 				"container": {
 					"width": 350,
-					"xtype": "WireIt.FormContainer",
+					"xtype": "WireIt.URILinkContainer",
 					"title": "output",
-					"fields": [ 
-						{
-							"type": 'url',
-							"inputParams": {
-								"label": "URL",
-								"name": "input",
-								"wirable": false
-						}	}
-					],
 					"terminals": [
 						{
 							"name": "input",
@@ -249,17 +263,34 @@ var tavernaLanguage = {
 				}
 			},
 			{
+				"name": "URL Link Output",
+				"category": "Output",
+				"description": "Workflow output",
+				"container": {
+					"width": 350,
+					"xtype": "WireIt.URILinkContainer",
+					"title": "output",
+					"terminals": [
+						{
+							"name": "input",
+							"offsetPosition": {"left": -14, "top": 25 },
+							"ddConfig": {
+								"type": "inputURL",
+								"allowedTypes": ["outputURL", "outputDelimitedURL"]
+							},
+							"nMaxWires": 1
+						}
+					]
+				}
+			},			
+			{
 				"name": "List Output",
 				"category": "Output",
 				"container": {
 					"xtype": "WireIt.FormContainer",
 					"title": "Output test",
 					"fields": [
-						{"type": "text", "inputParams": {"label": "List values", "name": "input", "wirable": false,
-								"ddConfig":{
-									"type": "inputList",
-									"allowedTypes": ["outputDepthOne", "outputList"]
-						}	}	}
+						{"type": "text", "inputParams": {"label": "List values", "name": "input", "wirable": false}}
 					],
 					"terminals": [
 						{
