@@ -21,5 +21,6 @@ public class WireItRunException extends Exception {
      */
     public WireItRunException(String msg, Exception ex) {
         super(msg, ex);
+        ex.printStackTrace();
     }
 }
