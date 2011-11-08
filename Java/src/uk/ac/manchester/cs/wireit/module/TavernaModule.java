@@ -7,12 +7,9 @@ package uk.ac.manchester.cs.wireit.module;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.ac.manchester.cs.wireit.RunWireit;
@@ -40,16 +37,18 @@ public class TavernaModule extends Module{
     private OutputFirer baclavaOutput;
     private String baclavaInput;
     private boolean alreadyRun = false;
+    private Resolver resolver;
     
     private static final String OUTPUT_DIR = "Output";
     private static final String WORFKLOW_DIR = "Workflows";
             
-    public TavernaModule(JSONObject json) throws JSONException, TavernaException, IOException, WireItRunException{
+    public TavernaModule(JSONObject json, Resolver resolver) throws JSONException, TavernaException, IOException, WireItRunException{
         super(json);
         commandLine = new CommandLineWrapper();
         setTavernaHome(System.getenv("TAVERNA_HOME"));
         setTavernaHome(RunWireit.getTavernaHome());
-        commandLine.setOutputRootDirectory(getRelativeFile(OUTPUT_DIR));
+        this.resolver = resolver;
+        commandLine.setOutputRootDirectory(resolver.getRelativeFile(OUTPUT_DIR));
         
         setWorkflow(json);  
        // URLRoot = URL.substring(0, URL.lastIndexOf("/"));
@@ -69,7 +68,7 @@ public class TavernaModule extends Module{
         if (fileSt.contains("..")){
             throw new TavernaException ("Security exception uris can not contain \"..\"");
         }
-        File workflowFile = getRelativeFile(WORFKLOW_DIR + File.separator + fileSt);
+        File workflowFile = resolver.getRelativeFile(WORFKLOW_DIR + File.separator + fileSt);
         commandLine.setWorkflowFile(workflowFile);
         
         TavernaWorkflow workflow = new XMLBasedT2Flow(workflowFile);
@@ -214,39 +213,10 @@ public class TavernaModule extends Module{
             //ystem.out.println(value);
             outputPorts.get(key).fireOutputReady(value, outputBuilder);
         }
-       String uriSt = RunWireit.getAbsoluteRootUrl() +  
-               OUTPUT_DIR + "/" + output.getParentFile().getName() + "/" + output.getName();
-       try {
-          URI uri = new URI(uriSt);
-          baclavaOutput.fireOutputReady(uri, outputBuilder);
-       } catch (URISyntaxException ex) {
-            ex.printStackTrace();
-            throw new WireItRunException ("Error converting " + uriSt + " to uri.", ex);
-       }
+        URI uri = resolver.FileAndParentToURI(OUTPUT_DIR, output);
+        baclavaOutput.fireOutputReady(uri, outputBuilder);
    }
     
-    private String getRelativeURI(Object object) throws WireItRunException{
-        URI uri = (URI)object;
-        if (uri.isAbsolute()) {
-            System.out.println("absolute");
-            return uri.toString();
-        } else {
-            String relative = uri.getPath();
-            String absolute = RunWireit.getAbsoluteRootFilePath() + relative;
-            //Fix windows placing the wrong slashes
-            absolute = absolute.replace("\\", "/");
-            absolute = URLEncoder.encode(absolute);
-            System.out.println(absolute);
-            return "file:" + absolute;
-        }
-    }
-    
-    private File getRelativeFile(String relative) throws WireItRunException {
-        String absolute = RunWireit.getAbsoluteRootFilePath() + relative;
-        System.out.println(absolute);
-        return new File(absolute);
-    }
-
     private class ValueListener implements OutputListener{
 
         private TavernaInput myInput;
@@ -273,7 +243,7 @@ public class TavernaModule extends Module{
                     myInput.setStringsInput((String[])output);
                 } else if (output instanceof URI){
                     System.out.println("setting URI");
-                    myInput.setSingleURIInput(getRelativeURI(output));                    
+                    myInput.setSingleURIInput(resolver.getURIObjectToRelativeURIString(output));                    
                 } else if (output instanceof DelimiterURI){
                     //TavernaInputs will throw an exception is depth is not 1
                     DelimiterURI delimiterURI = (DelimiterURI)output;
@@ -297,7 +267,7 @@ public class TavernaModule extends Module{
         @Override
         public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException{
             if (output instanceof URI){
-                baclavaInput = getRelativeURI(output);
+                baclavaInput = resolver.getURIObjectToRelativeURIString(output);
                 runIfReady(outputBuilder);
             } else {
                  throw new WireItRunException ("Unknown inpiut type " + output.getClass() + " in " + name);

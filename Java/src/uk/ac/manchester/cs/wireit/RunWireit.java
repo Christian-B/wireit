@@ -11,15 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
+import uk.ac.manchester.cs.wireit.module.Resolver;
 import uk.ac.manchester.cs.wireit.module.WireItRunException;
 import uk.ac.manchester.cs.wireit.taverna.TavernaException;
 
 public class RunWireit extends WireitSQLBase {
     
     public final String TAVERNA_CMD_HOME_PARAMETER = "TAVERNA_CMD_HOME";
-    private static String absoluteRootUrl;
     private static String tavernaHome;
-    private static String absoluteRootFilePath;
     
     public RunWireit() throws ServletException{
         super();
@@ -27,16 +26,13 @@ public class RunWireit extends WireitSQLBase {
  
     public void init(){
         tavernaHome = getServletContext().getInitParameter(TAVERNA_CMD_HOME_PARAMETER);
-        absoluteRootFilePath = getServletContext().getRealPath("/");
-        absoluteRootFilePath = absoluteRootFilePath.replace("\\", "/");
     }
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        absoluteRootUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() +
-                request.getContextPath() + "/";
         System.out.println();
         System.out.println((new Date()) + "in runWireit.doPost");
+        Resolver resolver = new Resolver(request, getServletContext());
         StringBuilder outputBuilder = new StringBuilder();
         outputBuilder.append("Run posted at ");
         outputBuilder.append(new Date());
@@ -51,7 +47,7 @@ public class RunWireit extends WireitSQLBase {
         PrintWriter out = response.getWriter();
         JSONObject jsonReply;
         try {
-            jsonReply = doRun(jsonInput, outputBuilder, request);
+            jsonReply = doRun(jsonInput, outputBuilder, request, resolver);
             addRunResult(jsonReply, outputBuilder);
             String output = getOutput(parameters.get("name"), jsonReply, parameters.get("language"));
             out.println(output);
@@ -66,22 +62,6 @@ public class RunWireit extends WireitSQLBase {
         return tavernaHome;
     }
     
-    public static String getAbsoluteRootUrl() throws WireItRunException{
-        if (absoluteRootUrl != null){
-            return absoluteRootUrl;
-        } else {
-            throw new WireItRunException ("Illegal call to getAbsoluteRootUrl() before it was set");
-        }
-    }
-    
-    public static String getAbsoluteRootFilePath() throws WireItRunException{
-        if (absoluteRootFilePath != null){
-            return absoluteRootFilePath;
-        } else {
-            throw new WireItRunException ("Illegal call to getAbsoluteRootFilePath() before it was set");
-        }
-    }
-
     private JSONObject getInputJson(HashMap<String, String> parameters) throws IOException, ServletException{
         String workingString = parameters.get("working");
         JSONObject jsonInput;
@@ -159,10 +139,10 @@ public class RunWireit extends WireitSQLBase {
         return parameters;
     }
 
-    private JSONObject doRun(JSONObject jsonInput, StringBuilder outputBuilder, 
-            HttpServletRequest request) 
+    private JSONObject doRun(JSONObject jsonInput, StringBuilder outputBuilder, HttpServletRequest request, 
+            Resolver resolver) 
             throws WireItRunException, JSONException, TavernaException, IOException{
-        Wiring wiring = new Wiring(jsonInput);
+        Wiring wiring = new Wiring(jsonInput, resolver);
         outputBuilder.append("Pipe loaded at ");
         outputBuilder.append(new Date());
         outputBuilder.append("\n");
