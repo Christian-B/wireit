@@ -31,7 +31,7 @@ YAHOO.lang.extend(WireIt.URILinkContainer, WireIt.FormContainer, {
 			"type": "uriLink",
 			"inputParams" : {
 				"name":"uri",
-				"value":options.uri || "Link will go here",
+				"value":options.uri || "",
 			},
 		};
 		this.options.fields.push(this.uriField);

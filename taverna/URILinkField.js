@@ -39,7 +39,7 @@ YAHOO.lang.extend(inputEx.URILinkField, inputEx.Field, {
 		this.value = val;
 		//console.log(this.value);
 		
-		var link = "No Value set"
+		var link = "The Link will go here.";
 		
 		 if (this.value){
 			var text = this.value
