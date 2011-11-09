@@ -242,27 +242,6 @@ var tavernaLanguage = {
 				}
 			},
 			{
-				"name": "URL Output",
-				"category": "Output",
-				"description": "Workflow output",
-				"container": {
-					"width": 350,
-					"xtype": "WireIt.URILinkContainer",
-					"title": "output",
-					"terminals": [
-						{
-							"name": "input",
-							"offsetPosition": {"left": -14, "top": 25 },
-							"ddConfig": {
-								"type": "inputURL",
-								"allowedTypes": ["outputURL", "outputDelimitedURL"]
-							},
-							"nMaxWires": 1
-						}
-					]
-				}
-			},
-			{
 				"name": "URL Link Output",
 				"category": "Output",
 				"description": "Workflow output",
