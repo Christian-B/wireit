@@ -31,9 +31,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		this.options.outputs = options.outputs || [];
 		
 		this.options.wfURI = options.wfURI;
-		
-		console.log(options);
-		
+				
 		this.options.links = options.links || [];
 
 	},
@@ -41,7 +39,6 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 	render: function() {
 		WireIt.TavernaWFContainer.superclass.render.call(this);
 
-		console.log(this.options)
 		//Add links if any
 		var offset = 33; //I assume this is the header
 		for(var i = 0 ; i < this.options.links.length ; i++) {
@@ -54,9 +51,13 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		
 		var baclavaName;
 		//Baclava Input if needed
+		//It is VITAL that the baclava Input terminal is added first and therefor terminal[0]
+			//The code in WorkflowTerminals depends on this!
+			//If there is not input this requirement does not apply.
 		if (this.options.inputs.length > 0) {
 			//This adds the terminal dot.
 			this.options.terminals.push({
+				"xtype": "WireIt.BaclavaTerminal",
 				"name": "Baclava Input", 
 				"offsetPosition": {"left": -14, "top": offset }, 
 				"nMaxWires": 1,
@@ -92,6 +93,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 			var newTerminal = {};
 			newTerminal.ddConfig = {};
 			
+			newTerminal.xtype = "WireIt.IndividualTerminal"
 			newTerminal.name = input.name;
 			newTerminal.offsetPosition = {"left": -14, "top": offset + 30*(i+1) }; 
 			newTerminal.nMaxWires = 1;
@@ -119,7 +121,6 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 			newTerminal.ddConfig = {};
 			newTerminal.wireConfig = {};
 			
-			newTerminal.name = output.name;
 			newTerminal.offsetPosition = {"right": -14, "top": offset + 30*(i+1+this.options.inputs.length) };
 			newTerminal.alwaysSrc = true;
 			newTerminal.wireConfig.drawingMethod = "arrows"
