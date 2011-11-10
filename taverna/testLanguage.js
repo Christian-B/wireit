@@ -18,8 +18,8 @@ var tavernaLanguage = {
 					"outputs": [{"name":"Foo", "depth":0}],
 					"wfURI":"Echo.t2flow",
 					"links" : [
-						{"uri": "../Workflows/Echo.html","text": "Workflow Description"},
-						{"uri": "../Workflows/Echo.t2flow","text": "Workflow Definition"},
+						{"uri": "Workflows/Echo.html","text": "Workflow Description"},
+						{"uri": "Workflows/Echo.t2flow","text": "Workflow Definition"},
 					]
 				},
 			},
@@ -32,8 +32,8 @@ var tavernaLanguage = {
 					"outputs": [{"name":"Foo", "depth":0}],
 					"wfURI":"HelloWorld.t2flow",
 					"links" : [
-						{"uri": "../Workflows/HelloWorld.html","text": "Workflow Description"},
-						{"uri": "../Workflows/HelloWorld.t2flow","text": "Workflow Definition"},
+						{"uri": "Workflows/HelloWorld.html","text": "Workflow Description"},
+						{"uri": "Workflows/HelloWorld.t2flow","text": "Workflow Definition"},
 					]
 				}
 			},
@@ -52,8 +52,8 @@ var tavernaLanguage = {
 						{"name":"out_Right", "depth":0}],
 					"wfURI":"ThreeStrings.t2flow",
 					"links" : [
-						{"uri": "../Workflows/ThreeStrings.html","text": "Workflow Description"},
-						{"uri": "../Workflows/ThreeStrings.t2flow","text": "Workflow Definition"},
+						{"uri": "Workflows/ThreeStrings.html","text": "Workflow Description"},
+						{"uri": "Workflows/ThreeStrings.t2flow","text": "Workflow Definition"},
 					]
 				}
 			},
@@ -70,8 +70,8 @@ var tavernaLanguage = {
 					"outputs": [{"name":"Result", "depth":1}],
 					"wfURI":"MixedWorkflow.t2flow",
 					"links" : [
-						{"uri": "../Workflows/MixedWorkflow.html","text": "Workflow Description"},
-						{"uri": "../Workflows/MixedWorkflow.t2flow","text": "Workflow Definition"},
+						{"uri": "Workflows/MixedWorkflow.html","text": "Workflow Description"},
+						{"uri": "Workflows/MixedWorkflow.t2flow","text": "Workflow Definition"},
 					]
 				}
 			},
@@ -226,7 +226,7 @@ var tavernaLanguage = {
 					"xtype": "WireIt.FormContainer",
 					"title": "output",
 					"fields": [ 
-						{"type": "string", "inputParams": {"label": "Value", "name": "input", "wirable": false}}
+						{"type": "uneditable", "inputParams": {"label": "Value", "name": "input", "wirable": false}}
 					],
 					"terminals": [
 						{
@@ -293,7 +293,7 @@ var tavernaLanguage = {
 					"collapsible": true,
 					"legend": "here comes the passthrough...",
 					"fields": [
-						{"type": "string", "inputParams": {"label": "PassThrough", "name": "both", "required": false } },
+						{"type": "uneditable", "inputParams": {"label": "PassThrough", "name": "both", "required": false } },
 					],
 					"terminals": [
 						{
