@@ -121,6 +121,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 			newTerminal.ddConfig = {};
 			newTerminal.wireConfig = {};
 			
+			newTerminal.name = output.name;
 			newTerminal.offsetPosition = {"right": -14, "top": offset + 30*(i+1+this.options.inputs.length) };
 			newTerminal.alwaysSrc = true;
 			newTerminal.wireConfig.drawingMethod = "arrows"
