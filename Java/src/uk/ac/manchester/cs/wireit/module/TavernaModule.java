@@ -7,9 +7,12 @@ package uk.ac.manchester.cs.wireit.module;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.ac.manchester.cs.wireit.RunWireit;
@@ -63,12 +66,11 @@ public class TavernaModule extends Module{
     private void setWorkflow(JSONObject json) throws JSONException, TavernaException, IOException, WireItRunException{
         JSONObject config = json.getJSONObject("config");
         String fileSt = config.optString("wfURI");
-        
         //Checks for security. Change as required
         if (fileSt.contains("..")){
             throw new TavernaException ("Security exception uris can not contain \"..\"");
         }
-        File workflowFile = resolver.getRelativeFile(WORFKLOW_DIR + File.separator + fileSt);
+        File workflowFile = resolver.getRelativeFile(fileSt);
         commandLine.setWorkflowFile(workflowFile);
         
         TavernaWorkflow workflow = new XMLBasedT2Flow(workflowFile);

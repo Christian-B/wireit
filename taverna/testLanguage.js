@@ -16,31 +16,38 @@ var tavernaLanguage = {
 					"xtype":"WireIt.TavernaWFContainer",
 					"inputs": [{"name":"Bar", "depth":0}],
 					"outputs": [{"name":"Foo", "depth":0}],
-					"wfURI":"Echo.t2flow",
+					"wfURI":"Workflows/Echo.t2flow",
+					"showWorkflow": true,
 					"links" : [
 						{"uri": "Workflows/Echo.html","text": "Workflow Description"},
 						{"uri": "Workflows/Echo.t2flow","text": "Workflow Definition"},
 					]
 				},
+				"helpPage": "Workflows/Echo.html",
 			},
 			{
-				"name": "HelloWorld",
+				"name": 'HelloWorld',
+				"description": 'The classical no input, just output "HelloWorld" demonstration Workflow',
 				"category": "Taverna Workflow",
 				"container": {
 					"xtype":"WireIt.TavernaWFContainer",
 					"inputs": [],
 					"outputs": [{"name":"Foo", "depth":0}],
-					"wfURI":"HelloWorld.t2flow",
+					"wfURI":"Workflows/HelloWorld.t2flow",
+					"showWorkflow": true,
 					"links" : [
 						{"uri": "Workflows/HelloWorld.html","text": "Workflow Description"},
 						{"uri": "Workflows/HelloWorld.t2flow","text": "Workflow Definition"},
 					]
-				}
+				},
+				"helpPage": "Workflows/Echo.html",
 			},
 			{
-				"name": "Triple Echo",
+				"name": 'Triple Echo',
+				"description": "Test workflow which simply passes the three inputs to the output with the same name. No processing is carried out",
 				"category": "Taverna Workflow",
 				"container": {
+					//"icon":"taverna/taverna.jpg",
 					"xtype":"WireIt.TavernaWFContainer",
 					"inputs": [
 						{"name":"in_Left", "depth":0},
@@ -50,33 +57,39 @@ var tavernaLanguage = {
 						{"name":"out_Left", "depth":0},
 						{"name":"out_Middle", "depth":0},
 						{"name":"out_Right", "depth":0}],
-					"wfURI":"ThreeStrings.t2flow",
+					"wfURI":"Workflows/ThreeStrings.t2flow",
+					"showWorkflow": "true",
 					"links" : [
 						{"uri": "Workflows/ThreeStrings.html","text": "Workflow Description"},
 						{"uri": "Workflows/ThreeStrings.t2flow","text": "Workflow Definition"},
 					]
-				}
+				},
+				"helpPage": "Workflows/ThreeStrings.html",
 			},
 			{
 				"name": "Mixed Concatenation",
 				"category": "Taverna Workflow",
+				"description": "Concatenates a mixture of single Strings and Lists of Strings",
 				"container": {
 					"xtype":"WireIt.TavernaWFContainer",
 					"inputs": [
-						{"name":"LeftList", "depth":1},
+						{"name":"LeftList", "depth":1, "description":"Cool this works"},
 						{"name":"LeftNoList", "depth":0},
 						{"name":"RightList", "depth":1},
 						{"name":"RightNoList", "depth":0}],
 					"outputs": [{"name":"Result", "depth":1}],
-					"wfURI":"MixedWorkflow.t2flow",
+					"wfURI":"Workflows/MixedWorkflow.t2flow",
+					"showWorkflow": false,
 					"links" : [
 						{"uri": "Workflows/MixedWorkflow.html","text": "Workflow Description"},
 						{"uri": "Workflows/MixedWorkflow.t2flow","text": "Workflow Definition"},
 					]
-				}
+				},
+				"helpPage": "Workflows/MixedWorkflow.html",
 			},
 			{
 				"name": "Simple Input",
+				"description": "Place to enter a single value",
 				"category": "Input",
 				"container": {
 					"xtype": "WireIt.FormContainer",
@@ -93,6 +106,7 @@ var tavernaLanguage = {
 					"terminals": [
 						{
 							"name": "output",
+							"description":"Cool this works",
 							"offsetPosition": {"right": -14, "top": 25},
 							"alwaysSrc":true,
 							 wireConfig: { drawingMethod: "arrows"},
@@ -106,6 +120,7 @@ var tavernaLanguage = {
 			},
 			{
 				"name": "URL Input",
+				"description": "Place to enter a single url.",
 				"category": "Input",
 				"container": {
 					"xtype": "WireIt.FormContainer",
@@ -137,6 +152,7 @@ var tavernaLanguage = {
 			},
 			{
 				"name": "URL To List Input",
+				"description": "Place to enter the url to a list and the delimiter between list elements.",
 				"category": "Input",
 				"container": {
 					"xtype": "WireIt.FormContainer",
@@ -176,6 +192,7 @@ var tavernaLanguage = {
 			},
 			{
 				"name": "List Input",
+				"description": "Place to enter a list of item. Each line is considered one item. NewLine within an item not supported.",
 				"category": "Input",
 				"container": {
 					"xtype": "WireIt.FormContainer",
@@ -198,7 +215,7 @@ var tavernaLanguage = {
 			{
 				"name": "Triple Echo Baclava Input",
 				"category": "Input",
-				"description": "Workflow input",
+				"description": "Workflow input for the Triple Echo workflow.",
 				"container": {
 					"width": 350,
 					"xtype": "WireIt.URILinkContainer",
@@ -221,7 +238,7 @@ var tavernaLanguage = {
 			{
 				"name": "Simple Output",
 				"category": "Output",
-				"description": "Workflow output",
+				"description": "Single port Workflow output in String format. ",
 				"container": {
 					"xtype": "WireIt.FormContainer",
 					"title": "output",
@@ -244,7 +261,7 @@ var tavernaLanguage = {
 			{
 				"name": "URL Link Output",
 				"category": "Output",
-				"description": "Workflow output",
+				"description": "Baclava Workflow output as a clickable link.",
 				"container": {
 					"width": 350,
 					"xtype": "WireIt.URILinkContainer",
@@ -265,6 +282,7 @@ var tavernaLanguage = {
 			{
 				"name": "List Output",
 				"category": "Output",
+				"description": "Single port workflow output. As a flattened list of Strings",
 				"container": {
 					"xtype": "WireIt.FormContainer",
 					"title": "Output test",
@@ -287,6 +305,7 @@ var tavernaLanguage = {
 			{
 				"name": "PassThrough",
 				"category": "Pass Through",
+				"description": "Field that can be placed between the output of one workflow and the Input of another one. Shows the value being passed as a String",
 				"container": {
 					"xtype": "WireIt.FormContainer",
 					// inputEx options :
@@ -320,8 +339,8 @@ var tavernaLanguage = {
 			},
 			{
 				"name": "URL Pass Through",
+				"description": "Field that can be placed between the Baclava output of one workflow and the Baclava Input of another one. Provides a clickable URI to the file being passed",
 				"category": "Pass Through",
-				"description": "Workflow output",
 				"container": {
 					"width": 350,
 					"xtype": "WireIt.URILinkContainer",
@@ -374,8 +393,36 @@ var tavernaLanguage = {
 
 		try {
 			this.language.adapter = WireIt.WiringEditor.adapters.AjaxAdapter;
+			
+			for(var i = 0 ; i < this.language.modules.length ; i++) {
+				module = this.language.modules[i];
+				var tavernaLink = ""
+				if (module.container.xtype == "WireIt.TavernaWFContainer"){
+					if (module.container.showWorkflow){	
+						var tavernaTitle = module.wfToolTip || "Click here to see workflow script";
+						var tavernaLink	= '<a href="' + module.container.wfURI +'" target="_blank"><IMG SRC="taverna/taverna.jpg" title="' + tavernaTitle + '"></a> '
+					} else {
+						module.container.icon = module.container.icon || "taverna/taverna.jpg";
+					}
+				}
+				var helpLink = "";
+				if (module.helpPage) {
+					var helpTitle = module.helpToolTip || "Click here to more information";
+					helpLink = ' <a href="' + module.helpPage +'" target="_blank"><IMG SRC="images/icons/help.png" title="' + helpTitle + '"></a>'
+				}
+				module.htmlTag = tavernaLink + module.name + helpLink;
+			}
 
 			this.editor = new tavernaLanguage.WiringEditor(this.language);
+
+			//for(var i = 0 ; i < this.language.modules.length ; i++) {
+			//console.log(this.language.modules[i].name);
+			//console.log(this.language.modules[i].savedName);
+			//console.log("---");
+			//	if (this.language.modules[i].savedName){
+			//		this.language.modules[i].name = this.language.modules[i].savedName;
+			//	}
+			//}
 
 			//Open the minimap
 			this.editor.accordionView.openPanel(2);
