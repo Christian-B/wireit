@@ -20,12 +20,12 @@ var tavernaLanguage = {
 					"outputs": [{"name":"Foo", "depth":0}],
 					"wfURI":"Workflows/Echo.t2flow",
 					"showWorkflow": true,
+					"helpPage": "Workflows/Echo.html",
 					"links" : [
 						{"uri": "Workflows/Echo.html","text": "Workflow Description"},
 						{"uri": "Workflows/Echo.t2flow","text": "Workflow Definition"},
 					]
 				},
-				"helpPage": "Workflows/Echo.html",
 			},
 			{
 				"name": 'HelloWorld',
@@ -37,12 +37,12 @@ var tavernaLanguage = {
 					"outputs": [{"name":"Foo", "depth":0}],
 					"wfURI":"Workflows/HelloWorld.t2flow",
 					"showWorkflow": true,
+					"helpPage": "Workflows/Echo.html",
 					"links" : [
 						{"uri": "Workflows/HelloWorld.html","text": "Workflow Description"},
 						{"uri": "Workflows/HelloWorld.t2flow","text": "Workflow Definition"},
 					]
 				},
-				"helpPage": "Workflows/Echo.html",
 			},
 			{
 				"name": 'Triple Echo',
@@ -61,12 +61,12 @@ var tavernaLanguage = {
 						{"name":"out_Right", "depth":0}],
 					"wfURI":"Workflows/ThreeStrings.t2flow",
 					"showWorkflow": "true",
+					"helpPage": "Workflows/ThreeStrings.html",
 					"links" : [
 						{"uri": "Workflows/ThreeStrings.html","text": "Workflow Description"},
 						{"uri": "Workflows/ThreeStrings.t2flow","text": "Workflow Definition"},
 					]
 				},
-				"helpPage": "Workflows/ThreeStrings.html",
 			},
 			{
 				"name": "Mixed Concatenation",
@@ -81,13 +81,13 @@ var tavernaLanguage = {
 						{"name":"RightNoList", "depth":0}],
 					"outputs": [{"name":"Result", "depth":1}],
 					"wfURI":"Workflows/MixedWorkflow.t2flow",
+					"helpPage": "Workflows/MixedWorkflow.html",
 					"showWorkflow": false,
 					"links" : [
 						{"uri": "Workflows/MixedWorkflow.html","text": "Workflow Description"},
 						{"uri": "Workflows/MixedWorkflow.t2flow","text": "Workflow Definition"},
 					]
 				},
-				"helpPage": "Workflows/MixedWorkflow.html",
 			},
 			{
 				"name": "Simple Input",
@@ -408,9 +408,9 @@ var tavernaLanguage = {
 					}
 				}
 				var helpLink = "";
-				if (module.helpPage) {
+				if (module.container.helpPage) {
 					var helpTitle = module.helpToolTip || "Click here to more information";
-					helpLink = ' <a href="' + module.helpPage +'" target="_blank"><IMG SRC="images/icons/help.png" title="' + helpTitle + '"></a>'
+					helpLink = ' <a href="' + module.container.helpPage +'" target="_blank"><IMG SRC="images/icons/help.png" title="' + helpTitle + '"></a>'
 				}
 				module.title = tavernaLink + module.name + helpLink;
 			}

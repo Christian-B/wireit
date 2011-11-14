@@ -18,10 +18,13 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 	 * @param {Object} options the options object
 	 */
 	setOptions: function(options) {
+		console.log(options);
 		WireIt.TavernaWFContainer.superclass.setOptions.call(this, options);
 
 		this.options.xtype = "WireIt.TavernaWFContainer";
 
+		console.log(options);
+		this.options.name = options.name;
 		this.options.className = options.className || "WireIt-Container WireIt-TavernaWFContainer";
 
 		// Overwrite default value for options:
@@ -33,10 +36,26 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		this.options.wfURI = options.wfURI;
 				
 		this.options.links = options.links || [];
-
+	
+		var tavernaLink = ""
+		if (options.showWorkflow){	
+			var tavernaTitle = options.wfToolTip || "Click here to see workflow script";
+			var tavernaLink	= '<a href="' + options.wfURI +'" target="_blank"><IMG SRC="taverna/taverna.jpg" title="' + tavernaTitle + '"></a> '
+		} else {
+			this.options.icon = this.options.icon || "taverna/taverna.jpg";
+		}
+		var helpLink = "";
+		if (options.helpPage) {
+			var helpTitle = options.helpToolTip || "Click here to more information";
+			helpLink = ' <a href="' + options.helpPage +'" target="_blank"><IMG SRC="images/icons/help.png" title="' + helpTitle + '"></a>'
+		}
+		this.options.title = tavernaLink + options.name + helpLink;
+		this.options.name = options.name;
 	},
 
+	
 	render: function() {
+		
 		WireIt.TavernaWFContainer.superclass.render.call(this);
 
 		//Add links if any

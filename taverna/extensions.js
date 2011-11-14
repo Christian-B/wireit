@@ -132,6 +132,7 @@ YAHOO.lang.extend(tavernaLanguage.WiringEditor, WireIt.WiringEditor, {
 	},
 
 	 /**
+	 * Overwrites the current implementation
 	 * add a module at the given pos
 	 */
 	addModule: function(module, pos) {
@@ -142,6 +143,7 @@ YAHOO.lang.extend(tavernaLanguage.WiringEditor, WireIt.WiringEditor, {
 			//containerConfig.title = module.name;
 			//Replaced it with one that uses the title if available
 			containerConfig.title = module.title || module.name;
+			containerConfig.name = module.name;
 			var container = this.layer.addContainer(containerConfig);
 			YAHOO.util.Dom.addClass(container.el, "WiringEditor-module-"+module.name);
 		}
@@ -150,5 +152,42 @@ YAHOO.lang.extend(tavernaLanguage.WiringEditor, WireIt.WiringEditor, {
 		}
 	},
 
+	 /**
+	 * Overwrites the current implementation
+	 * This method return a wiring within the given vocabulary described by the modules list
+	 * @method getValue
+	 */
+	getValue: function() {
+
+		var i;
+		var obj = {modules: [], wires: [], properties: null};
+
+		for( i = 0 ; i < this.layer.containers.length ; i++) {
+			//Don't use the title
+			//obj.modules.push( {name: this.layer.containers[i].options.title, value: this.layer.containers[i].getValue(), config: this.layer.containers[i].getConfig()});
+			//Use the name instead
+			var theName = this.layer.containers[i].options.name || this.layer.containers[i].options.title;
+			obj.modules.push( {name: theName, title: this.layer.containers[i].options.title, value: this.layer.containers[i].getValue(), config: this.layer.containers[i].getConfig()});
+		}
+
+		for( i = 0 ; i < this.layer.wires.length ; i++) {
+			var wire = this.layer.wires[i];
+
+			var wireObj = {
+				src: {moduleId: WireIt.indexOf(wire.terminal1.container, this.layer.containers), terminal: wire.terminal1.options.name},
+				tgt: {moduleId: WireIt.indexOf(wire.terminal2.container, this.layer.containers), terminal: wire.terminal2.options.name}
+			};
+			obj.wires.push(wireObj);
+		}
+
+		obj.properties = this.propertiesForm.getValue();
+
+		return {
+			name: obj.properties.name,
+			working: obj
+		};
+	},
 
 });
+
+
