@@ -167,7 +167,7 @@ YAHOO.lang.extend(tavernaLanguage.WiringEditor, WireIt.WiringEditor, {
 			//obj.modules.push( {name: this.layer.containers[i].options.title, value: this.layer.containers[i].getValue(), config: this.layer.containers[i].getConfig()});
 			//Use the name instead
 			var theName = this.layer.containers[i].options.name || this.layer.containers[i].options.title;
-			obj.modules.push( {name: theName, title: this.layer.containers[i].options.title, value: this.layer.containers[i].getValue(), config: this.layer.containers[i].getConfig()});
+			obj.modules.push( {name: theName, value: this.layer.containers[i].getValue(), config: this.layer.containers[i].getConfig()});
 		}
 
 		for( i = 0 ; i < this.layer.wires.length ; i++) {
