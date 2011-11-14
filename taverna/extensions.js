@@ -79,11 +79,11 @@ YAHOO.lang.extend(tavernaLanguage.WiringEditor, WireIt.WiringEditor, {
 		if(module.container.icon) {
 			div.appendChild( WireIt.cn('img',{src: module.container.icon}) );
 		}
-		//Replaced simply using the name at the tag
+		//Replaced simply using the name as the innerHtml object
 		//div.appendChild( WireIt.cn('span', null, null, module.name) );
-		//With looking for an htmlTag
-		var tag = module.htmlTag || module.name;
-		div.appendChild( WireIt.cn('span', null, null, tag) );
+		//With looking for a title and otherwise using name
+		var title = module.title || module.name;
+		div.appendChild( WireIt.cn('span', null, null, title) );
 	
 		var ddProxy = new WireIt.ModuleProxy(div, this);
 		ddProxy._module = module;
@@ -120,11 +120,35 @@ YAHOO.lang.extend(tavernaLanguage.WiringEditor, WireIt.WiringEditor, {
 	
 			var terminal1 = this.containers[src.moduleId].getTerminal(src.terminal);
 			var terminal2 = this.containers[tgt.moduleId].getTerminal(tgt.terminal);
+			//Removed version which depended on wireConfig for the options.
+				//As only src and tgt are saved
+			//var wire = new type( terminal1, terminal2, this.el, wireConfig);
+			//Replaced with version that gets the options from the source.
 			var wire = new type( terminal1, terminal2, this.el, terminal1.options.wireConfig);
 			wire.redraw();
 		
 			return wire;
 		}
 	},
+
+	 /**
+	 * add a module at the given pos
+	 */
+	addModule: function(module, pos) {
+		try {
+			var containerConfig = module.container;
+			containerConfig.position = pos;
+			//Removed line that always uses the name as the title.
+			//containerConfig.title = module.name;
+			//Replaced it with one that uses the title if available
+			containerConfig.title = module.title || module.name;
+			var container = this.layer.addContainer(containerConfig);
+			YAHOO.util.Dom.addClass(container.el, "WiringEditor-module-"+module.name);
+		}
+		catch(ex) {
+			this.alert("Error Layer.addContainer: "+ ex.message);
+		}
+	},
+
 
 });

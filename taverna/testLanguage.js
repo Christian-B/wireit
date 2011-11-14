@@ -12,8 +12,10 @@ var tavernaLanguage = {
 				"name": "Echo",
 				"category": "Taverna Workflow",
 				"description": "Echoes input to output",
+				"title": "outer title",
 				"container" : {
 					"xtype":"WireIt.TavernaWFContainer",
+					"title": "container title",
 					"inputs": [{"name":"Bar", "depth":0}],
 					"outputs": [{"name":"Foo", "depth":0}],
 					"wfURI":"Workflows/Echo.t2flow",
@@ -410,19 +412,10 @@ var tavernaLanguage = {
 					var helpTitle = module.helpToolTip || "Click here to more information";
 					helpLink = ' <a href="' + module.helpPage +'" target="_blank"><IMG SRC="images/icons/help.png" title="' + helpTitle + '"></a>'
 				}
-				module.htmlTag = tavernaLink + module.name + helpLink;
+				module.title = tavernaLink + module.name + helpLink;
 			}
 
 			this.editor = new tavernaLanguage.WiringEditor(this.language);
-
-			//for(var i = 0 ; i < this.language.modules.length ; i++) {
-			//console.log(this.language.modules[i].name);
-			//console.log(this.language.modules[i].savedName);
-			//console.log("---");
-			//	if (this.language.modules[i].savedName){
-			//		this.language.modules[i].name = this.language.modules[i].savedName;
-			//	}
-			//}
 
 			//Open the minimap
 			this.editor.accordionView.openPanel(2);
