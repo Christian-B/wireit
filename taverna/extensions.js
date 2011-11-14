@@ -62,5 +62,69 @@ YAHOO.lang.extend(tavernaLanguage.WiringEditor, WireIt.WiringEditor, {
 
 		this.preventLayerChangedEvent = false;
 	},
+	
+
+	/**
+	* Overwrites the orginal function to display more than the name.
+	* Add a module definition to the left list
+	*/
+	addModuleToList: function(module) {
+	
+		var div = WireIt.cn('div', {className: "WiringEditor-module"});
+	
+		if(module.description) {
+			div.title = module.description;
+		}
+	
+		if(module.container.icon) {
+			div.appendChild( WireIt.cn('img',{src: module.container.icon}) );
+		}
+		//Replaced simply using the name at the tag
+		//div.appendChild( WireIt.cn('span', null, null, module.name) );
+		//With looking for an htmlTag
+		var tag = module.htmlTag || module.name;
+		div.appendChild( WireIt.cn('span', null, null, tag) );
+	
+		var ddProxy = new WireIt.ModuleProxy(div, this);
+		ddProxy._module = module;
+	
+		// Get the category element in the accordion or create a new one
+		var category = module.category || "main";
+		var el = YAHOO.util.Dom.get("module-category-"+category);
+		if( !el ) {
+			this.modulesAccordionView.addPanel({
+				label: category,
+				content: "<div id='module-category-"+category+"'></div>"
+			});
+			this.modulesAccordionView.openPanel(this.modulesAccordionView._panels.length-1);
+			el = YAHOO.util.Dom.get("module-category-"+category);
+			}
+	
+		el.appendChild(div);
+	},
  
+ 
+	/**
+	 * Overwrites the Redner function with the sole purpose of overwriting the layer.addWire Function.
+	 * Add the rendering of the layer
+	 */
+	render: function() {
+ 
+		tavernaLanguage.WiringEditor.superclass.render.call(this);
+ 
+ 		this.layer.addWire = function(wireConfig) {
+			console.log("in overwritten");
+			var type = eval(wireConfig.xtype || "WireIt.Wire");
+			var src = wireConfig.src;
+			var tgt = wireConfig.tgt;
+	
+			var terminal1 = this.containers[src.moduleId].getTerminal(src.terminal);
+			var terminal2 = this.containers[tgt.moduleId].getTerminal(tgt.terminal);
+			var wire = new type( terminal1, terminal2, this.el, terminal1.options.wireConfig);
+			wire.redraw();
+		
+			return wire;
+		}
+	},
+
 });
