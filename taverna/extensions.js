@@ -113,7 +113,6 @@ YAHOO.lang.extend(tavernaLanguage.WiringEditor, WireIt.WiringEditor, {
 		tavernaLanguage.WiringEditor.superclass.render.call(this);
  
  		this.layer.addWire = function(wireConfig) {
-			console.log("in overwritten");
 			var type = eval(wireConfig.xtype || "WireIt.Wire");
 			var src = wireConfig.src;
 			var tgt = wireConfig.tgt;

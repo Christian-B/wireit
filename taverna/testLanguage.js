@@ -12,30 +12,29 @@ var tavernaLanguage = {
 				"name": "Echo",
 				"category": "Taverna Workflow",
 				"description": "Echoes input to output",
-				"title": "outer title",
-				"container" : {
-					"xtype":"WireIt.TavernaWFContainer",
-					"title": "container title",
+				"tavernaInfo" : {
+					"wfURI":"Workflows/Echo.t2flow",
 					"inputs": [{"name":"Bar", "depth":0}],
 					"outputs": [{"name":"Foo", "depth":0}],
-					"wfURI":"Workflows/Echo.t2flow",
 					"showWorkflow": true,
 					"helpPage": "Workflows/Echo.html",
 					"links" : [
 						{"uri": "Workflows/Echo.html","text": "Workflow Description"},
 						{"uri": "Workflows/Echo.t2flow","text": "Workflow Definition"},
-					]
+					],
+				},
+				"container" : {
+					"xtype":"WireIt.TavernaWFContainer",
 				},
 			},
 			{
 				"name": 'HelloWorld',
 				"description": 'The classical no input, just output "HelloWorld" demonstration Workflow',
 				"category": "Taverna Workflow",
-				"container": {
-					"xtype":"WireIt.TavernaWFContainer",
+				"tavernaInfo" : {
+					"wfURI":"Workflows/HelloWorld.t2flow",
 					"inputs": [],
 					"outputs": [{"name":"Foo", "depth":0}],
-					"wfURI":"Workflows/HelloWorld.t2flow",
 					"showWorkflow": true,
 					"helpPage": "Workflows/Echo.html",
 					"links" : [
@@ -43,14 +42,16 @@ var tavernaLanguage = {
 						{"uri": "Workflows/HelloWorld.t2flow","text": "Workflow Definition"},
 					]
 				},
+				"container": {
+					"xtype":"WireIt.TavernaWFContainer",
+				},
 			},
 			{
 				"name": 'Triple Echo',
 				"description": "Test workflow which simply passes the three inputs to the output with the same name. No processing is carried out",
 				"category": "Taverna Workflow",
-				"container": {
-					//"icon":"taverna/taverna.jpg",
-					"xtype":"WireIt.TavernaWFContainer",
+				"tavernaInfo" : {
+					"wfURI":"Workflows/ThreeStrings.t2flow",
 					"inputs": [
 						{"name":"in_Left", "depth":0},
 						{"name":"in_Middle", "depth":0},
@@ -59,7 +60,6 @@ var tavernaLanguage = {
 						{"name":"out_Left", "depth":0},
 						{"name":"out_Middle", "depth":0},
 						{"name":"out_Right", "depth":0}],
-					"wfURI":"Workflows/ThreeStrings.t2flow",
 					"showWorkflow": "true",
 					"helpPage": "Workflows/ThreeStrings.html",
 					"links" : [
@@ -67,26 +67,32 @@ var tavernaLanguage = {
 						{"uri": "Workflows/ThreeStrings.t2flow","text": "Workflow Definition"},
 					]
 				},
+				"container": {
+					//"icon":"taverna/taverna.jpg",
+					"xtype":"WireIt.TavernaWFContainer",
+				},
 			},
 			{
 				"name": "Mixed Concatenation",
 				"category": "Taverna Workflow",
 				"description": "Concatenates a mixture of single Strings and Lists of Strings",
-				"container": {
-					"xtype":"WireIt.TavernaWFContainer",
+				"tavernaInfo" : {
+					"wfURI":"Workflows/MixedWorkflow.t2flow",
 					"inputs": [
 						{"name":"LeftList", "depth":1, "description":"Cool this works"},
 						{"name":"LeftNoList", "depth":0},
 						{"name":"RightList", "depth":1},
 						{"name":"RightNoList", "depth":0}],
 					"outputs": [{"name":"Result", "depth":1}],
-					"wfURI":"Workflows/MixedWorkflow.t2flow",
 					"helpPage": "Workflows/MixedWorkflow.html",
 					"showWorkflow": false,
 					"links" : [
 						{"uri": "Workflows/MixedWorkflow.html","text": "Workflow Description"},
 						{"uri": "Workflows/MixedWorkflow.t2flow","text": "Workflow Definition"},
 					]
+				},
+				"container": {
+					"xtype":"WireIt.TavernaWFContainer",
 				},
 			},
 			{
@@ -387,6 +393,41 @@ var tavernaLanguage = {
 		]
 	},
 
+	moduleByName: function(name) {
+		var language = this.language;
+		var modules = language.modules
+		for(var i = 0 ; i < modules.length ; i++) {
+			if (modules[i].name == name) {
+				return modules[i];
+			}
+		}
+		return null;
+	},
+		
+	titleByName: function(name) {
+		module = this.moduleByName(name);
+		var tavernaLink = ""
+		if (module.tavernaInfo.showWorkflow){	
+			var tavernaTitle = module.tavernaInfo.wfToolTip || "Click here to see workflow script";
+			var tavernaLink	= '<a href="' + module.container.wfURI +'" target="_blank"><IMG SRC="taverna/taverna.jpg" title="' + tavernaTitle + '"></a> '
+		}
+		var helpLink = "";
+		if (module.tavernaInfo.helpPage) {
+			var helpTitle = module.tavernaInfo.helpToolTip || "Click here to more information";
+			helpLink = ' <a href="' + module.tavernaInfo.helpPage +'" target="_blank"><IMG SRC="images/icons/help.png" title="' + helpTitle + '"></a>'
+		}
+		return (tavernaLink + module.name + helpLink);
+	},
+	
+	iconByName: function(name) {
+		module = this.moduleByName(name);
+		if (module.tavernaInfo.showWorkflow){	
+			return null
+		} else {
+			return module.container.icon || "taverna/taverna.jpg";
+		}
+	},
+
 	/**
 	 * @method init
 	 * @static
@@ -398,21 +439,10 @@ var tavernaLanguage = {
 			
 			for(var i = 0 ; i < this.language.modules.length ; i++) {
 				module = this.language.modules[i];
-				var tavernaLink = ""
 				if (module.container.xtype == "WireIt.TavernaWFContainer"){
-					if (module.container.showWorkflow){	
-						var tavernaTitle = module.wfToolTip || "Click here to see workflow script";
-						var tavernaLink	= '<a href="' + module.container.wfURI +'" target="_blank"><IMG SRC="taverna/taverna.jpg" title="' + tavernaTitle + '"></a> '
-					} else {
-						module.container.icon = module.container.icon || "taverna/taverna.jpg";
-					}
+					module.title = this.titleByName(module.name);
+					module.container.icon = this.iconByName(module.name);
 				}
-				var helpLink = "";
-				if (module.container.helpPage) {
-					var helpTitle = module.helpToolTip || "Click here to more information";
-					helpLink = ' <a href="' + module.container.helpPage +'" target="_blank"><IMG SRC="images/icons/help.png" title="' + helpTitle + '"></a>'
-				}
-				module.title = tavernaLink + module.name + helpLink;
 			}
 
 			this.editor = new tavernaLanguage.WiringEditor(this.language);

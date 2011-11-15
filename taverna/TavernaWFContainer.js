@@ -18,50 +18,45 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 	 * @param {Object} options the options object
 	 */
 	setOptions: function(options) {
-		console.log(options);
 		WireIt.TavernaWFContainer.superclass.setOptions.call(this, options);
 
 		this.options.xtype = "WireIt.TavernaWFContainer";
-
-		console.log(options);
+		
+		//The load module method writes the name to title so if no name use title
+		options.name = options.name || options.title;
+		var module = tavernaLanguage.moduleByName(options.name);
+		var tavernaInfo = module.tavernaInfo;
+		
 		this.options.name = options.name;
 		this.options.className = options.className || "WireIt-Container WireIt-TavernaWFContainer";
 
 		// Overwrite default value for options:
 		this.options.resizable = (typeof options.resizable == "undefined") ? false : options.resizable;
 
-		this.options.inputs = options.inputs || [];
-		this.options.outputs = options.outputs || [];
+		this.inputs = tavernaInfo.inputs || [];
+		this.outputs = tavernaInfo.outputs || [];
 		
-		this.options.wfURI = options.wfURI;
+		//Always take the URI from the language.
+			//A URI is saved as the save and run code are shared.
+			//Taking the URI from the language allows the URI to be updated without breaking existing saved wirings.
+		this.options.wfURI = tavernaInfo.wfURI;
 				
-		this.options.links = options.links || [];
+		this.links = tavernaInfo.links || [];
 	
-		var tavernaLink = ""
-		if (options.showWorkflow){	
-			var tavernaTitle = options.wfToolTip || "Click here to see workflow script";
-			var tavernaLink	= '<a href="' + options.wfURI +'" target="_blank"><IMG SRC="taverna/taverna.jpg" title="' + tavernaTitle + '"></a> '
-		} else {
-			this.options.icon = this.options.icon || "taverna/taverna.jpg";
-		}
-		var helpLink = "";
-		if (options.helpPage) {
-			var helpTitle = options.helpToolTip || "Click here to more information";
-			helpLink = ' <a href="' + options.helpPage +'" target="_blank"><IMG SRC="images/icons/help.png" title="' + helpTitle + '"></a>'
-		}
-		this.options.title = tavernaLink + options.name + helpLink;
 		this.options.name = options.name;
+		
+		this.options.title = tavernaLanguage.titleByName(options.name);
+		this.options.icon = tavernaLanguage.iconByName(options.name);
 	},
 
-	
 	render: function() {
 		
 		WireIt.TavernaWFContainer.superclass.render.call(this);
 
 		//Add links if any
 		var offset = 33; //I assume this is the header
-		for(var i = 0 ; i < this.options.links.length ; i++) {
-			var link = this.options.links[i];
+		for(var i = 0 ; i < this.links.length ; i++) {
+			var link = this.links[i];
 			var text = link.text || link.uri;
 			var docLink = '<a href="' + link.uri + '" target="_blank">' + text + '</a>';
 			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "center"}, docLink));
@@ -73,7 +68,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		//It is VITAL that the baclava Input terminal is added first and therefor terminal[0]
 			//The code in WorkflowTerminals depends on this!
 			//If there is not input this requirement does not apply.
-		if (this.options.inputs.length > 0) {
+		if (this.inputs.length > 0) {
 			//This adds the terminal dot.
 			this.options.terminals.push({
 				"xtype": "WireIt.BaclavaTerminal",
@@ -106,8 +101,8 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "center"}, baclavaName));
 		
 		//Normal input
-		for(var i = 0 ; i < this.options.inputs.length ; i++) {
-			var input = this.options.inputs[i];
+		for(var i = 0 ; i < this.inputs.length ; i++) {
+			var input = this.inputs[i];
 			var showName = {};			
 			var newTerminal = {};
 			newTerminal.ddConfig = {};
@@ -133,15 +128,15 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		}
 		
 		//Normal Output
-		for(i = 0 ; i < this.options.outputs.length ; i++) {
-			var output = this.options.outputs[i];
+		for(i = 0 ; i < this.outputs.length ; i++) {
+			var output = this.outputs[i];
 			var showName = {};
 			var newTerminal = {};
 			newTerminal.ddConfig = {};
 			newTerminal.wireConfig = {};
 			
 			newTerminal.name = output.name;
-			newTerminal.offsetPosition = {"right": -14, "top": offset + 30*(i+1+this.options.inputs.length) };
+			newTerminal.offsetPosition = {"right": -14, "top": offset + 30*(i+1+this.inputs.length) };
 			newTerminal.alwaysSrc = true;
 			newTerminal.wireConfig.drawingMethod = "arrows"
 			
@@ -208,8 +203,6 @@ WireIt.BaclavaTerminal = function(parentEl, options, container) {
 YAHOO.lang.extend(WireIt.BaclavaTerminal, WireIt.Terminal, {
 
 	setOptions: function(options) {
-		console.log("in BaclavaTerminal setOptions");
-		//console.log(options);
 		WireIt.BaclavaTerminal.superclass.setOptions.call(this, options);
 	},
 
@@ -243,15 +236,11 @@ WireIt.IndividualTerminal = function(parentEl, options, container) {
 YAHOO.lang.extend(WireIt.IndividualTerminal, WireIt.Terminal, {
 
 	setOptions: function(options) {
-		console.log("in IndividualTerminal setOptions");
-		//console.log(options);
 		WireIt.IndividualTerminal.superclass.setOptions.call(this, options);
-		//console.log("again");
 	},
 	
 	setBaclavaTerminal: function(baclavaTerminal){
 		baclava = baclavaTerminal;
-		//console.log ("baclava set");
 	},
 	
 	addWire: function(wire) {
