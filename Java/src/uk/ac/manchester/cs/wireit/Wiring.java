@@ -51,7 +51,7 @@ public class Wiring {
                     String xtype = config.optString("xtype");
                     if ("WireIt.TavernaWFContainer".equalsIgnoreCase(xtype)){
                        modules[i] = new TavernaModule(jsonObject, resolver); 
-                    } else if ("WireIt.URILinkContainer".equalsIgnoreCase(xtype)){
+                    } else if ("WireIt.URILinkContainer".equalsIgnoreCase(xtype) || "WireIt.BaclavaContainer".equalsIgnoreCase(xtype)){
                        modules[i] = new URILinkModule(jsonObject); 
                     } else {
                         throw new JSONException("Unexpected name " + name + " and xtype " + xtype + " in modules");

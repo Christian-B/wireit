@@ -76,8 +76,8 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 				"offsetPosition": {"left": -14, "top": offset }, 
 				"nMaxWires": 1,
 				"ddConfig": {
-					"type": "inputURL",
-					"allowedTypes": ["outputURL"],
+					"type": "inputBaclava",
+					"allowedTypes": ["outputURL", "outputBaclava"],
 					}
 			});	
 			baclavaName = "Baclava format Input/Output"
@@ -91,11 +91,11 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 			"name": "Baclava Output", 
 			"offsetPosition": {"right": -14, "top": offset }, 
 			"ddConfig": {
-				"type": "outputURL",
-				"allowedTypes": ["inputURL"],
+				"type": "outputBaclava",
+				"allowedTypes": ["inputBaclava", "inputURL"],
 			},
 			"alwaysSrc": true,
-			"wireConfig": { drawingMethod: "arrows", color: "#EE11EE", bordercolor:"#FF00FF"} 
+			"wireConfig": { drawingMethod: "arrows", color: "#FF0000", bordercolor:"#FF00FF"},
 		});
 		//This adds the text name to the form
 		this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "center"}, baclavaName));

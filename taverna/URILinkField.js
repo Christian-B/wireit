@@ -44,7 +44,7 @@ YAHOO.lang.extend(inputEx.URILinkField, inputEx.Field, {
 		 if (this.value){
 			var text = this.value
 			if (this.endsWith(this.value, "BaclavaOutput.xml")){
-					text = "Baclava Output";
+					text = "Raw Baclava XML";
 				}
 			link = '<a href="' + this.value + '" target="_blank">' + text + '</a>';
 		}

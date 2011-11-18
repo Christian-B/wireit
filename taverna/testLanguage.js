@@ -226,7 +226,7 @@ var tavernaLanguage = {
 				"description": "Workflow input for the Triple Echo workflow.",
 				"container": {
 					"width": 350,
-					"xtype": "WireIt.URILinkContainer",
+					"xtype": "WireIt.BaclavaContainer",
 					"title": "input",
 					"uri" : "Inputs/BaclavaTripleEchoInput.xml",
 					"terminals": [
@@ -234,10 +234,10 @@ var tavernaLanguage = {
 							"name": "output",
 							"offsetPosition": {"right": -14, "top": 25},
 							"alwaysSrc":true,
-							 wireConfig: { drawingMethod: "arrows", color: "#EE11EE", bordercolor:"#FF00FF"},
+							 "wireConfig": { drawingMethod: "arrows", color: "#FF0000", bordercolor:"#FF00FF"},
 							"ddConfig": {
-								"type": "outputURL",
-								"allowedTypes": ["inputURL","inputDepthZero","inputDepthOne"],
+								"type": "outputBaclava",
+								"allowedTypes": ["inputBaclava"],
 							}
 						}
 					]
@@ -267,9 +267,30 @@ var tavernaLanguage = {
 				}
 			},
 			{
-				"name": "URL Link Output",
+				"name": "Baclava Output",
 				"category": "Output",
 				"description": "Baclava Workflow output as a clickable link.",
+				"container": {
+					"width": 350,
+					"xtype": "WireIt.BaclavaContainer",
+					"title": "output",
+					"terminals": [
+						{
+							"name": "input",
+							"offsetPosition": {"left": -14, "top": 25 },
+							"ddConfig": {
+								"type": "inputBaclava",
+								"allowedTypes": ["outputBaclava"]
+							},
+							"nMaxWires": 1
+						}
+					]
+				}
+			},			
+			{
+				"name": "URL Link Output",
+				"category": "Output",
+				"description": "Output as a clickable link.",
 				"container": {
 					"width": 350,
 					"xtype": "WireIt.URILinkContainer",
@@ -370,6 +391,36 @@ var tavernaLanguage = {
 							"ddConfig": {
 								"type": "outputURL",
 								"allowedTypes": ["inputURL","inputDepthZero","inputDepthOne"],
+							}
+						}
+					]
+				}
+			},			
+			{
+				"name": "Baclava Pass Through",
+				"description": "Field that can be placed between the Baclava output of one workflow and the Baclava Input of another one. Provides a clickable URI to the file being passed",
+				"category": "Pass Through",
+				"container": {
+					"width": 350,
+					"xtype": "WireIt.BaclavaContainer",
+					"terminals": [
+						{
+							"name": "input",
+							"offsetPosition": {"left": -14, "top": 25 },
+							"ddConfig": {
+								"type": "inputBaclava",
+								"allowedTypes": ["outputBaclava"]
+							},
+							"nMaxWires": 1
+						},
+						{
+							"name": "output",
+							"offsetPosition": {"right": -14, "top": 25},
+							"alwaysSrc":true,
+							 wireConfig: { drawingMethod: "arrows", color: "#FF0000", bordercolor:"#FF00FF"},
+							"ddConfig": {
+								"type": "outputBaclava",
+								"allowedTypes": ["inputBaclava"],
 							}
 						}
 					]
