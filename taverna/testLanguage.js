@@ -229,17 +229,7 @@ var tavernaLanguage = {
 					"xtype": "WireIt.BaclavaContainer",
 					"title": "input",
 					"uri" : "Inputs/BaclavaTripleEchoInput.xml",
-					"terminals": [
-						{
-							"name": "output",
-							"offsetPosition": {"right": -14, "top": 25},
-							"alwaysSrc":true,
-							 "wireConfig": { drawingMethod: "arrows", color: "#FF0000", bordercolor:"#FF00FF"},
-							"ddConfig": {
-								"type": "outputBaclava",
-								"allowedTypes": ["inputBaclava"],
-							}
-						}
+					"terminals": [{"name": "output"} //rest set by BaclavaContainer
 					]
 				}
 			},			
@@ -276,13 +266,7 @@ var tavernaLanguage = {
 					"title": "output",
 					"terminals": [
 						{
-							"name": "input",
-							"offsetPosition": {"left": -14, "top": 25 },
-							"ddConfig": {
-								"type": "inputBaclava",
-								"allowedTypes": ["outputBaclava"]
-							},
-							"nMaxWires": 1
+							"name": "input", //rest set by BaclavaContainer
 						}
 					]
 				}
@@ -296,15 +280,7 @@ var tavernaLanguage = {
 					"xtype": "WireIt.URILinkContainer",
 					"title": "output",
 					"terminals": [
-						{
-							"name": "input",
-							"offsetPosition": {"left": -14, "top": 25 },
-							"ddConfig": {
-								"type": "inputURL",
-								"allowedTypes": ["outputURL", "outputDelimitedURL"]
-							},
-							"nMaxWires": 1
-						}
+						{"name": "input"} //rest set by URILinkContainer
 					]
 				}
 			},			
@@ -374,25 +350,8 @@ var tavernaLanguage = {
 					"width": 350,
 					"xtype": "WireIt.URILinkContainer",
 					"terminals": [
-						{
-							"name": "input",
-							"offsetPosition": {"left": -14, "top": 25 },
-							"ddConfig": {
-								"type": "inputURL",
-								"allowedTypes": ["outputURL", "outputDelimitedURL"]
-							},
-							"nMaxWires": 1
-						},
-						{
-							"name": "output",
-							"offsetPosition": {"right": -14, "top": 25},
-							"alwaysSrc":true,
-							 wireConfig: { drawingMethod: "arrows", color: "#EE11EE", bordercolor:"#FF00FF"},
-							"ddConfig": {
-								"type": "outputURL",
-								"allowedTypes": ["inputURL","inputDepthZero","inputDepthOne"],
-							}
-						}
+						{ "name": "input"}, //rest set by URILinkContainer
+						{ "name": "output"} //rest set by URILinkContainer
 					]
 				}
 			},			
@@ -404,25 +363,8 @@ var tavernaLanguage = {
 					"width": 350,
 					"xtype": "WireIt.BaclavaContainer",
 					"terminals": [
-						{
-							"name": "input",
-							"offsetPosition": {"left": -14, "top": 25 },
-							"ddConfig": {
-								"type": "inputBaclava",
-								"allowedTypes": ["outputBaclava"]
-							},
-							"nMaxWires": 1
-						},
-						{
-							"name": "output",
-							"offsetPosition": {"right": -14, "top": 25},
-							"alwaysSrc":true,
-							 wireConfig: { drawingMethod: "arrows", color: "#FF0000", bordercolor:"#FF00FF"},
-							"ddConfig": {
-								"type": "outputBaclava",
-								"allowedTypes": ["inputBaclava"],
-							}
-						}
+						{ "name": "input" }, //rest set by BaclavaContainer
+						{ "name": "output" }, //rest set by BaclavaContainer
 					]
 				}
 			},			

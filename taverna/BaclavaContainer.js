@@ -43,17 +43,29 @@ YAHOO.lang.extend(WireIt.BaclavaContainer, WireIt.FormContainer, {
 			},
 		};
 		this.options.fields.push(this.showField);
-		//console.log(this.options.fields)
+
 	},
-	
-	endsWith: function(str, suffix) {
-		return str.indexOf(suffix, str.length - suffix.length) !== -1;
-	},
+
 
 	/**
 	 * @method render
 	 */
 	render: function() {
+		for(var i = 0 ; i < this.options.terminals.length ; i++) {
+			var terminal = this.options.terminals[i];
+			if (terminal.name == "output") {
+				terminal.offsetPosition = terminal.offsetPosition || {"right": -14, "top": 25};
+				terminal.alwaysSrc = terminal.alwaysSrc || true;
+				terminal.wireConfig = terminal.wireConfig || { drawingMethod: "arrows", color: "#FF0000", bordercolor:"#FF00FF"};
+				terminal.ddConfig = terminal.ddConfig || {"type": "outputBaclava", "allowedTypes": ["inputBaclava"]};				
+			};
+			if (terminal.name == "input") {
+				terminal.offsetPosition = terminal.offsetPosition || {"left": -14, "top": 25 };
+				terminal.nMaxWires = terminal.nMaxWires || 1;
+				terminal.wireConfig = terminal.wireConfig || { "drawingMethod": "arrows", "color": "#FF0000", "bordercolor":"#FF00FF"};
+				terminal.ddConfig = terminal.ddConfig || {"type": "inputBaclava", "allowedTypes": ["outputURL", "outputBaclava"] };
+			};
+		};
 		WireIt.BaclavaContainer.superclass.render.call(this);
 	},
 
