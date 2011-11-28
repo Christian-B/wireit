@@ -118,7 +118,7 @@ YAHOO.lang.extend(inputEx.BaclavaShowLinkField, inputEx.Field, {
 		 if (this.value){
 			var text = "Fancy Baclava Output";
 			//Link needs to be changed to fancy link.
-			link = '<a href="' + this.value + '" target="_blank">' + text + '</a>';
+			link = '<a href="DisplayBaclavaFile?baclava_document_url=' + this.value + '" target="_blank">' + text + '</a>';
 		}
 
 		inputEx.renderVisu(this.options.visu, link, this.fieldContainer);
