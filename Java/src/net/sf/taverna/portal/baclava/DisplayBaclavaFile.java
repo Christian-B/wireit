@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -64,6 +65,7 @@ public class DisplayBaclavaFile extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
@@ -79,8 +81,29 @@ public class DisplayBaclavaFile extends HttpServlet {
             //String baclavaFileURL = "http://localhost:8080/wf-design-wireit-christian/Inputs/BaclavaExample.xml";           
             
             // Download the Baclava file to display
-            URL baclavaFileURL = new URL(baclavaFileURLString);
-            InputStream baclavaInputStream = baclavaFileURL.openStream();
+            URL baclavaFileURL = null;
+            InputStream baclavaInputStream = null;
+            try{
+                //Using URI code to check if it is absoulte
+                URI theURI = new URI(baclavaFileURLString);
+                if (theURI.isAbsolute()){
+                   baclavaFileURL = theURI.toURL();
+                } else {
+                    String URLString =  request.getScheme() + "://" + request.getServerName() + ":" + 
+                            request.getServerPort() + request.getContextPath() + "/" + baclavaFileURLString;
+                    baclavaFileURL = new URL(URLString);
+                }
+                baclavaInputStream = baclavaFileURL.openStream();
+            } catch(IOException ioex){
+                System.out.println("Failed to read the Baclava file from URL " + baclavaFileURLString);
+                ioex.printStackTrace();
+                out.println("<p>Failed to read the Baclava file from URL "+baclavaFileURLString+"</p>");
+                out.println("<p>The exception thrown:</p>");
+                out.println("<p>" + ioex.getMessage() + "</p>");
+                out.println("</body>\n");
+                out.println("</html>\n");
+                return;
+            }
             
             // Load the Baclava file into a byte array as we need to possibly read it twice
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -208,8 +231,14 @@ public class DisplayBaclavaFile extends HttpServlet {
 
             out.println("</body>\n");
             out.println("</html>\n");
-            
-        } finally {            
+        } catch(Exception ex){
+            ex.printStackTrace();
+            out.println("<p>Oops something has gone wrong!</p>");
+            out.println("<p>The exception thrown:</p>");
+            out.println("<p>" + ex.getMessage() + "</p>");
+            out.println("</body>\n");
+            out.println("</html>\n");
+         } finally {            
             out.close();
         }
     }
@@ -333,7 +362,7 @@ public class DisplayBaclavaFile extends HttpServlet {
             // Create the data tree (with links to actual data vales)
             String dataFileParentPath = null;
 
-            dataFileParentPath = dataDir.getAbsolutePath() + System.getProperty("file.separator") + portName;
+            dataFileParentPath = getFilePath(dataDir, portName);
 
             dataTableHTML.append("<td width=\"15%\" style=\"vertical-align:top;\"><script language=\"javascript\">" + createResultTree(dataObject, dataDepth, dataDepth, "", dataFileParentPath, mimeType, request) + "</script></td>\n");
             rowCount++;
@@ -451,8 +480,9 @@ public class DisplayBaclavaFile extends HttpServlet {
 
             // Create the data tree (with links to actual data vales)
             String dataFileParentPath = null;
-
             dataFileParentPath = portDirectory.getAbsolutePath();
+            //UGH windows paths and URIs don't mix.
+            dataFileParentPath = dataFileParentPath.replace('\\', '/');
 
             dataTableHTML.append("<td width=\"15%\" style=\"vertical-align:top;\"><script language=\"javascript\">" + createResultTree(dataObject, dataDepth, dataDepth, "", dataFileParentPath, mimeType, request) + "</script></td>\n");
             rowCount++;
@@ -498,7 +528,7 @@ public class DisplayBaclavaFile extends HttpServlet {
 
         if (maxDepth == 0) { // Result data is a single item only
             try {
-                String dataFilePath = dataFileParentPath + System.getProperty("file.separator") + "Value";
+                String dataFilePath = addToFilePath(dataFileParentPath, "Value");
                 long dataSizeInKB = Math.round(new File(dataFilePath).length() / 1000d); // size in kilobytes (divided by 1000 not 1024!!!)
                 String dataFileURL = request.getContextPath() + "/FileServingServlet"
                         + "?" + FileServingServlet.DATA_FILE_PATH + "=" + URLEncoder.encode(dataFilePath, "UTF-8")
@@ -513,7 +543,7 @@ public class DisplayBaclavaFile extends HttpServlet {
         } else {
             if (currentDepth == 0) { // A leaf in the tree
                 try {
-                    String dataFilePath = dataFileParentPath + System.getProperty("file.separator") + "Value" + parentIndex;
+                    String dataFilePath = addToFilePath(dataFileParentPath, "Value" + parentIndex);
                     long dataSizeInKB = Math.round(new File(dataFilePath).length() / 1000d); // size in kilobytes (divided by 1000 not 1024!!!)
                     String dataFileURL = request.getContextPath() + "/FileServingServlet"
                             + "?" + FileServingServlet.DATA_FILE_PATH + "=" + URLEncoder.encode(dataFilePath, "UTF-8")
@@ -533,7 +563,7 @@ public class DisplayBaclavaFile extends HttpServlet {
                             maxDepth,
                             currentDepth - 1,
                             newParentIndex,
-                            dataFileParentPath + System.getProperty("file.separator") + "List" + parentIndex,
+                            addToFilePath(dataFileParentPath, "List" + parentIndex),
                             mimeType,
                             request));
                 }
@@ -793,4 +823,34 @@ public class DisplayBaclavaFile extends HttpServlet {
         return mimeList;
     }
 
+    /**
+     * Support funtion because Windows Style file seperaters get messed up in URIs
+     * <p>
+     * Windoiws is able to handle linux style file names,
+     * @param directory Place where new file will be created
+     * @param name Name of the file to place in the directory
+     * @return Linux format path
+     */
+    private String getFilePath(File directory, String name){
+        String path = directory.getAbsolutePath() + System.getProperty("file.separator") + name;
+        path = path.replace('\\', '/');
+        //ystem.out.println(path);
+        return path;
+    }
+    
+    /**
+     * Support funtion because Windows Style file seperaters get messed up in URIs
+     * <p>
+     * Windoiws is able to handle linux style file names,
+     * @param directory Place where new file will be created
+     * @param name Name of the file to place in the directory
+     * @return Linux format path
+     */
+    private String addToFilePath(String directory, String name){
+        //String path = directory + System.getProperty("file.separator") + name;
+        String path = directory + "/" + name;
+        path = path.replace('\\', '/');
+        //ystem.out.println(path);
+        return path;
+    }
 }
