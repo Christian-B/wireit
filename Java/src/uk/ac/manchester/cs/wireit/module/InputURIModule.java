@@ -1,27 +1,35 @@
 package uk.ac.manchester.cs.wireit.module;
 
+import uk.ac.manchester.cs.wireit.exception.WireItRunException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
-import uk.ac.manchester.cs.wireit.event.OutputFirer;
-import uk.ac.manchester.cs.wireit.event.OutputListener;
 
 /**
  *
  * @author Christian
  */
-public class InputURIModule extends Module{
+public class InputURIModule extends InputModule{
         
-    private OutputFirer output;
-    
-    private final String PORT_NAME = "output";
-
+    /**
+     * Constructor for passing the json to the super class.
+     * 
+     * @param json JSON representation of the modules.
+     * @throws JSONException Thrown if the json is not in the expected format.
+     */
     public InputURIModule (JSONObject json) throws JSONException{
         super(json);
-        output = new OutputFirer();
     }
     
+    /**
+     * Converts the value to a URI and passes it to any Listeners.
+     * <p>
+     * It is important to pass the Value as a URI otherwise the TavernaModule has no way of knowing
+     *    if the object is a String value that looks like a URI or a URI to a location that holds the actual input.
+     * @param outputBuilder Logging buffer.
+     * @throws WireItRunException Any Exception caught will be wrapped in a single Exception type.
+     */
     @Override
     public void run(StringBuilder outputBuilder) throws WireItRunException {
         Object value = values.get(PORT_NAME);
@@ -30,20 +38,6 @@ public class InputURIModule extends Module{
             output.fireOutputReady(uri, outputBuilder);
         } catch (URISyntaxException ex) {
             throw new WireItRunException("Ilegal URI: " + value, ex);
-        }
-    }
-
-    @Override
-    public OutputListener getOutputListener(String terminal) throws JSONException {
-        throw new JSONException("InputModule has no Inputs");
-    }
-
-    @Override
-    public void addOutputListener(String terminal, OutputListener listener) throws JSONException {
-        if (terminal.equals(PORT_NAME)){
-            output.addOutputListener(listener);
-        } else {
-            throw new JSONException("Unsupported port name " + terminal + " expected output");
         }
     }
 

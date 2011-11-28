@@ -1,19 +1,16 @@
 package uk.ac.manchester.cs.wireit;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-//Json element are optional and can be commented out.
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Debug class used to retreive and show a single saved pipe well formatted.
+ * @author Christian
+ */
 public class ShowWireit extends WireitSQLBase {
 
     public ShowWireit() throws ServletException{

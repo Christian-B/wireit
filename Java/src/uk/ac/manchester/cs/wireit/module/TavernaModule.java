@@ -4,15 +4,14 @@
  */
 package uk.ac.manchester.cs.wireit.module;
 
+import uk.ac.manchester.cs.wireit.utils.DelimiterURI;
+import uk.ac.manchester.cs.wireit.exception.WireItRunException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.ac.manchester.cs.wireit.RunWireit;
@@ -26,25 +25,105 @@ import uk.ac.manchester.cs.wireit.taverna.TavernaInput;
 import uk.ac.manchester.cs.wireit.taverna.baclava.DataThingBasedBaclava;
 import uk.ac.manchester.cs.wireit.taverna.workflow.TavernaWorkflow;
 import uk.ac.manchester.cs.wireit.taverna.workflow.XMLBasedT2Flow;
+import uk.ac.manchester.cs.wireit.utils.Resolver;
 
 /**
- *
+ * This module wraps the running of a taverna workflow.
+ * <p>
+ * The current implentation is written around A Taverna command line Wrapper written for Ondex.
+ * That tool does not provide the security nor all the options that Taverna Server does.
+ * It is therefor recommended that this class be updated to use Taverna Server.
+ * <p>
+ * The main functionality (which should stay even with a server versions) is.
+ * <ul>
+ *    <li> Extract the required inputs and outputs from the Workflow 
+ *    <li> Allow Wiring to connect to terminals with that match does in the workflow
+ *    <li>Listen for the required inputs from other modules
+ *    <ul> 
+ *        <li> Could be a Baclava ULI
+ *        <li> If individual inputs are used this module will them. All are required for the next steps.
+ *    </ul>
+ *    <li> Pass the inputs to Taverna
+ *    <li> Execute the workflow
+ *    <li> Obtain the resulting Baclava output file
+ *    <li> Extract the indiviual results
+ *    <li> Pass the idividual results to any listeners
+ *    <li> Pass the Baclava outout to and Listeners on the Baclava port
+ * </ul>
  * @author Christian
  */
 public class TavernaModule extends Module{
 
+    /** Wrapper around Taverna Command Line. Original written for Ondex*/
     private CommandLineWrapper commandLine;
+    
+    /** Map of Listeners. 
+     *  One for each input port. (Exceluding the Baclava input)
+     *  React to any data from upstream Modules.    
+     */
     private Map<String,ValueListener> inputPorts;
-    private Map<String,OutputFirer> outputPorts;
+
+    /**
+     * Map of input storage classes.
+     * One for each input port. (Exceluding the Baclava input)
+     * Store data from upstream Modules.    
+     * <p>
+     * TavernaInput was written for the ONDEX project.
+     * The functionality includes
+     * <ul>
+     *    <li>Allowing different types of inputs to be stored.
+     *    <ul>
+     *        <li>Depth 0 value (ast String)
+     *        <li>Depth 0 URI
+     *        <li>Depth 1 arrays of Values (as Strings)
+     *        <li>depth 1 URI and delimiter
+     *    </ul>
+     *    <li>Single method to say if it has ai input or not
+     *    <li>Ability to add the required command line arguements for the input passed in.
+     *    <ul>
+     *        <li>Correct parameter flag  
+     *        <li>Name of the port
+     *        <li>Value / uri
+     *        <li>Where applicable Delimiter 
+     *        <li>Array fo Strings conctanated to a Single String with a suitable Delimiter
+     * </ul>     
+     * <p>
+     * Even if using Taverna Server something like this will be required to handle the inputs.
+     */
     private Map<String,TavernaInput> tavernaInputs;
-    private OutputFirer baclavaOutput;
+    
+    /** For Baclava input the URI is saved as a String. */
     private String baclavaInput;
+
+    /** Map of Firers. One for each output port. Passing to any data from downstream Modules */    
+    private Map<String,OutputFirer> outputPorts;
+    
+    /** Firer for anyone Listening ofr the Baclava */
+    private OutputFirer baclavaOutput;
+    
+    /** Flag to avoid run causing execution if inputs alread have */
     private boolean alreadyRun = false;
+    
+    /** Handles absolute to relative URI mapping */
     private Resolver resolver;
     
+    /** Relative name of the folder to put outputs in */
     private static final String OUTPUT_DIR = "Output";
-    private static final String WORFKLOW_DIR = "Workflows";
             
+    /**
+     * Constructor which sets up the module based on the json.
+     * <p>
+     * See setWorkflow for specific json required.
+     * <p>
+     * Taverna home must be set either from the environment variable "TAVERNA_HOME"  
+     * or from RunWireit which gets it from the servlet context InitParameter(TAVERNA_CMD_HOME_PARAMETER);
+     * @param json JSON object including "wfURI" in the "config"
+     * @param resolver  Handles absolute to relative URI mapping
+     * @throws JSONException Thrown if the json is not in the expected format.
+     * @throws TavernaException thrown if a 
+     * @throws IOException
+     * @throws WireItRunException 
+     */
     public TavernaModule(JSONObject json, Resolver resolver) throws JSONException, TavernaException, IOException, WireItRunException{
         super(json);
         commandLine = new CommandLineWrapper();
@@ -64,7 +143,6 @@ public class TavernaModule extends Module{
     }
     
     private void setWorkflow(JSONObject json) throws JSONException, TavernaException, IOException, WireItRunException{
-        JSONObject config = json.getJSONObject("config");
         String fileSt = config.optString("wfURI");
         //Checks for security. Change as required
         if (fileSt.contains("..")){

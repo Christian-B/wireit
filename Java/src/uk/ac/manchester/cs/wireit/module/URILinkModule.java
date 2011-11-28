@@ -4,6 +4,8 @@
  */
 package uk.ac.manchester.cs.wireit.module;
 
+import uk.ac.manchester.cs.wireit.utils.DelimiterURI;
+import uk.ac.manchester.cs.wireit.exception.WireItRunException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.json.JSONException;

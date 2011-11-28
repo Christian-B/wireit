@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Taverna KISS Developer Documentation</title>
+</head>
+<body>
+<h1>Target audience</h1>
+This document is designed for
+<ul>
+	<li>Developers who intend to extend the functionality of the prototype.
+	<li>System admins who intend to add workflows or even create their own language.
+</ul>
+
+
+<h1>Installation</h1>
+<h2> Code</h2>
+<h3> WireIt</h3>
+This tool depends on <a href="http://neyric.github.com/wireit/">WireIt</a> version 0.5.0.
+<p>
+All the required changes to WireIt are done using <a href="extensions.js">Extensions</a>.
+The reasons for these extensions are all documented with the code.
+<h3> Taverna WireIt code <h3>
+The Taverna specific code: (For details see each specific file)
+<ul>
+	<li> Taverna Folder
+	<ul>
+		<li><a href="ajaxAdapter.js">ajaxAdapter.js<a>: Adaoter code using ajax to connect to the server.
+		<li><a href="tavernaLanguage.js">tavernaLanguage.js</a>: Base Language suitable for all projects
+		<li><a href="testLanguage.js">testLanguage.js</a>: Example language with a few workflows.
+		<li><a href="TavernaWFContainer.js">TavernaWFContainer.js</a>: Used to add a workflow.
+		<li><a href="BaclavaContainer.js">BaclavaContainer.js</a>: Used to add Backava links
+		<li><a href="URILinkContainer.js">URILinkContainer.js</a>: Conatiner for a URL link
+		<li><a href="URILinkField.js">URILinkField.js</a>: A field which shows an uneditable URL as a clickable link.
+		<li><a href="ExecutionFrame.js">ExecutionFrame.js</a>: Code to send a run to server and get it back.
+		<li><a href="extensions.js">extensions.js</a>: All changes made to core WireIt code in one place.
+		<li><a href="index.html">index.html</a>: Page showing current status of protype
+		<li><a href="taverna.jpg">taverna.jpg</a>: The Taverna icon
+		<li><a href="developer.html">developer.html</a>: This document
+	</ul>
+	<li>Workflow Folder
+	<ul>
+		<li> Any workflow you want the system to run.
+		<li> HTML pages describing workflows.
+	</ul>
+	<li> Java Folder
+	Holds all server side code.
+	</ul>
+		<li>uk.ac.manchester.cs.wireit package
+		<ul>
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/DeleteWireit.java">DeleteWireit.java<a>: Handles the delete call
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/ListWireit.java">ListWireit.java<a>: Handles the list/load call
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/RunWireit.java">RunWireit.java<a>: Handles the run call
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/SaveWireit.java">SaveWireit.java<a>: Handles the save call
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/ShowWireit.java">ShowWireit.java<a>: Debug class
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/WireitSQLBase.java">WireitSQLBase.java<a>: Base class for all of the above.
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/"URLEncoder.java>URLEncoder.java<a>: hack of URLEncoder to replace space as %20
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/Wiring.java">Wiring.java<a>: Class that build and runs the modules
+		</ul>
+		<li>uk.ac.manchester.cs.wireit.module package
+		<ul>
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/CommentModule.java">CommentModule.java<a>: Currently overwrites a comment with run info.
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/InputDelimiterURIModule.java">InputDelimiterURIModule.java<a>: Used for list URIs
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/InputListModule.java">InputListModule.java<a>: Used for list as a collection of Strings
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+		</ul>
+	</ul>
+</ul>
+<h3> Taverna Command Line </h3>
+</body>

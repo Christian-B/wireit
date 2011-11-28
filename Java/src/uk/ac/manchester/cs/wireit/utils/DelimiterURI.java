@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.manchester.cs.wireit.module;
+package uk.ac.manchester.cs.wireit.utils;
 
+import uk.ac.manchester.cs.wireit.exception.WireItRunException;
 import java.net.URI;
 import java.net.URISyntaxException;
 

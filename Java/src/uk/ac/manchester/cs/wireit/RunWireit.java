@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
-import uk.ac.manchester.cs.wireit.module.Resolver;
-import uk.ac.manchester.cs.wireit.module.WireItRunException;
+import uk.ac.manchester.cs.wireit.exception.WireItRunException;
 import uk.ac.manchester.cs.wireit.taverna.TavernaException;
+import uk.ac.manchester.cs.wireit.utils.Resolver;
 
 public class RunWireit extends WireitSQLBase {
     

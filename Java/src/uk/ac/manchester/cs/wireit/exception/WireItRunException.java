@@ -1,7 +1,7 @@
-package uk.ac.manchester.cs.wireit.module;
+package uk.ac.manchester.cs.wireit.exception;
 
 /**
- *
+ * 
  * @author Christian
  */
 public class WireItRunException extends Exception {

@@ -1,43 +1,39 @@
 package uk.ac.manchester.cs.wireit.module;
 
+import uk.ac.manchester.cs.wireit.exception.WireItRunException;
 import org.json.JSONException;
 import org.json.JSONObject;
-import uk.ac.manchester.cs.wireit.event.OutputFirer;
-import uk.ac.manchester.cs.wireit.event.OutputListener;
 
 /**
- *
+ * Input module for a depth 0 port where inputs are provided as a String.
+ * <p>
+ * Because tavern can handle a single value to a depth 1 port 
+ *    it is allowed to connect this modules to a depth 1 Listener.
+ * <p>
+ * The only role of this module is to pass the values received from WireIt to the downstream modules.
  * @author Christian
  */
-public class InputStringModule extends Module{
+public class InputStringModule extends InputModule{
         
-    private OutputFirer output;
-    
-    private final String PORT_NAME = "output";
-
+    /**
+     * Constructor for passing the json to the super class.
+     * 
+     * @param json JSON representation of the modules.
+     * @throws JSONException Thrown if the json is not in the expected format.
+     */
     public InputStringModule (JSONObject json) throws JSONException{
         super(json);
-        output = new OutputFirer();
     }
     
+    /**
+     * Passes the value to any listeners.
+     * @param outputBuilder Logging buffer.
+     * @throws WireItRunException Any Exception caught will be wrapped in a single Exception type.
+     */
     @Override
     public void run(StringBuilder outputBuilder) throws WireItRunException {
         Object value = values.get(PORT_NAME);
         output.fireOutputReady(value, outputBuilder);
-    }
-
-    @Override
-    public OutputListener getOutputListener(String terminal) throws JSONException {
-        throw new JSONException("InputModule has no Inputs");
-    }
-
-    @Override
-    public void addOutputListener(String terminal, OutputListener listener) throws JSONException {
-        if (terminal.equals(PORT_NAME)){
-            output.addOutputListener(listener);
-        } else {
-            throw new JSONException("Unsupported port name " + terminal + " expected output");
-        }
     }
 
 }
