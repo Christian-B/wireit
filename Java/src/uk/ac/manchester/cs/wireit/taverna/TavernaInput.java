@@ -117,16 +117,16 @@ public class TavernaInput {
      * The uri is not validated beyond checking it is not null or empty.
      * 
      * @param uri String to be passed to Taverna as a uri
-     * @param delimiterCh Charater to be passed to Taverna as the delimiter
+     * @param delimiter String to be passed to Taverna as the delimiter
      * @throws TavernaException Thrown if the uri is null or empty.
      *     Also thrown if the depth is not 1.
      */
-    public void setListURIInput(String uri, char delimiterCh) throws TavernaException {
+    public void setListURIInput(String uri, String delimiter) throws TavernaException {
         if (depth != 1){
             throw new TavernaException ("Delimiters are only allowed with depth 1");
         }
         setSingleURIInput(uri);
-        this.delimiter = "" + delimiterCh;
+        this.delimiter = delimiter;
     }
 
     /**
@@ -164,14 +164,14 @@ public class TavernaInput {
      * The file is not validated beyond checking it exists and is readable.
      * 
      * @param file File to be passed to Taverna as a uri
-     * @param delimiterCh Charater to be passed to Taverna as the delimiter
+     * @param delimiter String to be passed to Taverna as the delimiter
      * @throws TavernaException Thrown if the uri is null or empty.
      *     Also thrown if the depth is not 1.
      */
-    public void setListFileInput(File file, char delimiterCh) throws TavernaException, IOException {
+    public void setListFileInput(File file, String delimiter) throws TavernaException, IOException {
         resetInputs();
         Utils.checkFile(file);
-        setListURIInput("file:"+file.getAbsolutePath(), delimiterCh);
+        setListURIInput("file:"+file.getAbsolutePath(), delimiter);
     }
     
    /**
