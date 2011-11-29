@@ -122,10 +122,9 @@ public class TavernaModule extends Module{
      * @throws JSONException Thrown if the json is not in the expected format.
      * @throws TavernaException Thrown if a setting travena home or the workflow fails
      * @throws IOException  Thrown if Workflow can not be read
-     * @throws WireItRunException  Wraps other exceptions
      */
     public TavernaModule(JSONObject json, Resolver resolver) 
-            throws JSONException, TavernaException, IOException, WireItRunException{
+            throws JSONException, TavernaException, IOException{
         super(json);
         commandLine = new CommandLineWrapper();
         setTavernaHome(System.getenv("TAVERNA_HOME"));
@@ -161,9 +160,8 @@ public class TavernaModule extends Module{
      * 
      * @throws TavernaException Any error parsing the workflow
      * @throws IOException Any error reading the workflow
-     * @throws WireItRunException An error converting the uri to an absolute one.
      */
-    private void setWorkflow() throws TavernaException, IOException, WireItRunException{
+    private void setWorkflow() throws TavernaException, IOException{
         String fileSt = config.optString("wfURI");
         //Checks for security. Change as required
         if (fileSt.contains("..")){

@@ -1,6 +1,5 @@
 package uk.ac.manchester.cs.wireit;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;

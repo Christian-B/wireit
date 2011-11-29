@@ -53,10 +53,9 @@ public class Wiring {
      * @throws JSONException Thrown it the json is not in the expected format.
      * @throws TavernaException Thrown by the TavernaModule if the information is inconsistant. 
      * @throws IOException Thrown by the TavernaModule if the workflow is unreadable.
-     * @throws WireItRunException Thrown by the resolver is unable to translate.
      */
     public Wiring(JSONObject jsonInput, Resolver resolver) 
-            throws JSONException, TavernaException, IOException, WireItRunException{
+            throws JSONException, TavernaException, IOException{
         JSONArray jsonArray = jsonInput.getJSONArray("modules");
         modules = new Module[jsonArray.length()];
         for (int i = 0; i < jsonArray.length(); i++){

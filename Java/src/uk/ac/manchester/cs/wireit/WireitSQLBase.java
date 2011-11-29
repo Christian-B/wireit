@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This is a base class for the various wireit classes.
  * Adds the abilty to open a connection to the mysql server and keep it open.
- * 
+ * <p>
+ * The sql connection is closed after every call to avoid SQL connection timeout issues.
+ * <p>
+ * This is a protype and has some ugly things in it like hard coded user name and password.
  * @author Christian
  */
 public class WireitSQLBase extends HttpServlet{
@@ -33,6 +36,16 @@ public class WireitSQLBase extends HttpServlet{
         }
     }
     
+    /**
+     * Executes an SQL query.
+     * <p>
+     * closeResultSet should be called once data has been extracted.
+     * <p>
+     * @param sqlStr Quesy as a String
+     * @return ResultSet from which values can be extracted.
+     * 
+     * @throws SQLException 
+     */
     ResultSet executeQuery(String sqlStr) throws SQLException{
         Connection conn = null;
         Statement stmt = null;
@@ -48,6 +61,10 @@ public class WireitSQLBase extends HttpServlet{
         }
     }
             
+    /**
+     * Closes the resultSet and the Connection and Statment used to create it.
+     * @param rset ResultSet no longer required.
+     */
     void closeResultSet(ResultSet rset){
         try {
             Statement stmt = rset.getStatement();
@@ -60,6 +77,13 @@ public class WireitSQLBase extends HttpServlet{
         }    
     }
     
+    /**
+     * Executes an update quest and closes the connections.
+     * 
+     * @param sqlStr Quesy as a String
+     * @return number of rows changed.
+     * @throws SQLException 
+     */
     int executeUpdate(String sqlStr) throws SQLException{
         Connection conn = null;
         Statement stmt = null;
@@ -79,8 +103,8 @@ public class WireitSQLBase extends HttpServlet{
     /**
      * Reads the data from the request body
      * @see http://java.sun.com/developer/onlineTraining/Programming/BasicJava1/servlet.html
-     * @param request
-     * @return 
+     * @param request HTTP call
+     * @return The body of the call.
      */
      String readRequestBody(HttpServletRequest request) throws IOException{
         StringBuilder json = new StringBuilder();

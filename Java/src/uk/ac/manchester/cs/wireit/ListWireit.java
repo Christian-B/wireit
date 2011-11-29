@@ -100,7 +100,14 @@ public class ListWireit extends WireitSQLBase {
         return builder.toString();
     }
 
-    
+    /**
+     * Added the data from the SQL result set to the output.
+     * 
+     * @param rset Result of the SQl query.
+     * @param builder Builder for the result to be sent back to the client
+     * @param language The WireIt language that for which the list of pipes was requested.
+     * @throws SQLException error reading the SQL result.
+     */
     private void appendResult(ResultSet rset, StringBuilder builder, String language) throws SQLException{
                    // Print a paragraph <p>...</p> for each record
         builder.append("{\"id\":\"");

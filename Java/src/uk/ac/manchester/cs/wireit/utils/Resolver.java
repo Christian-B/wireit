@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.manchester.cs.wireit.utils;
 
 import java.io.File;
@@ -13,15 +9,29 @@ import uk.ac.manchester.cs.wireit.URLEncoder;
 import uk.ac.manchester.cs.wireit.exception.WireItRunException;
 
 /**
- *
+ * Helper class set up by the request which can be used for coberting Absolute, relative and file uris.
+ * 
  * @author Christian
  */
 public class Resolver {
     
+    /** This is everything that must be added to a relative URIString to make it absolute */
     private String absoluteRootUrl;
+    
+    /** This is everything that must be added to a relative URIString to make it an absolute file path */
     private String absoluteRootFilePath;
+    
+    /** Ideally local uris can use the  file protocol, but if there are funny characters better to use the Absolute uri */
     private String localURIPrefix;       
     
+    /** 
+     * Constructor which extracts the three prefix Strings.
+     * <p>
+     * This has been written to work with older servlet code so requires both the request and the servlet.
+     * 
+     * @param request The hhtp request.
+     * @param servletContext The servlet that caught the request.
+     */
     public Resolver(HttpServletRequest request, ServletContext servletContext){
         absoluteRootUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() +
                 request.getContextPath() + "/";
@@ -38,6 +48,16 @@ public class Resolver {
         }
     }
     
+    /**
+     * Creates a URI based on a File and the directory that file is in.
+     * @param grandParent The part of the files absolute path that should show up in the URI.
+     * <p>
+     * There may be a cleaner way of doing this by automatically checking which part of the file's 
+     * absolute path is required but oh well this works.
+     * @param file The file to be exposed as a URI.
+     * @return
+     * @throws WireItRunException 
+     */
     public URI FileAndParentToURI(String grandParent, File file) throws WireItRunException{
         String uriSt = absoluteRootUrl + grandParent + "/" + file.getParentFile().getName() + "/" + file.getName();
         try {
@@ -47,7 +67,14 @@ public class Resolver {
        }
     }
 
-    public String getURIObjectToRelativeURIString(Object object) throws WireItRunException{
+    /**
+     * Converts a URI object to a URI relative if possible.
+     * 
+     * @param object URI as an Object as that is how Listeners pass it.
+     * @return URU (as String) in the best format for accessing locally.
+     * @throws WireItRunException 
+     */
+    public String getURIObjectToRelativeURIString(Object object){
         URI uri = (URI)object;
         if (uri.isAbsolute()) {
             System.out.println("absolute");
@@ -61,7 +88,12 @@ public class Resolver {
         }
     }
     
-    public File getRelativeFile(String relative) throws WireItRunException {
+    /**
+     * Converts a relative file.
+     * @param relative relative part of the file name
+     * @return The file
+     */
+    public File getRelativeFile(String relative) {
         String absolute = absoluteRootFilePath + relative;
         System.out.println(absolute);
         return new File(absolute);
