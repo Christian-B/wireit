@@ -9,7 +9,7 @@ import uk.ac.manchester.cs.wireit.exception.WireItRunException;
 public interface OutputListener {
     
     /**
-     * Passes the Object on to any downstream modules,
+     * Receives the Object on to any upstream module.
      * <p>
      * This could cuase the module to execute.
      * Any log information is written to the outputBuilder.

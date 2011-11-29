@@ -120,11 +120,12 @@ public class TavernaModule extends Module{
      * @param json JSON object including "wfURI" in the "config"
      * @param resolver  Handles absolute to relative URI mapping
      * @throws JSONException Thrown if the json is not in the expected format.
-     * @throws TavernaException thrown if a 
-     * @throws IOException
-     * @throws WireItRunException 
+     * @throws TavernaException Thrown if a setting travena home or the workflow fails
+     * @throws IOException  Thrown if Workflow can not be read
+     * @throws WireItRunException  Wraps other exceptions
      */
-    public TavernaModule(JSONObject json, Resolver resolver) throws JSONException, TavernaException, IOException, WireItRunException{
+    public TavernaModule(JSONObject json, Resolver resolver) 
+            throws JSONException, TavernaException, IOException, WireItRunException{
         super(json);
         commandLine = new CommandLineWrapper();
         setTavernaHome(System.getenv("TAVERNA_HOME"));
@@ -132,17 +133,37 @@ public class TavernaModule extends Module{
         this.resolver = resolver;
         commandLine.setOutputRootDirectory(resolver.getRelativeFile(OUTPUT_DIR));
         
-        setWorkflow(json);  
+        setWorkflow();  
        // URLRoot = URL.substring(0, URL.lastIndexOf("/"));
     }
     
+    /**
+     * Sets the location of the Taverna Commandline.
+     * 
+     * @param tavernaHome Either the path to commandLine or null.
+     * @throws TavernaException If a none NULL path does not have the required file. 
+     * @throws IOException If creating the File fails.
+     */
     public final void setTavernaHome(String tavernaHome) throws TavernaException, IOException {
         if (tavernaHome != null && !tavernaHome.isEmpty()){
             commandLine.setTavernaHome(new File(tavernaHome));        
         } 
     }
     
-    private void setWorkflow(JSONObject json) throws JSONException, TavernaException, IOException, WireItRunException{
+    /**
+     * Gets and parses a workflow from the config's "wfURI".
+     * <p>
+     * The Workflow is parsed to get the Inputs and the outputs.
+     * <p>
+     * Current implementation uses an XML Hack to read the workflow.
+     * This should be replaced with proper taverna code.
+     * Similarly T2 and scufl should be supported.
+     * 
+     * @throws TavernaException Any error parsing the workflow
+     * @throws IOException Any error reading the workflow
+     * @throws WireItRunException An error converting the uri to an absolute one.
+     */
+    private void setWorkflow() throws TavernaException, IOException, WireItRunException{
         String fileSt = config.optString("wfURI");
         //Checks for security. Change as required
         if (fileSt.contains("..")){
@@ -156,6 +177,12 @@ public class TavernaModule extends Module{
         setOutputs(workflow);
     }
         
+    /**
+     * Sets up the TavernaInputs and the Listeners including the Baclava one.
+     * 
+     * @param workflow Interface that gives the workflow name, input ports and output ports
+     * @throws TavernaException Thrown if an unexpected port name is received.
+     */
     private void setInputs(TavernaWorkflow workflow) throws TavernaException{
         //removeNullandEmptyValues();
         Map<String,Integer> inputs = workflow.getInputs();  
@@ -170,6 +197,10 @@ public class TavernaModule extends Module{
         baclavaInput = null;
     }
 
+    /**
+     * Sets up the output firers including the Baclava one.
+     * @param workflow Interface that gives the workflow name, input ports and output ports
+     */
     private void setOutputs(TavernaWorkflow workflow){
         outputPorts = new HashMap<String,OutputFirer>();
         List<String> outputs = workflow.getOutputs();
@@ -179,6 +210,7 @@ public class TavernaModule extends Module{
         baclavaOutput = new OutputFirer();
     }
     
+    //Will only run the workflow if no input is required.
     @Override
     public void run(StringBuilder outputBuilder) throws WireItRunException {
         //Just in case their are no inputs are all set as values.
@@ -188,6 +220,24 @@ public class TavernaModule extends Module{
     }
     
     @Override
+   /**
+     * Returns an listner for the requested port.
+     * <p>
+     * See Wiring.java for more details.
+     * <p>
+     * The allowed port names are:
+     * <ul>
+     *     <li>An input port in the workflow
+     *     <li>"in_"concat An input port in the workflow
+     *     <ul>
+     *         <li>this is required if an input and an output port share the same name.
+     *     </ul>
+     *     <li>"Baclava Input"
+     * </ul>
+     * @param terminal Name of the Input port to be attached.
+     * @return The Listener that will handles the Object coming in.
+     * @throws JSONException If the terminal name does not match on of the legal values see above.
+     */
     public OutputListener getOutputListener(String terminal) throws JSONException {
         if (inputPorts.containsKey(terminal)){
             return inputPorts.get(terminal);
@@ -205,6 +255,23 @@ public class TavernaModule extends Module{
     }
 
     @Override
+    /**
+     * Adds the Listener as one of the downstream modules to this one.
+     * <p>
+     * The allowed port names are:
+     * <ul>
+     *     <li>An outnput port in the workflow
+     *     <li>"out_"concat An output port in the workflow
+     *     <ul>
+     *         <li>this is required if an input and an output port share the same name.
+     *     </ul>
+     *     <li>"Baclava Output"
+     * </ul>     * 
+     * @param terminal Name of the output port to be attached.
+     * @param listener Listener to be used.
+     * @throws JSONException It is WireIt's responsibility that the "wires" array correctly matches the "modules" array.
+     *    If this is not the case an exception is thrown.
+     */
     public void addOutputListener(String terminal, OutputListener listener) throws JSONException {
         if (outputPorts.containsKey(terminal)){
             outputPorts.get(terminal).addOutputListener(listener);
@@ -221,6 +288,10 @@ public class TavernaModule extends Module{
         }
     }
     
+    /**
+     * Check if all inputs have a value associated with them.
+     * @return true if and only if all inputs have been set.
+     */
     private boolean allValuesSet(){        //ystem.out.println("in allValuesSet" + values.size());
         for (String key:tavernaInputs.keySet()){
             if (!tavernaInputs.get(key).hasValue()){
@@ -230,7 +301,17 @@ public class TavernaModule extends Module{
         return true;
     }
      
-    File runWorkflowWithInputs() throws TavernaException, ProcessException{
+    /**
+     * Runs the workflow based on indivudual inputs.
+     * <p>
+     * Obtains the TavernaInputs from the map and passes these to the command line wrapper.
+     * <p>
+     * The runs the workflow and obtains the Baclava file.
+     * @return Baclava Output File
+     * @throws TavernaException Unable to start the process
+     * @throws ProcessException Error running the process
+     */ 
+    private File runWorkflowWithInputs() throws TavernaException, ProcessException{
         System.out.println("Workflow ready based on inputs!");
         TavernaInput[] inputArray = new TavernaInput[0];
         inputArray = tavernaInputs.values().toArray(inputArray);
@@ -243,7 +324,17 @@ public class TavernaModule extends Module{
         return output;
     }
 
-    File runWorkflowWithBaclava() throws TavernaException, ProcessException{
+   /**
+     * Runs the workflow based on Baclava input.
+     * <p>
+     * Send the Baclava input to the command line wrapper.
+     * <p>
+     * The runs the workflow and obtains the Baclava file.
+     * @return Baclava Output File
+     * @throws TavernaException Unable to start the process
+     * @throws ProcessException Error running the process
+     */ 
+    private File runWorkflowWithBaclava() throws TavernaException, ProcessException{
         System.out.println("Workflow ready based on Baclava!" + baclavaInput);
         commandLine.setInputsURI(baclavaInput);        
         CommandLineRun run = commandLine.runWorkFlow();
@@ -252,6 +343,19 @@ public class TavernaModule extends Module{
         return output;
     }
 
+    /**
+     * Checks to see if the required inputs are there and if so runs and processes output.
+     * <p>
+     * A workflow will run if it requires no input.
+     * <p>
+     * A workflow will run based on inputs if all the inputs declared in the workflow have had some value assigned.
+     * <p>
+     * The workflow will run if a Baclava value has been set.
+     * <p>
+     * The resulting Baclava file is processed (values passed on).
+     * @param outputBuilder Logging buffer.
+     * @throws WireItRunException Any Exception caught will be wrapped in a single Exception type.
+     */
     private void runIfReady(StringBuilder outputBuilder) throws WireItRunException {
         File output;
         if (allValuesSet()){
@@ -271,6 +375,20 @@ public class TavernaModule extends Module{
         }
     }
     
+    /**
+     * Process the Baclava file sending both Individual Values and the whole Baclava to relative Listeners.
+     * <p>
+     * For Each putput port the associated value is obtained (as an Object) and passed to any registered listeners.
+     * <p>
+     * The output file is converted to a URI and passed to any listners on the Baclava output
+     * <p>
+     * This is slighlty sub optimal as all the output values are extracted 
+     *    even ones where there is never a connected Listener.
+     * @param output Baclava File output by either runWorkflowWithXXX method.
+     * @param outputBuilder Logging buffer.
+     * @throws WireItRunException Any Exception caught will be wrapped in a single Exception type.
+     *     These could come from downstream modules.
+     */
     private void processRun(File output, StringBuilder outputBuilder) throws WireItRunException {
         alreadyRun = true;
         DataThingBasedBaclava baclava;
@@ -297,15 +415,44 @@ public class TavernaModule extends Module{
         baclavaOutput.fireOutputReady(uri, outputBuilder);
    }
     
+    /**
+     * This class receives input values and passes then to the correct method of the relative Taverna Input.
+     * <p>
+     * The Type of input Depth 0 vs 1, value vs URI is based on the Type of the Object received.
+     * <p>
+     * This is a prototype so it throws an Exception if an unexpected type is received.
+     * This should be expanded as new types are uncovered. 
+     */
     private class ValueListener implements OutputListener{
 
+        /** Link to the same Input wrapper as the matching terminal is mapped to. */
         private TavernaInput myInput;
         
+        /**
+         * Creates a Listener associated with this input wrapper.
+         * @param input input storage classes
+         */
         private ValueListener(TavernaInput input){
             myInput = input;
         }
         
         @Override
+        /**
+         * Receives the Object on to any upstream modules.
+         * <p>
+         * The Type of input Depth 0 vs 1, value vs URI is based on the Type of the Object received.
+         * Depending on the type different methods are called on the inputWrapper.
+         * <p>
+         * After receiving an input the module checks if it now has al required inputs and if so runs.
+         * <p>
+         * This is a prototype so it throws an Exception if an unexpected type is received.
+         * This should be expanded as new types are uncovered. 
+         * 
+         * @param output Information being passed from one module to another.
+         * @param outputBuilder Logging buffer. 
+         * @throws WireItRunException Something has gone wrong. This could be caused by exectution 
+         *    or even one of the downstream modules.
+         */
         public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException{
              try {
                 if (output instanceof String){
@@ -339,12 +486,23 @@ public class TavernaModule extends Module{
         }
     }
 
+    /**
+     * Listener for Baclava Input.
+     */
     private class BaclavaListener implements OutputListener{
        
         private BaclavaListener(){
         }
         
-        @Override
+        //@Override
+        /**
+         * Receives a baclava file and causes the module to execute.
+         * 
+         * @param output URI to a Baclava file.
+         * @param outputBuilder Logging buffer. 
+         * @throws WireItRunException Something has gone wrong. This could be caused by exectution 
+         *    or even one of the downstream modules.
+         */
         public void outputReady(Object output, StringBuilder outputBuilder) throws WireItRunException{
             if (output instanceof URI){
                 baclavaInput = resolver.getURIObjectToRelativeURIString(output);

@@ -59,6 +59,7 @@ public class OutputModule extends Module implements OutputListener{
 
     @Override
     /**
+     * Passes the Object on to any downstream modules.
      * 
      * WARNING: This is a prototype so does not yet handle all possible input types. Please Exstend accordingly.
      *    This will only cause an problem if the Object is a type which can not be handled corrently 

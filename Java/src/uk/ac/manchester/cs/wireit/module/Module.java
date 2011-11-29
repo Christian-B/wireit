@@ -82,7 +82,7 @@ public abstract class Module {
      * 
      * Most Modules will implement this by having an OutputFirer associated with each output terminal.
      * 
-     * @param terminal Name of the Input port to be attached.
+     * @param terminal Name of the output port to be attached.
      * @param listener Listener to be used.
      * @throws JSONException It is WireIt's responsibility that the "wires" array correctly matches the "modules" array.
      *    If this is not the case an exception is thrown.
