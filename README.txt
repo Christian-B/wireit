@@ -1,23 +1,10 @@
-WireIt README
+This work was developed for as a protocol for the Ondex project.
 
-WireIt is an open-source javascript library to create web wirable interfaces for dataflow applications, visual programming languages, graphical modeling, or graph editors.
+That project has now come to a close so no future work is expected here.
 
-Project home page:
-    http://javascript.neyric.com/wireit/
+See taverna/developer.html for ideas on how to take this work farther.
 
-WireIt guide:
-	http://javascript.neyric.com/wireit/guide.html
+This work is being taken over by the Nice and BioVel projects.
 
-The code for Wireit is provided under a BSD license:
-    http://javascript.neyric.com/wireit/license.txt
-    
-Source code:
-    http://github.com/neyric/wireit
+Code development will therefor be moved to svn.
 
-Issue tracker:
-	 http://github.com/neyric/wireit/issues
-	
-Blog: 
-    http://javascript.neyric.com/blog/category/wireit/
-
- 
