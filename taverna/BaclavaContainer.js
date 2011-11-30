@@ -1,5 +1,8 @@
 /**
- * Container represented by an image
+ * Container holding a URI to A Baclava File.
+ * The same link is displayed twice, once as a simple link and one as a link to the DsiplayBaclava servlet.
+ * Both share the same value "uri".
+ * Either cn be removed by commenting out the definition in setOptions (including the relative push)
  * @class BaclavaContainer
  * @extends WireIt.FormContainer
  * @constructor
@@ -26,6 +29,7 @@ YAHOO.lang.extend(WireIt.BaclavaContainer, WireIt.FormContainer, {
 		// Overwrite default value for options:
 		this.options.resizable = (typeof options.resizable == "undefined") ? false : options.resizable;
 		
+		//Add a direct link
 		this.options.fields = this.options.fields || [];
 		this.uriField = {
 			"type": "uriLink",
@@ -35,6 +39,8 @@ YAHOO.lang.extend(WireIt.BaclavaContainer, WireIt.FormContainer, {
 			},
 		};
 		this.options.fields.push(this.uriField);
+		
+		//Add a display Baclava Link
 		this.showField = {
 			"type": "baclavaShowLink",
 			"inputParams" : {
@@ -46,8 +52,10 @@ YAHOO.lang.extend(WireIt.BaclavaContainer, WireIt.FormContainer, {
 
 	},
 
-
 	/**
+	 * This function does all the styling for the terminals so that all conatiners will be the same.
+	 * Style changes should be here in which case they effect future pipes as well.
+	 * Individual ones can be set in the language defintion which overrides any defaults set here.
 	 * @method render
 	 */
 	render: function() {
@@ -71,11 +79,11 @@ YAHOO.lang.extend(WireIt.BaclavaContainer, WireIt.FormContainer, {
 
 });
 
-//   *******   Raw Data Link  ******* //
+//   *******   Display Baclava Link  ******* //
 (function() {
 
 /**
- * Create a uneditable field where you can stick the html you want
+ * Create a uneditable field where the uri is show as the parameter to the Baclava Display servlet.
  * Added Options:
  * <ul>
  *    <li>visu: inputEx visu type</li>
@@ -98,10 +106,6 @@ YAHOO.lang.extend(inputEx.BaclavaShowLinkField, inputEx.Field, {
 	setOptions: function(options) {
 		inputEx.BaclavaShowLinkField.superclass.setOptions.call(this,options);
 		this.options.visu = options.visu;
-	},
-
-	endsWith: function(str, suffix) {
-		return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	},
 
 	/**

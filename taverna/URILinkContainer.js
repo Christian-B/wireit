@@ -1,5 +1,6 @@
 /**
- * Container represented by an image
+ * Container represented by a uri as a clickable link.
+ * Can be used both as a passt=Through and as an Output.
  * @class URILinkContainer
  * @extends WireIt.FormContainer
  * @constructor
@@ -43,6 +44,7 @@ YAHOO.lang.extend(WireIt.URILinkContainer, WireIt.FormContainer, {
 	},
 
 	/**
+	 * This method formats the terminals.using defualts that can be overwritten in the language definitions.
 	 * @method render
 	 */
 	render: function() {

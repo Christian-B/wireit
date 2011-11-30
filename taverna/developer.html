@@ -19,12 +19,19 @@ This tool depends on <a href="http://neyric.github.com/wireit/">WireIt</a> versi
 <p>
 All the required changes to WireIt are done using <a href="extensions.js">Extensions</a>.
 The reasons for these extensions are all documented with the code.
-<h3> Taverna WireIt code <h3>
+<h3> Taverna WireIt code </h3>
 The Taverna specific code: (For details see each specific file)
 <ul>
+    <li>WireIt Root
+    <ul>
+		<li><a href="index.html">index.html<a>: Editted WireIt homepahe with Link to Taverna Stuff.
+		<li><a href="taverna.html">taverna.html<a>: Root File for taverna Kiss
 	<li> Taverna Folder
 	<ul>
-		<li><a href="ajaxAdapter.js">ajaxAdapter.js<a>: Adaoter code using ajax to connect to the server.
+		<li><a href="ajaxAdapter.js">ajaxAdapter.js<a>: Adapoter code using ajax to connect to the server.
+		<li><a href="AjaxDataPreview.jsp">AjaxDataPreview.jsp<a>: Adaptyer for the Baclava displayer
+		<li><a href="DataTree.css">DataTree.css<a>: StyleSheet for the Baclava Displayer
+		<li><a href="DataTree.jsp">DataTree.jsp<a>: JavaScript ocde for the Baclava Displayer
 		<li><a href="tavernaLanguage.js">tavernaLanguage.js</a>: Base Language suitable for all projects
 		<li><a href="testLanguage.js">testLanguage.js</a>: Example language with a few workflows.
 		<li><a href="TavernaWFContainer.js">TavernaWFContainer.js</a>: Used to add a workflow.
@@ -36,6 +43,7 @@ The Taverna specific code: (For details see each specific file)
 		<li><a href="index.html">index.html</a>: Page showing current status of protype
 		<li><a href="taverna.jpg">taverna.jpg</a>: The Taverna icon
 		<li><a href="developer.html">developer.html</a>: This document
+		<li><a href="images">images</a>: Images used for the Baclava Displayer
 	</ul>
 	<li>Workflow Folder
 	<ul>
@@ -43,7 +51,7 @@ The Taverna specific code: (For details see each specific file)
 		<li> HTML pages describing workflows.
 	</ul>
 	<li> Java Folder
-	Holds all server side code.
+	Holds all server side code. See code for documentation.
 	</ul>
 		<li>uk.ac.manchester.cs.wireit package
 		<ul>
@@ -53,28 +61,302 @@ The Taverna specific code: (For details see each specific file)
 			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/SaveWireit.java">SaveWireit.java<a>: Handles the save call
 			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/ShowWireit.java">ShowWireit.java<a>: Debug class
 			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/WireitSQLBase.java">WireitSQLBase.java<a>: Base class for all of the above.
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/"URLEncoder.java>URLEncoder.java<a>: hack of URLEncoder to replace space as %20
+			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/URLEncoder.java">URLEncoder.java<a>: hack of URLEncoder to replace space as %20
 			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/Wiring.java">Wiring.java<a>: Class that build and runs the modules
 		</ul>
 		<li>uk.ac.manchester.cs.wireit.module package
 		<ul>
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/CommentModule.java">CommentModule.java<a>: Currently overwrites a comment with run info.
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/InputDelimiterURIModule.java">InputDelimiterURIModule.java<a>: Used for list URIs
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/InputListModule.java">InputListModule.java<a>: Used for list as a collection of Strings
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
-			<li><a href="../Java/src/uk/ac/manchester/cs/wireit/module/"><a>:
+			<li>Holds the Java code for the modules.
+			<li>Each WireIt container will result in one module..
+		</ul>
+		<li>uk.ac.manchester.cs.wireit.event package
+		<ul>
+			<li>Java modules are connected with outputListeners.
+		</ul>
+		<li>uk.ac.manchester.cs.wireit.exceptions package
+		<ul>
+			<li>Woops something went wrong.
+		</ul>
+		<li>uk.ac.manchester.cs.wireit.taverna package (and sub packages)
+		<ul>
+			<li>Wrapper around command line
+			<li>Designed for Ondex but works here too.
+			<li>Includes code for running it from an updatable Java MenuBar
+			<li>Should ideally be replaced with Taverna Server wrapper.
+		</ul>
+		<li>uk.ac.manchester.cs.wireit.utils package
+		<ul>
+			<li>Supprot classes tpo avoid code duplication elsewhere.
+		</ul>
+		<li>net.sf.taverna.portal package
+		<ul>
+			<li>Baclava Display code
+		</ul>
+		<li>net.sf.taverna.portal.baclava
+		<ul>
+			<li>Baclava Display code
+		</ul>
+		<li>net.sf.taverna.t2.lang.baclava package and sub packages
+		<ul>
+			<li>Should be replaced with a jar
+		</ul>
+		<li>org.json package
+		<ul>
+			<li>Should be replaced with a jar
+		</ul>
+	</ul>
+	<li> copyTomcatLib
+	<ul>
+		<li>jars needed to build the Java code
+		<li>also needed to run the code.
+		<ul>
+			<li>Need to be copied to Tomcat's libn folder
+		</ul>
+	</ul>
+	<li>WEB-INF/web.xml
+</ul>
+<h2> Taverna Command Line </h2>
+</ul>
+	<li>Requires the setting of tavern home directory
+	<ul>
+		<li>Setting a servlet paramter "TAVERNA_CMD_HOME"
+		<li>Setting a system property "TAVERNA_HOME"
+		<li>Hard code it into the class TavernaModule
+	</ul>
+</ul>
+<h2> MySQL </h2>
+</ul>
+	<li>Hard coded values in WireitSQLBase
+	<ul>
+		<li>port: 3306 (MySql default)
+		<li>database: wireit
+		<li>username: wireity
+		<li>password: See the code
+	</ul>
+</ul>
+<h2> Tomcat </h2>
+</ul>
+	<li>Hard coded values in WireitSQLBase
+	<ul>
+		<li>port: 3306 (MySql default)
+		<li>database: wireit
+		<li>username: wireity
+		<li>password: See the code
+	</ul>
+</ul>
+
+<h1>Changing the code</h1>
+
+<h2>Clean out WireIt extra<h2>
+<h3>WireIt/Index.html</h3>
+This page still contains a lot of none taverna links and could be replaced with a porject specific page.
+<h4>Warning</h4>
+Renaming taverna.html to index.html is dangerous if it is server up as the default page.
+When I did that I had tomcat consider it at a higher level and all relative links and ../ links failed..
+<h3>WireIt/tavern.html</h3>
+<h4>Using the Build files</h4>
+Currently this file loads in all of the indivudal java script files in their full format.
+The build folder contains much smaller build files for the WireIt modules.
+I am currently unsure which files these build version replace.
+<h4>Remove files not required</h4>
+Currently all WireIt files are in the repository
+You could consider remvoing
+<ul>
+	<li>Examples folder. - Will need WireIt/Index.html to be replaced.
+	<li>doc folder
+	<li>Much of the Yui stuff which has debig, normal and min versions.
+	<li>Code not required>
+</ul>
+However other than use up a bit of server space these files do no effect the running.
+They are never sent to the client.
+
+<h2>Taverna Server</h2>
+Due to security issues and code maturity it is recommended that the command line wrapper be replaced with taverna Server.
+<p>
+See the TavernaModule class for details of what is done now.
+
+<h2>Adding real workflows</h2>
+<h3> tavernaLanguage.js </h3>
+This file would not need to be changed.unless you wish to change the styling of the input, ouput and passthrough containers.
+<h3> testLanguage.js </h3>
+<ul>
+	<li>Copy the file with a new name
+	<li>Change the languageName
+	<li>Replace the modules
+	<li>Change taverna.htlm to point to your new file and NOT testLanguage,js
+</ul>
+<h4>Taverna Workflow modules</h4>
+<ul>
+	<li>"name": Name for the container with this workflow.
+	<ul>
+		<li>Must be unique within a language (incl ones in tavernaLanguage.js )
+		<li>Need not match the workflow name as defined in the workflow file.
+		<li>Need not match the name of the workflow file.
+		<li>May contain spaces.
+	</ul>
+	<li>"category": This defines which sub section it goes to on the left hand side.,
+	<li>"description": Tool tip for the module in the module list (on left).,
+	<li>"tavernaInfo" : { //These are specific things for addin a Taverna Container
+	<li>"wfURI": URI to the workflow
+	<ul>
+		<li> The current implmentation is that it must be a relative link.
+		<li> This relative link can not have double dots in it.
+		<li> Edit TavernaModule class setWorkflow method to allow other URIs (at your own risk)
+	</ul>
+	<li>"inputs": Defines the input terminals that will be added.
+	<li>"outputs": Defines the output terminals that will be added.
+	<ul>
+		<li> Note: Baclava input and out put are added automatically so not included here
+		<li> "name": Must match exactly (including case) the port name in the workflow.
+		<ul>
+			<li> If a workflow has an input and output port with the same name, use the "in_" and "out_" prefixes.
+		</ul>
+		<li> "depth": The (Taverna's defintion) depth of the port.
+		<ul>
+			<li>Must be equal to or less than the depth in the Workflow
+			<li>Max depth is 1 due to a limitation of Taverna's Command line tool.
+		</ul>
+		<li>The "terminal" paramters such as "xtype", "offsetPosition", "nMaxWires", "ddConfig.type" and : "ddConfig."allowedTypes" are added by TavernaWFContainer.js.
+	</ul>
+	<li>"showWorkflow": Defines if the Taverna icon should be a link to the workflow file.
+	<li>"helpPage": Provides a page where users can get more information about the workflow.
+	<ul>
+		<li> If set results in a help icon next to the workflow name.
+		<ul>
+			<li>Both when on the left and when dragged across.
+		</ul>
+		<li>Does not need to be a local URI. (or in same place as workflow)
+		<li>Can be any web page that the designer finds useful for the users.
+		<li>Currently only one helppage is supported per module.
+		<li>This page is never accessed by the WireIt server so there is no secuirty issue.
+	</ul>
+	<li>"links" : Allow additional uir links to be added when a module is drag in.
+	<ul>
+		<li>These are optional
+		<li>Could be the same as the workflow and help page but need not be.
+		<li>Limited only by the size of the container on the page.
+		<li>Do not have to be local URIs
+		<li>These page is never accessed by the WireIt server so there is no secuirty issue.
+		<li>"uri": page to point to
+		<li>"text": text to show up in the link
+		<li>"container" : {"xtype":"WireIt.TavernaWFContainer"}
+		<ul>
+			<li>Do not edit or omit this.
+			<li>Used by wireit to call TavernaWFContainer.js to build the container
+			<li>Used by Wiring.java to identify module as a Taverna Module.
 		</ul>
 	</ul>
 </ul>
-<h3> Taverna Command Line </h3>
+<h4>Baclava file input modules</h4>
+This allow the user to be given prefilled in Baclava input file with all the paramters he needs to use a specific workflow.
+<ul>
+	<li>"name": Name for the container with this workflow.
+	<ul>
+		<li>Must be unique within a language (incl ones in tavernaLanguage.js )
+		<li>May contain spaces.
+	</ul>
+	<li>"category": This defines which sub section it goes to on the left hand side.,
+	<li>"description": Tool tip for the module in the module list (on left).,
+	<li>"container":  The remainder are options that for the "container"
+	<li>"width": Defines how wide the container will be.
+	<ul>
+		<li>This allows for making the conatiner bigger for long URIs
+	</ul>
+	<li>"xtype": "WireIt.BaclavaContainer",
+	<ul>
+		<li>Do not edit or omit this.
+		<li>Used by wireit to call BaclavaContainer.js to build the container
+		<li>Used by Wiring.java to identify module as a URI Module.
+	</ul>
+	<li>"uri": URI to the data to be used.
+	<ul>
+		<li>Does not need to be a local URI. (or in same place as workflow)
+		<li>Should point to a file Taverna can read as Baclava
+		<li>This link is passed unchecked to Taverna.
+		<li>REMEMBER: Rememebr that port names in the Baclava file must match (or be a super set of) port names in the Workflow.
+	</ul>
+	<li>"terminals": [{"name": "output"}
+	<ul>
+		<li>Do not edit or omit this.
+		<li>Used by BaclavaContainer.js to identify this as a hard coded input needing and output terminal..
+		<ul>
+			<li>BaclavaContainer.js code is shared with "Baclava Output" and "Baclava Pass Through"
+		</ul>
+	</ul>
+</ul>
+
+<h2>Updating to latest/ Edge WireIt</h2>
+This tool was developed against the Master branch of WireIT.
+<p>
+I noticed that the edge branch includes a major restructoring. This will require at the very least fixing the links in taverna.html
+<p>
+Each exstension in extensions.js will have to be very carefully check.
+Has the code being extended changed?
+If so the extension will be to reflect this change.
+<p>
+Also check that these exstentions  do not effect new WireIt code.
+<ul>
+	<li>renderButtons:
+	<ul>
+		<li>adds the run button.
+		<li>May chash with Wiret is Run becomes the norm.
+	</ul>
+	<li>loadWiring
+	<ul>
+		<li>A cut and paste of part of the WiringEditor.loadPipe method
+		<li>If that changes this method may have to too.
+	</ul>
+	<li>addModuleToList
+	<ul>
+		<li>Original code assumed that the name was also the title.
+		<li>Must check new WireIt does not use title elsewhere
+	</ul>
+	<li>render
+	<ul>
+		<li>Original code used the wireConfig to draw a wire after it was loaded.
+		<li>However wireConfig is not saved so not present during a reload
+		<li>This version picks up new wireConfig even if the terminal code is changed between saving and reloading.
+	</ul>
+	<li>addModule
+	<ul>
+		<li>Original code assumed that the name was also the title.
+		<li>Must check new WireIt does not use title elsewhere
+	</ul>
+	<li>getValue:
+	<ul>
+		<li>Original code used the "title" as the name here
+		<li>Name is now used which allows the title to be changed.
+		<li>Must check new WireIt does not use title elsewhere
+	</ul>
+</ul>
+
+<h2>Extending functionality</h2>
+<h3>Warning</h3>
+This tool is NOT meant to be a replcaement for the Taverna Workbench.
+<p>
+It does not and never should have all the power but therefor all the confusion of the workbench.
+The proptype was called Keep it Simple and Straightforward to remind everyone that
+it is purely for users to run workflows easily.
+
+<h3>Adding container types</h3>
+<h4>Containers made up of just standard inputex stuff</h4>
+On the WireIt side this can be done by just adding the new container definitions to tavernaLanguage.js for all projects
+or to the replacement of testLanguage.js for project spefic oontainers.
+<p>
+WARNING: You may have to add any new inputex things used to taverna.html otherwise WireIt will not find the new item and default back to the backup.
+This could result in your code working but without the expected new feature.
+
+<h4>Containers with more than just standard inputex stuff</h4>
+This may require a new container class such as I did for URILinkContainer.js, BaclavaContainer.js and TavernaWFContainer.js
+
+<h4>Java side changes</h4>
+Additions of any new containers may require a change to Wirings.Java.
+<p>
+The only exception is modules added as explained in the section Adding real workflows.
+
+<h2>Changing Styling</h2>
+<h3>Wire styles</h3>
+Wire styles are general defined in the language's "terminals" section.
+However where possible these have been puched into the Container defintions to ensure a uniform way of working.
+The Defaults in the container defintions can always be overwritten by specifing values in the language sections.
 </body>

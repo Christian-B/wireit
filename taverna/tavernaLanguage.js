@@ -1,5 +1,7 @@
 /**
  * tavernaLanguage
+ * This is the base language for all Taverna projects
+ * Project specific ones like worklfows and modules should go in a replacement of testLanguage.js (see develop.html)
  */
 var tavernaLanguage = {
 
@@ -8,6 +10,7 @@ var tavernaLanguage = {
 		languageName: "tavernaBaseLanguage",
 
 		modules: [
+			//Input modules 
 			{
 				"name": "Simple Input",
 				"description": "Place to enter a single value",
@@ -133,6 +136,7 @@ var tavernaLanguage = {
 					],
 				}
 			},
+			//Output modules
 			{
 				"name": "Simple Output",
 				"category": "Output",
@@ -207,6 +211,8 @@ var tavernaLanguage = {
 					]
 				}
 			},
+			
+			//Pass through modules that act as both input and putput
 			{
 				"name": "PassThrough",
 				"category": "Pass Through",
@@ -286,6 +292,11 @@ var tavernaLanguage = {
 		]
 	},
 
+	/**
+	 * Support function for finding a the configuaration for a module based on its name
+	 * @method moduleByName
+	 * @static
+	 */
 	moduleByName: function(name) {
 		var language = this.language;
 		var modules = language.modules
@@ -297,6 +308,13 @@ var tavernaLanguage = {
 		return null;
 	},
 		
+	/**
+	 * Creates a title for a taverna module given the name of the module.
+	 * Adds a taverna logo with a link (if showWorkflow)
+	 * Adds a link to a help page if one was set.
+	 * @method titleByName
+	 * @static
+	 */
 	titleByName: function(name) {
 		module = this.moduleByName(name);
 		var tavernaLink = ""
@@ -312,6 +330,12 @@ var tavernaLanguage = {
 		return (tavernaLink + module.name + helpLink);
 	},
 	
+	/**
+	 * Provides a Taverna icon for those taverna modules that do not allow showWorkflow
+	 * This ensures there will always be exactly one Taverna icons, either as a link to the workflow or just plain.
+	 * @method iconByName
+	 * @static
+	 */
 	iconByName: function(name) {
 		module = this.moduleByName(name);
 		if (module.tavernaInfo.showWorkflow){	
@@ -322,6 +346,7 @@ var tavernaLanguage = {
 	},
 
 	/**
+	 * Extended init function that also does the taverna specific stuff.
 	 * @method init
 	 * @static
 	 */
@@ -332,7 +357,7 @@ var tavernaLanguage = {
 			this.language.adapter = WireIt.WiringEditor.adapters.AjaxAdapter;
 		
 			//bring in the specific exstensions for the project
-			//Pipes are saved and loaded by languages so taking the name from the exstensionb keeps them apart.
+			//Pipes are saved and loaded by languages so taking the name from the exstension keeps them apart.
 			this.language.languageName = languageExstension.language.languageName
 			//Add in the speific Workflows and inputs from the exstension
 			for(var i = 0 ; i < languageExstension.language.modules.length ; i++) {

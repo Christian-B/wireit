@@ -1,12 +1,18 @@
 /**
- * testLanguage
+ * testLanguage. See developers.html for documentation.
+ * To create a project specific language this file should be replaced.
+ * Remember to add the new file to taverna.html (or its replacement)
  */
-var languageExstension = {
+var languageExstension = { //Do not replace this name unless you replace it in tavernaLanguage.js as well.
 
 	language: {
 	
+		//Using a different language name for each project keeps the save pipes apart, 
+		//   even if multiple projects are run from the same server.
 		languageName: "tavernaTestLanguage",
-	
+
+
+		//the modules here will be added to the ones declared in tavernaLanguage.js 
 		modules: [
 			{
 				"name": "Echo",

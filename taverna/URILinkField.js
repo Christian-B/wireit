@@ -2,6 +2,7 @@
 
 /**
  * Create a uneditable field where you can stick the html you want
+ * Used by both BaclavaContainer.js and URILinkContainer.js
  * Added Options:
  * <ul>
  *    <li>visu: inputEx visu type</li>
@@ -32,6 +33,7 @@ YAHOO.lang.extend(inputEx.URILinkField, inputEx.Field, {
 
 	/**
 	 * Store the value and update the visu
+	 * Converting the value to a clickable link.
 	 * @param {Any} val The value that will be sent to the visu
 	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
 	 */

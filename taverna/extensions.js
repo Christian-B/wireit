@@ -105,7 +105,7 @@ YAHOO.lang.extend(tavernaLanguage.WiringEditor, WireIt.WiringEditor, {
  
  
 	/**
-	 * Overwrites the Redner function with the sole purpose of overwriting the layer.addWire Function.
+	 * Overwrites the Render function so that configuaration comes from the src terminal.
 	 * Add the rendering of the layer
 	 */
 	render: function() {

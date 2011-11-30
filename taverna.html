@@ -109,7 +109,9 @@ div.ComposedModule { background-color: #DDDDAA; }
 <script src="js/ImageContainer.js" type="text/javascript"></script>
 
 <!-- Taverna Language Specific stuff -->
+   <!-- this is the base for all languages -->
 <script src="taverna/tavernaLanguage.js" type="text/javascript"></script>
+   <!-- This file should be replaced with the a specific one with te project specific url, and workflows -->
 <script src="taverna/testLanguage.js" type="text/javascript"></script>
 <!-- Taverna Specific stuff -->
 <script src="taverna/TavernaWFContainer.js" type="text/javascript"></script>
@@ -203,7 +205,7 @@ YAHOO.util.Event.onDOMReady( tavernaLanguage.init, tavernaLanguage, true);
 	        		<p style="font-weight: bold;">What this example does :</p>
 					<ul style="margin-left: 20px;">
 						<li>* Define a visual language with inputs, outputs, passthroughs and a number of taverna modules.</li>
-						<li>* Allows Taverna modules to be connected to inpouts and outpus.</li>
+						<li>* Allows Taverna modules to be connected to inputs and outpus.</li>
 						<li>* Allows Taverna modules to be connected even if port names don't match.</li>
 						<li>* Provides access to Baclava output.</li>
 						<li>* Allows the wiring to be sent to the server to run.</li>

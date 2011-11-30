@@ -1,5 +1,6 @@
 /**
- * Container with left inputs and right outputs
+ * Container for Taverna Modules.
+ * Handles the adding of most of the terminals based on limited information. (see Developer.html)
  * Based on WireIt's InOutContainer
  * @class TavernaWFContainer
  * @extends WireIt.Container
@@ -36,20 +37,26 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		this.inputs = tavernaInfo.inputs || [];
 		this.outputs = tavernaInfo.outputs || [];
 		
-		//Always take the URI from the language.
-			//A URI is saved as the save and run code are shared.
-			//Taking the URI from the language allows the URI to be updated without breaking existing saved wirings.
+		//Always take the wfURI from the language.
+			//A wfURI is saved as the save and run code are shared.
+			//Taking the wfURI from the language allows the wfURI to be updated without breaking existing saved wirings.
 		this.options.wfURI = tavernaInfo.wfURI;
 				
 		this.links = tavernaInfo.links || [];
 	
 		this.options.name = options.name;
 		
+		//Add links to workflow and help page is applicable
 		this.options.title = tavernaLanguage.titleByName(options.name);
+		//Add a taverna icon if above did not already do so
 		this.options.icon = tavernaLanguage.iconByName(options.name);
 	},
 
-	render: function() {
+   /**
+    * Adds the links and terminals and formats them.
+    * @method render
+    */	
+    render: function() {
 		
 		WireIt.TavernaWFContainer.superclass.render.call(this);
 
@@ -66,7 +73,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		var baclavaName;
 		//Baclava Input if needed
 		//It is VITAL that the baclava Input terminal is added first and therefor terminal[0]
-			//The code in WorkflowTerminals depends on this!
+			//The code in IndividualTerminal (below) depends on this!
 			//If there is not input this requirement does not apply.
 		if (this.inputs.length > 0) {
 			//This adds the terminal dot.
@@ -100,7 +107,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 		//This adds the text name to the form
 		this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px", textAlign: "center"}, baclavaName));
 		
-		//Normal input
+		//Normal input includingall styling
 		for(var i = 0 ; i < this.inputs.length ; i++) {
 			var input = this.inputs[i];
 			var showName = {};			
@@ -127,7 +134,7 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 			this.bodyEl.appendChild(WireIt.cn('div', null, {lineHeight: "30px"}, showName));
 		}
 		
-		//Normal Output
+		//Normal Output including all styling
 		for(i = 0 ; i < this.outputs.length ; i++) {
 			var output = this.outputs[i];
 			var showName = {};
@@ -191,8 +198,11 @@ YAHOO.lang.extend(WireIt.TavernaWFContainer, WireIt.Container, {
 	},
 });
 
-/*** BaclavaTerminal  ***/
-
+/**
+ * BaclavaTerminal  
+ * Adds the extra that if a wire is added it removes the idiviual input wires.
+ * @extends WireIt.Termina
+ */
 (function() {
 
 WireIt.BaclavaTerminal = function(parentEl, options, container) {
@@ -206,6 +216,9 @@ YAHOO.lang.extend(WireIt.BaclavaTerminal, WireIt.Terminal, {
 		WireIt.BaclavaTerminal.superclass.setOptions.call(this, options);
 	},
 
+	/**
+	 * Extra feature is that the wires from the idividual input terminals are removed.
+	 */
 	addWire: function(wire) {
 		//console.log("addWire:");
 		WireIt.BaclavaTerminal.superclass.addWire.call(this, wire);
@@ -214,19 +227,29 @@ YAHOO.lang.extend(WireIt.BaclavaTerminal, WireIt.Terminal, {
 		}
 	},
 		
+	/**
+	 * Register an individual terminal, so the wires can be removed if required.
+	 */
 	addIndividualTerminal: function(terminal){
 		individualTerminals.push(terminal);
-		terminal.setBaclavaTerminal(this);
 	},
 	
 });
 
 })();
 
-/*** IndividualTerminal ***/
+/**
+  * IndividualTerminal 
+  * This extension register itself with the BaclavaTerminal so that wires can be removed.
+  * WARNING: Replies on the Baclava Input terminal to be the first one added.
+  * @extends WireIt.Termina
+  **/
 
 (function() {
 
+/**
+ * Extension is to register this with baclava Input
+ */
 WireIt.IndividualTerminal = function(parentEl, options, container) {
 	WireIt.IndividualTerminal.superclass.constructor.call(this, parentEl, options, container);
 	//The following line only works if the Baclava input is added FIRST!
@@ -239,13 +262,12 @@ YAHOO.lang.extend(WireIt.IndividualTerminal, WireIt.Terminal, {
 		WireIt.IndividualTerminal.superclass.setOptions.call(this, options);
 	},
 	
-	setBaclavaTerminal: function(baclavaTerminal){
-		baclava = baclavaTerminal;
-	},
-	
+	/**
+	 * Extension is to remove the BaclavaInputs wire if adding one here.
+	 */
 	addWire: function(wire) {
 		WireIt.BaclavaTerminal.superclass.addWire.call(this, wire);
-		baclava.removeAllWires();
+		container.terminals[0].removeAllWires();
 	},
 
 });

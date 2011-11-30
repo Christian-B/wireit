@@ -1,5 +1,6 @@
 /**
- * An "ExecutionFrame" is the equivalent to the jsBox layer.
+ * This provides the methods required to run the pipes.
+ * It sends the pipes to the run servlet and receives and reloades the retunred json.
  * It contains a set module instances and a set of wires linking them.
  * @class ExecutionFrame
  * @constructor
@@ -23,6 +24,8 @@ var ExecutionFrame = function(editor, frameLevel, parentFrame, parentIndex) {
 ExecutionFrame.prototype = {
 
 	/**
+	 * This method does run a pipe (Send Json to the server)
+	 * And what method to call depending on success or failure.
 	 * @method run
 	 * @param {Object} params The input parameters
 	 */
@@ -51,6 +54,8 @@ ExecutionFrame.prototype = {
    
 /**
  * runModule success callback
+ * It loads the json back as the main wiring.
+ * It fills in the run Status window (on the right hand side)
  * @method runModuleSuccess
  */
 runModuleSuccess: function(encoded) {
@@ -80,6 +85,8 @@ runModuleSuccess: function(encoded) {
    
     /**
      * runModule failure callback
+     * Oops something went wrong so popup an alert.
+     *Hopefully there will be much more information in Tomcat's satnadr output log file.
      * @method runModuleFailure
      */
     runModuleFailure: function(errorStr) {

@@ -1,5 +1,7 @@
 /**
  * Ajax Adapter. Expect JSON response for all queries.
+ * This class is like the one supplied by WireIT but has the local URI hard coded in.
+ * It also adds a run method.
  * @class WireIt.WiringEditor.adapters.AjaxAdapter
  * @static 
  */
